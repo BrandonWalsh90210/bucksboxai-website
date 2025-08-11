@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BucksBox.ai - あなたのアプリを世界へ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF3B30;
+            --dark-bg: #000000;
+            --light-text: #FFFFFF;
+            --gray-text: #8E8E93;
+            --section-padding: 80px 20px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 1s 2s forwards;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 15px 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        /* Space Background Effects */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: planetGlow 6s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes planetGlow {
+            0%, 100% { 
+                opacity: 0.4; 
+                box-shadow: 0 0 20px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
+            }
+            50% { 
+                opacity: 0.8; 
+                box-shadow: 0 0 40px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
+            }
+        }
+
+        /* Central Floating Logo - Enhanced */
+        .floating-logo-central {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .logo-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: centralRotate 30s infinite linear;
+        }
+
+        .logo-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            opacity: 0.2;
+            filter: drop-shadow(0 0 30px rgba(123, 104, 238, 0.8));
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        .logo-orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(123, 104, 238, 0.2);
+            border-radius: 50%;
+            animation: orbitPulse 3s ease-in-out infinite;
+        }
+
+        .logo-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: particleOrbit 20s linear infinite reverse;
+        }
+
+        .orbit-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #FF00FF, #00BFFF);
+            border-radius: 50%;
+            filter: blur(1px);
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        @keyframes centralRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                filter: drop-shadow(0 0 30px rgba(123, 104, 238, 0.8)) brightness(1);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                filter: drop-shadow(0 0 50px rgba(123, 104, 238, 1)) brightness(1.2);
+            }
+        }
+
+        @keyframes orbitPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes particleOrbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Remove old floating logos styles */
+        .floating-logos {
+            display: none;
+        }
+
+        /* Adjust body background */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: transparent;
+            color: var(--light-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 5s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--gray-text);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Section Styles */
+        section {
+            padding: var(--section-padding);
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .about-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .about-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2);
+        }
+
+        .about-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        /* Features Section */
+        .features {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+            padding: 60px;
+            margin: 50px 0;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(0, 122, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .feature-icon {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* How It Works Section */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            padding: 30px;
+            animation: stepPulse 3s ease-in-out infinite;
+            animation-delay: calc(var(--step-index) * 0.2s);
+        }
+
+        @keyframes stepPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .step:hover .step-number {
+            transform: rotate(360deg);
+        }
+
+        /* Pricing Section */
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pricingShine 10s ease-in-out infinite;
+        }
+
+        @keyframes pricingShine {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) rotate(180deg); }
+        }
+
+        .price-tag {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .price-details {
+            font-size: 1.2rem;
+            color: var(--gray-text);
+            margin-bottom: 30px;
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--gray-text);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .contact-info {
+            padding: 40px;
+        }
+
+        .info-item {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px 20px 30px;
+            margin-top: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: var(--gray-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                padding: 40px 20px;
+            }
+
+            .pricing-card {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
+
+    <!-- Central Floating Logo -->
+    <div class="floating-logo-central">
+        <div class="logo-wrapper">
+            <div class="logo-orbit"></div>
+            <div class="logo-particles">
+                <div class="orbit-particle" style="top: 0; left: 50%; transform: translateX(-50%);"></div>
+                <div class="orbit-particle" style="top: 50%; right: 0; transform: translateY(-50%);"></div>
+                <div class="orbit-particle" style="bottom: 0; left: 50%; transform: translateX(-50%);"></div>
+                <div class="orbit-particle" style="top: 50%; left: 0; transform: translateY(-50%);"></div>
+            </div>
+            <!-- プレースホルダー：実際の運用時は提供された画像ファイルのパスに置き換えてください -->
+            <img src="bucksbox-logo.png" alt="BucksBox.ai" class="logo-image">
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-logo">BucksBox.ai</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">BucksBox.ai</a>
+            <ul class="nav-menu">
+                <li><a href="#about">企業理念</a></li>
+                <li><a href="#service">サービス</a></li>
+                <li><a href="#how-it-works">ご利用方法</a></li>
+                <li><a href="#pricing">料金</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>あなたのアプリアイデアを<br>世界へ届ける</h1>
+            <p>AppLaunch Hub - 誰もがアプリを販売できる革新的プラットフォーム<br>
+            複雑な手続きは私たちにお任せください</p>
+            <a href="#about" class="cta-button">今すぐ始める</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">企業理念</h2>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--gray-text); max-width: 800px; margin: 0 auto;">
+                BucksBox.aiは、「誰もがアプリを作れる時代」から「誰もがアプリを販売できる時代」へと導くプラットフォームです。<br>
+                私たちは単なる代行業者ではありません。開発者の創造性を世界に解き放つパートナーとして、<br>
+                アプリ販売の新しいエコシステムを構築しています。
+            </p>
+        </div>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-icon">🚀</div>
+                <h3>シンプル</h3>
+                <p>複雑な手続きを排除し、アプリ販売への最短ルートを提供します</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">🌍</div>
+                <h3>グローバル</h3>
+                <p>世界中のユーザーにあなたのアプリを届けるお手伝いをします</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">💰</div>
+                <h3>フェア</h3>
+                <p>透明性の高い収益分配で、開発者の努力に正当な報酬を</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Section -->
+    <section id="service">
+        <h2 class="section-title">サービス概要</h2>
+        <div class="features">
+            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 40px;">
+                AppLaunch Hubは、アプリ開発者とApp Storeを繋ぐ革新的なプラットフォームです
+            </p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <h4>App Store Connect代行</h4>
+                        <p>面倒な登録手続きはすべてお任せください</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <h4>審査サポート</h4>
+                        <p>Appleのガイドラインに準拠した審査対策をサポート</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <h4>収益管理</h4>
+                        <p>売上の自動計算と透明性の高い収益分配</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <h4>マーケティング支援</h4>
+                        <p>アプリの露出を最大化するための戦略的サポート</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <h4>多言語対応</h4>
+                        <p>グローバル市場への展開をサポート</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <div>
+                        <h4>分析ツール</h4>
+                        <p>ダウンロード数や収益の詳細な分析レポート</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works">
+        <h2 class="section-title">ご利用方法</h2>
+        <div class="steps">
+            <div class="step" style="--step-index: 0;">
+                <div class="step-number">1</div>
+                <h3>アプリを開発</h3>
+                <p>あなたのアイデアを形にしてください。ノーコードツールでもOK！</p>
+            </div>
+            <div class="step" style="--step-index: 1;">
+                <div class="step-number">2</div>
+                <h3>申請</h3>
+                <p>AppLaunch Hubにアプリをアップロード</p>
+            </div>
+            <div class="step" style="--step-index: 2;">
+                <div class="step-number">3</div>
+                <h3>審査・公開</h3>
+                <p>私たちがApp Storeへの申請を代行</p>
+            </div>
+            <div class="step" style="--step-index: 3;">
+                <div class="step-number">4</div>
+                <h3>収益化</h3>
+                <p>世界中のユーザーから収益を獲得</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <h2 class="section-title">料金体系</h2>
+        <div class="pricing-card">
+            <h3 style="font-size: 2rem; margin-bottom: 20px;">シンプルな成果報酬型</h3>
+            <div class="price-tag">手数料 35%</div>
+            <div class="price-details">
+                初期費用・月額費用は一切かかりません<br>
+                売上が発生した時のみ手数料をいただきます
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 15px; margin-top: 30px;">
+                <h4 style="color: var(--primary-color); margin-bottom: 15px;">収益配分の例</h4>
+                <p>アプリ売上: ¥1,000<br>
+                Apple手数料(30%): ¥300<br>
+                BucksBox.ai手数料(35%): ¥245<br>
+                <strong style="color: var(--primary-color);">あなたの収益: ¥455</strong></p>
+            </div>
+            <a href="#contact" class="cta-button" style="margin-top: 30px;">申し込む</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">お問い合わせ</h2>
+        <div class="contact-container">
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="name">お名前</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">メールアドレス</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">お問い合わせ内容</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="form-button">送信する</button>
+            </form>
+            <div class="contact-info">
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div>
+                        <h4>本社所在地</h4>
+                        <p>Tokyo, Japan</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">📧</div>
+                    <div>
+                        <h4>メール</h4>
+                        <p>bucksboxaiqa.2025@gmail.com</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">🐦</div>
+                    <div>
+                        <h4>SNS</h4>
+                        <p><a href="https://x.com/bucksboxai" target="_blank" style="color: var(--primary-color);">@bucksboxai</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>BucksBox.ai</h4>
+                <p>誰もがアプリを販売できる時代へ</p>
+                <p style="margin-top: 10px;">
+                    <a href="https://x.com/bucksboxai" target="_blank">Follow us on X</a>
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>サービス</h4>
+                <ul>
+                    <li><a href="#service">AppLaunch Hub</a></li>
+                    <li><a href="#pricing">料金プラン</a></li>
+                    <li><a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank">App Store ガイドライン</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>会社情報</h4>
+                <ul>
+                    <li><a href="#about">企業理念</a></li>
+                    <li><a href="#">利用規約</a></li>
+                    <li><a href="#">プライバシーポリシー</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>サポート</h4>
+                <ul>
+                    <li><a href="#contact">お問い合わせ</a></li>
+                    <li><a href="#">よくある質問</a></li>
+                    <li><a href="#">開発者ガイド</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 BucksBox.ai - All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" id="scrollTop">
+        <span style="font-size: 1.5rem;">↑</span>
+    </div>
+
+    <script>
+        // Generate space background elements
+        function createSpaceBackground() {
+            const spaceBackground = document.getElementById('spaceBackground');
+            
+            // Create stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                spaceBackground.appendChild(star);
+            }
+            
+            // Create planets
+            const planetColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#DDA0DD'];
+            for (let i = 0; i < 5; i++) {
+                const planet = document.createElement('div');
+                planet.className = 'planet';
+                const size = Math.random() * 30 + 20;
+                planet.style.width = size + 'px';
+                planet.style.height = size + 'px';
+                planet.style.left = Math.random() * 90 + 5 + '%';
+                planet.style.top = Math.random() * 90 + 5 + '%';
+                planet.style.background = `radial-gradient(circle at 30% 30%, ${planetColors[i]}, ${planetColors[i]}88)`;
+                planet.style.color = planetColors[i];
+                planet.style.animationDelay = Math.random() * 6 + 's';
+                spaceBackground.appendChild(planet);
+            }
+        }
+
+        // Initialize space background on load
+        window.addEventListener('load', createSpaceBackground);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Show/hide scroll to top button
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.scrollY > 300) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        // Scroll to top functionality
+        document.getElementById('scrollTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Intersection Observer for section animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Form submission handling
+        document.querySelector('.contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Here you would normally handle the form submission
+            alert('お問い合わせありがとうございます。24時間以内にご返信させていただきます。');
+            e.target.reset();
+        });
+
+        // Add hover effect to feature items
+        document.querySelectorAll('.feature-item').forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Dynamic year in footer
+        const currentYear = new Date().getFullYear();
+        document.querySelector('.footer-bottom p').textContent = `© ${currentYear} BucksBox.ai - All rights reserved.`;
+    </script>
+</body>
+</html>
