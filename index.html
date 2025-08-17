@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BucksBox.ai - あなたのアプリを世界へ</title>
+    <title>BucksBox.ai - アプリビジネスの新しいカタチ</title>
     <style>
         * {
             margin: 0;
@@ -23,10 +23,142 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--dark-bg);
+            background-color: transparent;
             color: var(--light-text);
             overflow-x: hidden;
             line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Space Background Effects */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: planetGlow 6s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes planetGlow {
+            0%, 100% { 
+                opacity: 0.4; 
+                box-shadow: 0 0 20px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
+            }
+            50% { 
+                opacity: 0.8; 
+                box-shadow: 0 0 40px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
+            }
+        }
+
+        /* Central Floating Logo */
+        .floating-logo-central {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .logo-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: centralRotate 30s infinite linear;
+        }
+
+        .logo-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            opacity: 0.4;
+            filter: drop-shadow(0 0 30px rgba(123, 104, 238, 0.8));
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        .logo-orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(123, 104, 238, 0.2);
+            border-radius: 50%;
+            animation: orbitPulse 3s ease-in-out infinite;
+        }
+
+        .logo-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: particleOrbit 20s linear infinite reverse;
+        }
+
+        .orbit-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #FF00FF, #00BFFF);
+            border-radius: 50%;
+            filter: blur(1px);
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        @keyframes centralRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                filter: drop-shadow(0 0 30px rgba(123, 104, 238, 0.8)) brightness(1);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                filter: drop-shadow(0 0 50px rgba(123, 104, 238, 1)) brightness(1.2);
+            }
+        }
+
+        @keyframes orbitPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes particleOrbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* Loading Animation */
@@ -151,191 +283,13 @@
             overflow: hidden;
         }
 
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.3;
-        }
-
-        /* Space Background Effects */
-        .space-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
-        }
-
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 4s infinite;
-        }
-
-        .planet {
-            position: absolute;
-            border-radius: 50%;
-            animation: planetGlow 6s infinite ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes planetGlow {
-            0%, 100% { 
-                opacity: 0.4; 
-                box-shadow: 0 0 20px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
-            }
-            50% { 
-                opacity: 0.8; 
-                box-shadow: 0 0 40px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
-            }
-        }
-
-        /* Central Floating Logo - Enhanced */
-        .floating-logo-central {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .logo-wrapper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: centralRotate 30s infinite linear;
-        }
-
-        .logo-image {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 250px;
-            opacity: 0.2;
-            filter: drop-shadow(0 0 30px rgba(123, 104, 238, 0.8));
-            animation: breathe 4s ease-in-out infinite;
-        }
-
-        .logo-orbit {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 1px solid rgba(123, 104, 238, 0.2);
-            border-radius: 50%;
-            animation: orbitPulse 3s ease-in-out infinite;
-        }
-
-        .logo-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            animation: particleOrbit 20s linear infinite reverse;
-        }
-
-        .orbit-particle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: linear-gradient(45deg, #FF00FF, #00BFFF);
-            border-radius: 50%;
-            filter: blur(1px);
-            box-shadow: 0 0 10px currentColor;
-        }
-
-        @keyframes centralRotate {
-            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
-        }
-
-        @keyframes breathe {
-            0%, 100% { 
-                transform: translate(-50%, -50%) scale(1);
-                filter: drop-shadow(0 0 30px rgba(123, 104, 238, 0.8)) brightness(1);
-            }
-            50% { 
-                transform: translate(-50%, -50%) scale(1.1);
-                filter: drop-shadow(0 0 50px rgba(123, 104, 238, 1)) brightness(1.2);
-            }
-        }
-
-        @keyframes orbitPulse {
-            0%, 100% { 
-                transform: scale(1);
-                opacity: 0.2;
-            }
-            50% { 
-                transform: scale(1.1);
-                opacity: 0.4;
-            }
-        }
-
-        @keyframes particleOrbit {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Remove old floating logos styles */
-        .floating-logos {
-            display: none;
-        }
-
-        /* Adjust body background */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: transparent;
-            color: var(--light-text);
-            overflow-x: hidden;
-            line-height: 1.6;
-            position: relative;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            background: var(--primary-color);
-            border-radius: 50%;
-            animation: float 20s infinite linear;
-        }
-
-        @keyframes float {
-            from {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
         .hero-content {
             text-align: center;
             z-index: 2;
             max-width: 900px;
             padding: 0 20px;
             animation: fadeInUp 1s ease-out;
+            position: relative;
         }
 
         @keyframes fadeInUp {
@@ -384,6 +338,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            margin: 10px 5px;
         }
 
         .cta-button::before {
@@ -430,6 +385,122 @@
             -webkit-text-fill-color: transparent;
         }
 
+        /* Services Grid */
+        .services-main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 2px solid rgba(123, 104, 238, 0.3);
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card.featured {
+            border-color: var(--secondary-color);
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(255, 255, 255, 0.02));
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(123, 104, 238, 0.1) 0%, transparent 70%);
+            transition: all 0.6s ease;
+        }
+
+        .service-card:hover::before {
+            top: -150%;
+            left: -150%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(123, 104, 238, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .service-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--gray-text);
+            margin-bottom: 25px;
+        }
+
+        .service-features {
+            list-style: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .service-features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Revenue Model Cards */
+        .revenue-highlight {
+            background: rgba(88, 86, 214, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .revenue-highlight h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .revenue-example {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
         /* About Section */
         .about-grid {
             display: grid;
@@ -449,22 +520,6 @@
             overflow: hidden;
         }
 
-        .about-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .about-card:hover::before {
-            opacity: 0.1;
-        }
-
         .about-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2);
@@ -481,119 +536,57 @@
             color: var(--primary-color);
         }
 
-        /* Features Section */
-        .features {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 30px;
-            padding: 60px;
+        /* Process Steps */
+        .process-container {
             margin: 50px 0;
         }
 
-        .feature-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+        .process-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
         }
 
-        .feature-item {
-            display: flex;
-            align-items: start;
-            gap: 15px;
-            padding: 20px;
-            border-radius: 15px;
-            transition: all 0.3s ease;
+        .process-title {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 1.4rem;
         }
 
-        .feature-item:hover {
-            background: rgba(0, 122, 255, 0.1);
-            transform: translateX(10px);
-        }
-
-        .feature-icon {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        /* How It Works Section */
         .steps {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 30px;
-            margin-top: 50px;
         }
 
         .step {
             text-align: center;
             position: relative;
-            padding: 30px;
-            animation: stepPulse 3s ease-in-out infinite;
-            animation-delay: calc(var(--step-index) * 0.2s);
-        }
-
-        @keyframes stepPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            padding: 20px;
         }
 
         .step-number {
             display: inline-block;
-            width: 60px;
-            height: 60px;
-            line-height: 60px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
             background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             border-radius: 50%;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
+            margin-bottom: 15px;
         }
 
-        .step:hover .step-number {
-            transform: rotate(360deg);
-        }
-
-        /* Pricing Section */
-        .pricing-card {
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
-            border: 2px solid var(--primary-color);
-            border-radius: 30px;
-            padding: 50px;
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pricing-card::before {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            animation: pricingShine 10s ease-in-out infinite;
-        }
-
-        @keyframes pricingShine {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) rotate(180deg); }
-        }
-
-        .price-tag {
-            font-size: 3rem;
-            font-weight: bold;
+        .step h4 {
             color: var(--primary-color);
-            margin: 20px 0;
+            margin-bottom: 10px;
         }
 
-        .price-details {
-            font-size: 1.2rem;
+        .step p {
+            font-size: 0.9rem;
             color: var(--gray-text);
-            margin-bottom: 30px;
         }
 
         /* Contact Section */
@@ -623,7 +616,8 @@
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 15px;
             background: rgba(255, 255, 255, 0.1);
@@ -635,7 +629,8 @@
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--primary-color);
             background: rgba(255, 255, 255, 0.15);
@@ -728,33 +723,6 @@
             color: var(--gray-text);
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .contact-container {
-                grid-template-columns: 1fr;
-            }
-
-            .features {
-                padding: 40px 20px;
-            }
-
-            .pricing-card {
-                padding: 30px 20px;
-            }
-        }
-
         /* Scroll to Top Button */
         .scroll-top {
             position: fixed;
@@ -783,6 +751,29 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .services-main {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -799,8 +790,19 @@
                 <div class="orbit-particle" style="bottom: 0; left: 50%; transform: translateX(-50%);"></div>
                 <div class="orbit-particle" style="top: 50%; left: 0; transform: translateY(-50%);"></div>
             </div>
-            <!-- プレースホルダー：実際の運用時は提供された画像ファイルのパスに置き換えてください -->
-            <img src="bucksbox-logo.png" alt="BucksBox.ai" class="logo-image">
+            <div class="logo-image">
+                <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+                    <defs>
+                        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#FF00FF;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#7B68EE;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00BFFF;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <text x="150" y="70" text-anchor="middle" style="font-size: 60px; font-weight: 900; fill: url(#logoGrad); font-family: -apple-system, BlinkMacSystemFont, sans-serif;">BB</text>
+                    <text x="150" y="110" text-anchor="middle" style="font-size: 20px; font-weight: 600; fill: white; opacity: 0.8; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">BucksBox.ai</text>
+                </svg>
+            </div>
         </div>
     </div>
 
@@ -817,9 +819,10 @@
             <a href="#home" class="logo">BucksBox.ai</a>
             <ul class="nav-menu">
                 <li><a href="#about">企業理念</a></li>
+                <li><a href="#our-apps">開発アプリ</a></li>
                 <li><a href="#service">サービス</a></li>
-                <li><a href="#how-it-works">ご利用方法</a></li>
-                <li><a href="#pricing">料金</a></li>
+                <li><a href="#how-it-works">ご利用の流れ</a></li>
+                <li><a href="#pricing">料金体系</a></li>
                 <li><a href="#contact">お問い合わせ</a></li>
             </ul>
         </div>
@@ -828,10 +831,10 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1>あなたのアプリアイデアを<br>世界へ届ける</h1>
-            <p>AppLaunch Hub - 誰もがアプリを販売できる革新的プラットフォーム<br>
-            複雑な手続きは私たちにお任せください</p>
-            <a href="#about" class="cta-button">今すぐ始める</a>
+            <h1>アプリビジネスの<br>新しいカタチ</h1>
+            <p>アイデアから収益化まで、すべてをサポート<br>
+            BucksBox.aiが実現する３つのアプリビジネスソリューション</p>
+            <a href="#service" class="cta-button">サービスを見る</a>
         </div>
     </section>
 
@@ -840,79 +843,158 @@
         <h2 class="section-title">企業理念</h2>
         <div style="text-align: center; margin-bottom: 50px;">
             <p style="font-size: 1.2rem; line-height: 1.8; color: var(--gray-text); max-width: 800px; margin: 0 auto;">
-                BucksBox.aiは、「誰もがアプリを作れる時代」から「誰もがアプリを販売できる時代」へと導くプラットフォームです。<br>
-                私たちは単なる代行業者ではありません。開発者の創造性を世界に解き放つパートナーとして、<br>
-                アプリ販売の新しいエコシステムを構築しています。
+                BucksBox.aiは、自社アプリ開発の実績と経験を基盤に、<br>
+                すべての人がアプリビジネスに参加できる世界を実現します。<br>
+                アイデアの提供から、開発、そして販売まで、<br>
+                私たちは新しいアプリエコシステムの構築を目指しています。
             </p>
         </div>
         <div class="about-grid">
             <div class="about-card">
                 <div class="about-icon">🚀</div>
-                <h3>シンプル</h3>
-                <p>複雑な手続きを排除し、アプリ販売への最短ルートを提供します</p>
+                <h3>実績に基づく開発力</h3>
+                <p>自社アプリ開発で培った技術とノウハウを活かし、確実な品質を提供</p>
             </div>
             <div class="about-card">
-                <div class="about-icon">🌍</div>
-                <h3>グローバル</h3>
-                <p>世界中のユーザーにあなたのアプリを届けるお手伝いをします</p>
+                <div class="about-icon">💡</div>
+                <h3>アイデアの価値化</h3>
+                <p>技術的な知識がなくても、優れたアイデアを収益化できる仕組みを構築</p>
             </div>
             <div class="about-card">
-                <div class="about-icon">💰</div>
-                <h3>フェア</h3>
-                <p>透明性の高い収益分配で、開発者の努力に正当な報酬を</p>
+                <div class="about-icon">🤝</div>
+                <h3>継続的なパートナーシップ</h3>
+                <p>開発者・アイデア提供者と共に成長し、成功を分かち合う関係を構築</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Our Apps Section -->
+    <section id="our-apps">
+        <h2 class="section-title">自社開発アプリ</h2>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--gray-text); max-width: 800px; margin: 0 auto;">
+                BucksBox.aiは、日常の課題を解決する実用的なアプリを開発・販売しています。<br>
+                $1前後の手頃な価格で、ユーザーに価値を提供し続けています。
+            </p>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 20px; text-align: center;">
+            <h3 style="color: var(--primary-color); margin-bottom: 20px;">開発実績が証明する技術力</h3>
+            <p style="color: var(--gray-text); margin-bottom: 30px;">
+                私たちの開発したアプリは、App Storeで実際に販売されています。<br>
+                この実績と経験が、お客様のアイデアを確実に形にする基盤となっています。
+            </p>
+            <a href="bucksbox-our-apps-page.html" class="cta-button" style="background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));">
+                開発アプリ一覧を見る
+            </a>
         </div>
     </section>
 
     <!-- Service Section -->
     <section id="service">
-        <h2 class="section-title">サービス概要</h2>
-        <div class="features">
-            <p style="text-align: center; font-size: 1.2rem; margin-bottom: 40px;">
-                AppLaunch Hubは、アプリ開発者とApp Storeを繋ぐ革新的なプラットフォームです
+        <h2 class="section-title">３つのメインサービス</h2>
+        <div style="text-align: center; margin-bottom: 60px;">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--gray-text); max-width: 900px; margin: 0 auto;">
+                BucksBox.aiは、アプリビジネスに関わるすべての段階をサポートする<br>
+                ３つのメインサービスを提供しています
             </p>
-            <div class="feature-list">
-                <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <div>
-                        <h4>App Store Connect代行</h4>
-                        <p>面倒な登録手続きはすべてお任せください</p>
+        </div>
+        
+        <div class="services-main">
+            <!-- Service 1: 自社アプリ販売 -->
+            <div class="service-card featured">
+                <div class="service-icon">📱</div>
+                <h3>自社開発アプリ販売</h3>
+                <p class="service-description">
+                    BucksBox.aiが企画・開発した<br>
+                    実用的なアプリをApp Storeで販売
+                </p>
+                <ul class="service-features">
+                    <li>日常の課題を解決するアプリ</li>
+                    <li>$1前後の手頃な価格設定</li>
+                    <li>継続的なアップデート</li>
+                    <li>グローバル市場対応</li>
+                </ul>
+                <div style="margin-top: 25px;">
+                    <a href="bucksbox-our-apps-page.html" class="cta-button" style="padding: 10px 25px; font-size: 0.9rem;">
+                        開発実績を見る
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Service 2: アイデアのアプリ化 -->
+            <div class="service-card">
+                <div class="service-icon">💡</div>
+                <h3>アイデアのアプリ化サービス</h3>
+                <p class="service-description">
+                    あなたのアイデアを当社が開発<br>
+                    技術的な知識は一切不要
+                </p>
+                <ul class="service-features">
+                    <li>アイデアの審査・評価</li>
+                    <li>機能仕様の再定義</li>
+                    <li>当社による完全開発</li>
+                    <li>App Storeでの販売</li>
+                </ul>
+                <div class="revenue-highlight">
+                    <h4>報酬モデル</h4>
+                    <p style="font-size: 0.9rem;">初月売上（Apple手数料控除後）の<br><strong style="font-size: 1.3rem;">18%を還元</strong></p>
+                    <div class="revenue-example">
+                        <p style="font-size: 0.85rem;">
+                            例：売上¥10,000の場合<br>
+                            Apple手数料(30%)：¥3,000<br>
+                            残額：¥7,000<br>
+                            <strong style="color: var(--secondary-color);">あなたへの報酬：¥1,260</strong>
+                        </p>
                     </div>
                 </div>
-                <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <div>
-                        <h4>審査サポート</h4>
-                        <p>Appleのガイドラインに準拠した審査対策をサポート</p>
+            </div>
+            
+            <!-- Service 3: 審査代行 -->
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3>Apple Store審査代行</h3>
+                <p class="service-description">
+                    開発済みアプリの申請を完全代行<br>
+                    複雑な手続きから解放
+                </p>
+                <ul class="service-features">
+                    <li>当社名義での申請代行</li>
+                    <li>審査対策サポート</li>
+                    <li>継続的な収益管理</li>
+                    <li>アップデート対応</li>
+                </ul>
+                <div class="revenue-highlight">
+                    <h4>収益分配モデル</h4>
+                    <p style="font-size: 0.9rem;">売上（Apple手数料控除後）から<br>
+                    <strong>当社：45%</strong> / <strong>開発者：55%</strong></p>
+                    <div class="revenue-example">
+                        <p style="font-size: 0.85rem;">
+                            例：売上¥10,000の場合<br>
+                            Apple手数料(30%)：¥3,000<br>
+                            残額：¥7,000<br>
+                            当社手数料：¥3,150<br>
+                            <strong style="color: var(--secondary-color);">開発者収益：¥3,850</strong>
+                        </p>
                     </div>
                 </div>
-                <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <div>
-                        <h4>収益管理</h4>
-                        <p>売上の自動計算と透明性の高い収益分配</p>
-                    </div>
+            </div>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 20px; margin-top: 50px;">
+            <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 30px;">すべてのサービスで提供する価値</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="padding: 20px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">✓ 初期費用・月額費用なし</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-text);">成果報酬型の透明な料金体系</p>
                 </div>
-                <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <div>
-                        <h4>マーケティング支援</h4>
-                        <p>アプリの露出を最大化するための戦略的サポート</p>
-                    </div>
+                <div style="padding: 20px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">✓ 審査対策完全サポート</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-text);">Appleガイドライン準拠を保証</p>
                 </div>
-                <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <div>
-                        <h4>多言語対応</h4>
-                        <p>グローバル市場への展開をサポート</p>
-                    </div>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <div>
-                        <h4>分析ツール</h4>
-                        <p>ダウンロード数や収益の詳細な分析レポート</p>
-                    </div>
+                <div style="padding: 20px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">✓ 透明な収益管理</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-text);">リアルタイムで売上確認可能</p>
                 </div>
             </div>
         </div>
@@ -920,27 +1002,71 @@
 
     <!-- How It Works Section -->
     <section id="how-it-works">
-        <h2 class="section-title">ご利用方法</h2>
-        <div class="steps">
-            <div class="step" style="--step-index: 0;">
-                <div class="step-number">1</div>
-                <h3>アプリを開発</h3>
-                <p>あなたのアイデアを形にしてください。ノーコードツールでもOK！</p>
+        <h2 class="section-title">ご利用の流れ</h2>
+        
+        <div class="process-container">
+            <!-- Process 1: アイデアのアプリ化 -->
+            <div class="process-section">
+                <h3 class="process-title">1. アイデアのアプリ化サービス</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>アイデア投稿</h4>
+                        <p>お問い合わせフォームからアイデアをご提案</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>審査・評価</h4>
+                        <p>実現可能性と市場性を当社で審査</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>仕様策定</h4>
+                        <p>機能仕様の再定義と開発計画立案</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>開発・公開</h4>
+                        <p>当社が開発しApp Storeで販売開始</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h4>報酬受取</h4>
+                        <p>初月売上の18%（Apple手数料控除後）をお支払い</p>
+                    </div>
+                </div>
             </div>
-            <div class="step" style="--step-index: 1;">
-                <div class="step-number">2</div>
-                <h3>申請</h3>
-                <p>AppLaunch Hubにアプリをアップロード</p>
-            </div>
-            <div class="step" style="--step-index: 2;">
-                <div class="step-number">3</div>
-                <h3>審査・公開</h3>
-                <p>私たちがApp Storeへの申請を代行</p>
-            </div>
-            <div class="step" style="--step-index: 3;">
-                <div class="step-number">4</div>
-                <h3>収益化</h3>
-                <p>世界中のユーザーから収益を獲得</p>
+            
+            <!-- Process 2: 審査代行サービス -->
+            <div class="process-section">
+                <h3 class="process-title">2. Apple Store審査代行サービス</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>アプリ提出</h4>
+                        <p>開発済みアプリと必要情報を提供</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>審査準備</h4>
+                        <p>ガイドライン準拠確認と修正提案</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>申請代行</h4>
+                        <p>当社名義でApp Store Connectへ申請</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>公開管理</h4>
+                        <p>審査通過後の公開とアップデート管理</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h4>収益分配</h4>
+                        <p>毎月売上の55%（Apple手数料控除後）をお支払い</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -948,21 +1074,83 @@
     <!-- Pricing Section -->
     <section id="pricing">
         <h2 class="section-title">料金体系</h2>
-        <div class="pricing-card">
-            <h3 style="font-size: 2rem; margin-bottom: 20px;">シンプルな成果報酬型</h3>
-            <div class="price-tag">手数料 35%</div>
-            <div class="price-details">
-                初期費用・月額費用は一切かかりません<br>
-                売上が発生した時のみ手数料をいただきます
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p style="font-size: 1.3rem; color: var(--primary-color); font-weight: 600;">
+                初期費用・月額費用は一切不要
+            </p>
+            <p style="font-size: 1.1rem; color: var(--gray-text); margin-top: 10px;">
+                すべて成果報酬型の透明な料金体系です
+            </p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 900px; margin: 0 auto;">
+            <!-- アイデアのアプリ化 料金 -->
+            <div style="background: linear-gradient(135deg, rgba(88, 86, 214, 0.15), rgba(0, 122, 255, 0.05)); border: 2px solid var(--secondary-color); border-radius: 25px; padding: 40px 30px; text-align: center;">
+                <h3 style="font-size: 1.6rem; margin-bottom: 20px; color: var(--secondary-color);">アイデアのアプリ化</h3>
+                <div style="font-size: 2.5rem; font-weight: bold; color: var(--primary-color); margin: 20px 0;">
+                    初月売上の18%
+                </div>
+                <p style="color: var(--gray-text); margin-bottom: 25px;">
+                    Apple手数料控除後の売上から計算
+                </p>
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 15px;">報酬計算例</h4>
+                    <div style="text-align: left; font-size: 0.9rem;">
+                        <p>アプリ売上：¥10,000</p>
+                        <p>Apple手数料(30%)：-¥3,000</p>
+                        <p style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; margin-top: 10px;">
+                            控除後売上：¥7,000
+                        </p>
+                        <p style="font-size: 1.1rem; color: var(--secondary-color); font-weight: bold; margin-top: 10px;">
+                            あなたへの報酬：¥1,260
+                        </p>
+                    </div>
+                </div>
+                <ul style="list-style: none; text-align: left; font-size: 0.9rem;">
+                    <li style="padding: 8px 0;">✓ 開発費用は当社が全額負担</li>
+                    <li style="padding: 8px 0;">✓ アイデア採用時のみ報酬発生</li>
+                    <li style="padding: 8px 0;">✓ 初月のみの単発報酬</li>
+                </ul>
             </div>
-            <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 15px; margin-top: 30px;">
-                <h4 style="color: var(--primary-color); margin-bottom: 15px;">収益配分の例</h4>
-                <p>アプリ売上: ¥1,000<br>
-                Apple手数料(30%): ¥300<br>
-                BucksBox.ai手数料(35%): ¥245<br>
-                <strong style="color: var(--primary-color);">あなたの収益: ¥455</strong></p>
+            
+            <!-- 審査代行 料金 -->
+            <div style="background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(88, 86, 214, 0.05)); border: 2px solid var(--primary-color); border-radius: 25px; padding: 40px 30px; text-align: center;">
+                <h3 style="font-size: 1.6rem; margin-bottom: 20px; color: var(--primary-color);">審査代行サービス</h3>
+                <div style="font-size: 2rem; font-weight: bold; margin: 20px 0;">
+                    <span style="color: var(--secondary-color);">当社 45%</span>
+                    <span style="color: var(--gray-text); font-size: 1.2rem; margin: 0 10px;">/</span>
+                    <span style="color: var(--primary-color);">開発者 55%</span>
+                </div>
+                <p style="color: var(--gray-text); margin-bottom: 25px;">
+                    Apple手数料控除後の売上から分配
+                </p>
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 15px;">収益分配例</h4>
+                    <div style="text-align: left; font-size: 0.9rem;">
+                        <p>アプリ売上：¥10,000</p>
+                        <p>Apple手数料(30%)：-¥3,000</p>
+                        <p style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; margin-top: 10px;">
+                            控除後売上：¥7,000
+                        </p>
+                        <p>当社手数料(45%)：¥3,150</p>
+                        <p style="font-size: 1.1rem; color: var(--primary-color); font-weight: bold; margin-top: 10px;">
+                            開発者収益：¥3,850
+                        </p>
+                    </div>
+                </div>
+                <ul style="list-style: none; text-align: left; font-size: 0.9rem;">
+                    <li style="padding: 8px 0;">✓ 継続的な収益分配</li>
+                    <li style="padding: 8px 0;">✓ 当社名義での申請・管理</li>
+                    <li style="padding: 8px 0;">✓ 月次精算・送金</li>
+                </ul>
             </div>
-            <a href="#contact" class="cta-button" style="margin-top: 30px;">申し込む</a>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px;">
+            <p style="color: var(--gray-text); margin-bottom: 20px;">
+                詳細な条件や審査基準については、お気軽にお問い合わせください
+            </p>
+            <a href="#contact" class="cta-button">サービスについて問い合わせる</a>
         </div>
     </section>
 
@@ -970,7 +1158,17 @@
     <section id="contact">
         <h2 class="section-title">お問い合わせ</h2>
         <div class="contact-container">
-            <form class="contact-form">
+            <form class="contact-form" action="https://formspree.io/f/mkgzardz" method="POST" id="contactForm">
+                <div class="form-group">
+                    <label for="service-type">お問い合わせ内容</label>
+                    <select id="service-type" name="service-type" required>
+                        <option value="">選択してください</option>
+                        <option value="idea">アイデアのアプリ化について</option>
+                        <option value="deploy">審査代行サービスについて</option>
+                        <option value="apps">自社開発アプリについて</option>
+                        <option value="other">その他</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label for="name">お名前</label>
                     <input type="text" id="name" name="name" required>
@@ -980,10 +1178,15 @@
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="message">お問い合わせ内容</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
+                    <label for="message">詳細内容</label>
+                    <textarea id="message" name="message" rows="5" required placeholder="アイデアの概要、開発済みアプリの詳細など"></textarea>
                 </div>
-                <button type="submit" class="form-button">送信する</button>
+                <!-- Formspree用の隠しフィールド（スパム対策） -->
+                <input type="text" name="_gotcha" style="display:none">
+                <!-- 送信後のリダイレクト先（オプション） -->
+                <input type="hidden" name="_subject" value="BucksBox.ai お問い合わせ">
+                <button type="submit" class="form-button" id="submitButton">送信する</button>
+                <div id="formStatus" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
             </form>
             <div class="contact-info">
                 <div class="info-item">
@@ -1007,6 +1210,12 @@
                         <p><a href="https://x.com/bucksboxai" target="_blank" style="color: var(--primary-color);">@bucksboxai</a></p>
                     </div>
                 </div>
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; margin-top: 30px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">対応時間</h4>
+                    <p style="font-size: 0.9rem;">ご質問に対する標準応答時間は72時間（最長一週間以内）となります。<br>
+                    (業務の状況により、前倒し、後ろ倒しの場合もありますことをご了承ください)<br>
+                    受付は、メールにてお願いします。</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1016,7 +1225,7 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h4>BucksBox.ai</h4>
-                <p>誰もがアプリを販売できる時代へ</p>
+                <p>アプリビジネスの新しいカタチ</p>
                 <p style="margin-top: 10px;">
                     <a href="https://x.com/bucksboxai" target="_blank">Follow us on X</a>
                 </p>
@@ -1024,15 +1233,17 @@
             <div class="footer-section">
                 <h4>サービス</h4>
                 <ul>
-                    <li><a href="#service">AppLaunch Hub</a></li>
-                    <li><a href="#pricing">料金プラン</a></li>
-                    <li><a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank">App Store ガイドライン</a></li>
+                    <li><a href="#our-apps">自社開発アプリ</a></li>
+                    <li><a href="#service">アイデアのアプリ化</a></li>
+                    <li><a href="#service">審査代行サービス</a></li>
+                    <li><a href="#pricing">料金体系</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h4>会社情報</h4>
                 <ul>
                     <li><a href="#about">企業理念</a></li>
+                    <li><a href="#how-it-works">ご利用の流れ</a></li>
                     <li><a href="#">利用規約</a></li>
                     <li><a href="#">プライバシーポリシー</a></li>
                 </ul>
@@ -1042,7 +1253,8 @@
                 <ul>
                     <li><a href="#contact">お問い合わせ</a></li>
                     <li><a href="#">よくある質問</a></li>
-                    <li><a href="#">開発者ガイド</a></li>
+                    <li><a href="#">審査基準について</a></li>
+                    <li><a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank">App Store ガイドライン</a></li>
                 </ul>
             </div>
         </div>
@@ -1152,17 +1364,56 @@
             observer.observe(section);
         });
 
-        // Form submission handling
-        document.querySelector('.contact-form').addEventListener('submit', (e) => {
+        // Form submission handling with Formspree
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Here you would normally handle the form submission
-            alert('お問い合わせありがとうございます。24時間以内にご返信させていただきます。');
-            e.target.reset();
-        });
-
-        // Add hover effect to feature items
-        document.querySelectorAll('.feature-item').forEach((item, index) => {
-            item.style.animationDelay = `${index * 0.1}s`;
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            const submitButton = document.getElementById('submitButton');
+            const formStatus = document.getElementById('formStatus');
+            
+            // ボタンを無効化して二重送信を防ぐ
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+            formStatus.innerHTML = '';
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // 送信成功
+                    formStatus.innerHTML = '<span style="color: #34C759;">✓ お問い合わせを受け付けました。<br>標準72時間以内（最長一週間以内）にご返信させていただきます。</span>';
+                    form.reset();
+                    
+                    // 5秒後にメッセージを消す
+                    setTimeout(() => {
+                        formStatus.innerHTML = '';
+                    }, 5000);
+                } else {
+                    // エラーレスポンスの処理
+                    const data = await response.json();
+                    if (data.errors) {
+                        const errorMessages = data.errors.map(error => error.message).join('<br>');
+                        throw new Error(errorMessages);
+                    } else {
+                        throw new Error('送信に失敗しました。しばらくしてから再度お試しください。');
+                    }
+                }
+            } catch (error) {
+                // エラー表示
+                formStatus.innerHTML = `<span style="color: #FF3B30;">✗ ${error.message || '送信エラーが発生しました。直接メール（bucksboxaiqa.2025@gmail.com）でお問い合わせください。'}</span>`;
+            } finally {
+                // ボタンを再度有効化
+                submitButton.disabled = false;
+                submitButton.textContent = '送信する';
+            }
         });
 
         // Dynamic year in footer
