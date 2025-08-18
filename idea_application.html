@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アイデアのアプリ化申請 - BucksBox.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF3B30;
+            --success-color: #34C759;
+            --dark-bg: #000000;
+            --light-text: #FFFFFF;
+            --gray-text: #8E8E93;
+            --error-color: #FF3B30;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Space Background */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 20px 80px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(0, 122, 255, 0.1));
+            border-radius: 20px;
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: var(--gray-text);
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-title {
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .info-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light-text);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .required {
+            color: var(--accent-color);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            margin-top: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: start;
+            gap: 15px;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--gray-text);
+            cursor: pointer;
+        }
+
+        .checkbox-group a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .warning-box {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--light-text);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .warning-box h4 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--light-text);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .highlight-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+
+        .form-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .form-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            background: rgba(52, 199, 89, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .form-container {
+                padding: 25px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="bucksbox-homepage-revised.html" class="logo">BucksBox.ai</a>
+            <a href="bucksbox-homepage-revised.html" class="back-button">
+                <span>←</span> ホームへ戻る
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="page-header">
+            <h1 class="page-title">アイデアのアプリ化申請</h1>
+            <p class="page-subtitle">
+                あなたのアイデアを当社が開発・販売いたします<br>
+                技術的な知識は一切不要。優れたアイデアがあれば、それを収益化できます
+            </p>
+        </div>
+
+        <!-- Service Info -->
+        <div class="info-section">
+            <h2 class="info-title">💡 サービス概要</h2>
+            <p>アイデア提供者から提供されたアイデアを当社が審査し、採用された場合に当社の責任と費用でアプリを開発・販売するサービスです。</p>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <h4>報酬</h4>
+                    <p>初月売上（Apple手数料控除後）の<strong>18%</strong></p>
+                </div>
+                <div class="info-item">
+                    <h4>報酬期間</h4>
+                    <p>アプリ公開から<strong>30日間のみ</strong><br>（2ヶ月目以降の報酬なし）</p>
+                </div>
+                <div class="info-item">
+                    <h4>開発費用</h4>
+                    <p><strong>当社が全額負担</strong><br>初期費用・月額費用なし</p>
+                </div>
+                <div class="info-item">
+                    <h4>審査期間</h4>
+                    <p>標準<strong>72時間以内</strong><br>（最長1週間以内）</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Important Notice -->
+        <div class="warning-box">
+            <h4>重要事項</h4>
+            <ul style="list-style: none; margin-left: 0;">
+                <li>• 一度提供されたアイデアおよび開発されたアプリの権利は、いかなる理由があっても当社に永続的に帰属し、返還されません</li>
+                <li>• アイデア採用時のみ報酬が発生します（不採用の場合は報酬なし）</li>
+                <li>• 報酬は初月（30日間）の売上に対してのみ支払われます</li>
+                <li>• 詳細は<a href="bucksbox-terms-of-service.html" target="_blank" style="color: var(--primary-color);">利用規約</a>をご確認ください</li>
+            </ul>
+        </div>
+
+        <!-- Application Form -->
+        <div class="form-container">
+            <form id="ideaApplicationForm" action="https://formspree.io/f/xvgpgngz" method="POST">
+                <!-- Hidden Fields -->
+                <input type="hidden" name="service_type" value="idea-application">
+                <input type="hidden" name="_subject" value="【BucksBox.ai】アイデアのアプリ化申請">
+
+                <!-- 申請者情報 -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">👤</span>
+                        申請者情報
+                    </h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="company_name">会社名・組織名</label>
+                            <input type="text" id="company_name" name="company_name" placeholder="株式会社〇〇">
+                        </div>
+                        <div class="form-group">
+                            <label for="applicant_name">申請者名 <span class="required">*</span></label>
+                            <input type="text" id="applicant_name" name="applicant_name" required placeholder="山田 太郎">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">メールアドレス <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required placeholder="example@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">電話番号</label>
+                            <input type="tel" id="phone" name="phone" placeholder="090-1234-5678">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- アイデア詳細 -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">💡</span>
+                        アイデア詳細
+                    </h2>
+                    
+                    <div class="warning-box">
+                        <h4>重要事項</h4>
+                        <p>以下の項目はご希望として承りますが、当社の審査・分析の結果、市場戦略・技術的制約・ブランド戦略等の観点から変更される場合があります。これらの仕様については当社の総合的な審査により決定させていただきます。</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="app_idea_title">アプリアイデアのタイトル（希望） <span class="required">*</span></label>
+                        <input type="text" id="app_idea_title" name="app_idea_title" required placeholder="例：お薬忘れ防止アプリ">
+                        <div class="form-help">当社審査の結果、市場戦略上変更される場合があります</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app_idea_description">アイデアの詳細説明 <span class="required">*</span></label>
+                        <textarea id="app_idea_description" name="app_idea_description" required placeholder="アプリの機能、解決したい課題、使用方法などを具体的に記載してください。&#10;&#10;例：&#10;・高齢者が薬の飲み忘れを防ぐためのアプリ&#10;・大きな文字とシンプルな操作で誰でも使える&#10;・服薬時間になったら通知でお知らせ&#10;・タップするだけで服薬記録完了"></textarea>
+                        <div class="form-help">解決したい課題、主要機能、操作方法など、できるだけ具体的に記載してください</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="target_users">想定ユーザー層 <span class="required">*</span></label>
+                            <select id="target_users" name="target_users" required>
+                                <option value="">選択してください</option>
+                                <option value="general">一般消費者（幅広い年齢層）</option>
+                                <option value="young">若年層（10-30代）</option>
+                                <option value="middle">中年層（30-50代）</option>
+                                <option value="elderly">高齢者（60代以上）</option>
+                                <option value="business">ビジネス・法人向け</option>
+                                <option value="students">学生向け</option>
+                                <option value="parents">子育て世代</option>
+                                <option value="healthcare">医療・介護関係者</option>
+                                <option value="other">その他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="app_category">アプリカテゴリ（希望） <span class="required">*</span></label>
+                            <select id="app_category" name="app_category" required>
+                                <option value="">選択してください</option>
+                                <option value="utility">ユーティリティ</option>
+                                <option value="lifestyle">ライフスタイル</option>
+                                <option value="health">ヘルスケア・フィットネス</option>
+                                <option value="productivity">仕事効率化</option>
+                                <option value="education">教育</option>
+                                <option value="entertainment">エンターテインメント</option>
+                                <option value="business">ビジネス</option>
+                                <option value="finance">ファイナンス</option>
+                                <option value="travel">旅行</option>
+                                <option value="other">その他</option>
+                            </select>
+                            <div class="form-help">App Store戦略により最適カテゴリに変更される場合があります</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 市場性・収益性 -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📈</span>
+                        市場性・収益性
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="market_analysis">市場性・収益性の見込み</label>
+                        <textarea id="market_analysis" name="market_analysis" placeholder="なぜ収益が見込めるかなどを記載してください。&#10;&#10;例：&#10;・高齢者人口の増加に伴い需要拡大が見込まれる&#10;・類似アプリは操作が複雑で高齢者には不向き&#10;・シンプルな操作性で差別化が可能"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expected_price">希望販売価格</label>
+                        <select id="expected_price" name="expected_price">
+                            <option value="">選択してください</option>
+                            <option value="150">150円</option>
+                            <option value="200">200円</option>
+                            <option value="250">250円</option>
+                            <option value="300">300円</option>
+                            <option value="other">その他（備考欄に記載）</option>
+                        </select>
+                        <div class="form-help">当社の価格帯は150-200円が中心ですが、市場分析により最終価格を決定します</div>
+                    </div>
+                </div>
+
+                <!-- 技術的要件 -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">⚙️</span>
+                        技術的要件
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="technical_requirements">必要な機能・技術要件</label>
+                        <textarea id="technical_requirements" name="technical_requirements" placeholder="実現したい機能を具体的に記載してください。&#10;&#10;例：&#10;・プッシュ通知機能（服薬時間のリマインダー）&#10;・写真撮影機能（薬の記録用）&#10;・カレンダー表示機能&#10;・大きな文字表示&#10;・オフライン動作必須"></textarea>
+                        <div class="form-help">実装したい機能、必要な技術、特別な要件があれば記載してください</div>
+                    </div>
+                </div>
+
+                <!-- 補足情報 -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📝</span>
+                        補足情報
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="additional_info">その他・補足事項</label>
+                        <textarea id="additional_info" name="additional_info" placeholder="参考となる類似アプリ、特別な要望、質問などがあれば記載してください。"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reference_apps">参考となる類似アプリ・サービス</label>
+                        <input type="text" id="reference_apps" name="reference_apps" placeholder="例：〇〇アプリのような機能、△△サービスの操作性">
+                        <div class="form-help">既存のアプリやサービスで参考になるものがあれば記載してください</div>
+                    </div>
+                </div>
+
+                <!-- 同意事項 -->
+                <div class="checkbox-group">
+                    <input type="checkbox" id="copyright_agreement" name="copyright_agreement" required>
+                    <label for="copyright_agreement">
+                        <strong>重要：権利譲渡に関する同意</strong><br>
+                        私は、提供するアイデアおよび当社が開発するアプリの著作権を含む一切の知的財産権を当社に完全に譲渡することに同意します。この権利譲渡は永続的かつ取消不能であり、契約解除等のいかなる事由によっても返還されないことを理解し、同意します。
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms_agreement" name="terms_agreement" required>
+                    <label for="terms_agreement">
+                        <a href="bucksbox-terms-of-service.html" target="_blank">利用規約</a>および
+                        <a href="#" target="_blank">プライバシーポリシー</a>に同意します
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="revenue_understanding" name="revenue_understanding" required>
+                    <label for="revenue_understanding">
+                        <strong>報酬条件の理解</strong><br>
+                        報酬は初月（30日間）の売上に対してのみ支払われ、2ヶ月目以降の報酬はないことを理解し、同意します。
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="form-button" id="submitButton">
+                    アイデアを申請する
+                </button>
+
+                <div class="spinner" id="loadingSpinner"></div>
+                <div class="success-message" id="successMessage">
+                    申請を受け付けました。確認メールをご確認ください。<br>
+                    審査結果は1-2週間以内にご連絡いたします（案件の混み具合により前後する場合があります）。
+                </div>
+                <div class="error-message" id="errorMessage">
+                    送信エラーが発生しました。お手数ですが、直接メール（bucksboxaiqa.2025@gmail.com）でお問い合わせください。
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Generate space background
+        function createSpaceBackground() {
+            const spaceBackground = document.getElementById('spaceBackground');
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                spaceBackground.appendChild(star);
+            }
+        }
+
+        window.addEventListener('load', createSpaceBackground);
+
+        // Form submission handling
+        document.getElementById('ideaApplicationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            const submitButton = document.getElementById('submitButton');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+            loadingSpinner.style.display = 'block';
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    // Success
+                    successMessage.style.display = 'block';
+                    form.reset();
+                    
+                    // Scroll to success message
+                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    // Error response
+                    throw new Error('Server response error');
+                }
+            } catch (error) {
+                // Error handling
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } finally {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.textContent = 'アイデアを申請する';
+                loadingSpinner.style.display = 'none';
+            }
+        });
+
+        // Form validation
+        const requiredFields = ['applicant_name', 'email', 'app_idea_title', 'app_idea_description', 'target_users', 'app_category'];
+        const checkboxes = ['copyright_agreement', 'terms_agreement', 'revenue_understanding'];
+
+        function validateForm() {
+            let isValid = true;
+            
+            // Check required fields
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = 'var(--error-color)';
+                } else {
+                    field.style.borderColor = '';
+                }
+            });
+            
+            // Check required checkboxes
+            checkboxes.forEach(checkboxId => {
+                const checkbox = document.getElementById(checkboxId);
+                if (!checkbox.checked) {
+                    isValid = false;
+                    checkbox.parentElement.style.borderColor = 'var(--error-color)';
+                } else {
+                    checkbox.parentElement.style.borderColor = '';
+                }
+            });
+            
+            // Email validation
+            const emailField = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailField.value && !emailRegex.test(emailField.value)) {
+                isValid = false;
+                emailField.style.borderColor = 'var(--error-color)';
+            }
+            
+            return isValid;
+        }
+
+        // Real-time validation
+        document.getElementById('ideaApplicationForm').addEventListener('input', validateForm);
+        document.getElementById('ideaApplicationForm').addEventListener('change', validateForm);
+    </script>
+</body>
+</html>
