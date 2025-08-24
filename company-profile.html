@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会社概要 - BucksBox.ai | 会社情報・ビジョン</title>
+    <meta name="description" content="BucksBox.aiの会社概要、ミッション、ビジョン、サービス内容をご紹介。アプリビジネスの新しいカタチを提供する企業です。">
+    <meta name="keywords" content="BucksBox.ai,会社概要,ミッション,ビジョン,アプリ開発企業,iOS開発">
+    <meta name="author" content="BucksBox.ai">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bucksbox.ai/company-profile">
+    <meta property="og:title" content="会社概要 - BucksBox.ai">
+    <meta property="og:description" content="BucksBox.aiの会社情報、ミッション、ビジョン。アプリビジネスの新しいカタチを提供します。">
+    <meta property="og:image" content="https://bucksbox.ai/images/company-og.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:title" content="会社概要 - BucksBox.ai">
+    <meta property="twitter:description" content="BucksBox.aiの会社情報、ミッション、ビジョンをご紹介。">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bucksbox.ai/company-profile">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF3B30;
+            --success-color: #34C759;
+            --dark-bg: #000000;
+            --light-text: #FFFFFF;
+            --gray-text: #8E8E93;
+            --section-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.8;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Space Background */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 20px 80px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(0, 122, 255, 0.1));
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ffffff10" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .page-title {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .company-tagline {
+            font-size: 1.4rem;
+            color: var(--gray-text);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .company-logo {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Company Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--section-bg);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--gray-text);
+            font-size: 1rem;
+        }
+
+        /* Company Sections */
+        .company-section {
+            background: var(--section-bg);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .company-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+        }
+
+        .section-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--light-text);
+        }
+
+        .section-content p {
+            margin-bottom: 20px;
+        }
+
+        .section-content ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-content li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .section-content li::marker {
+            color: var(--primary-color);
+        }
+
+        /* Mission Vision Values */
+        .mvv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .mvv-item {
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .mvv-item h4 {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mvv-item p {
+            line-height: 1.7;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .service-card {
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.2);
+        }
+
+        .service-card h4 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .service-card .service-icon {
+            font-size: 1.8rem;
+        }
+
+        .service-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .service-features {
+            list-style: none;
+            margin: 0;
+        }
+
+        .service-features li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Team Section */
+        .team-philosophy {
+            background: linear-gradient(135deg, rgba(255, 59, 48, 0.1), rgba(255, 149, 0, 0.1));
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .team-philosophy h4 {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .contact-item {
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        .contact-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .contact-item .contact-icon {
+            font-size: 1.5rem;
+        }
+
+        .contact-item p {
+            line-height: 1.6;
+        }
+
+        .contact-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .highlight-box h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--gray-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .company-tagline {
+                font-size: 1.1rem;
+            }
+
+            .company-section {
+                padding: 25px 20px;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .mvv-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="bucksbox-homepage-revised.html" class="logo">BucksBox.ai</a>
+            <a href="bucksbox-homepage-revised.html" class="back-button">
+                <span>←</span> ホームへ戻る
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="company-logo">🚀</div>
+            <h1 class="page-title">BucksBox.ai</h1>
+            <p class="company-tagline">アイデアを収益に変える、モバイルアプリ開発のプロフェッショナル</p>
+            <p style="color: var(--gray-text); font-size: 1rem; position: relative; z-index: 1;">
+                革新的なアプリ開発・審査代行サービスでクリエイターの夢を実現します
+            </p>
+        </div>
+
+        <!-- Company Stats -->
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">3</span>
+                <div class="stat-label">主要サービス</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">2025</span>
+                <div class="stat-label">設立年</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">iOS</span>
+                <div class="stat-label">専門プラットフォーム</div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">72h</span>
+                <div class="stat-label">平均サポート応答時間</div>
+            </div>
+        </div>
+
+        <!-- Mission, Vision, Values -->
+        <div class="company-section">
+            <h2 class="section-title">
+                <span class="section-icon">🎯</span>
+                私たちの理念
+            </h2>
+            
+            <div class="mvv-grid">
+                <div class="mvv-item">
+                    <h4><span>🌟</span>ミッション</h4>
+                    <p>優れたアイデアを持つ全ての人に、技術的な障壁を取り除き、アプリ開発から収益化まで一貫したサポートを提供することで、デジタル時代における新しい価値創造を実現します。</p>
+                </div>
+                <div class="mvv-item">
+                    <h4><span>🔮</span>ビジョン</h4>
+                    <p>世界中のクリエイターが、アイデア一つで持続可能なビジネスを構築できる未来を創造し、イノベーションの民主化を推進する、モバイルアプリ開発業界のリーディングカンパニーになります。</p>
+                </div>
+                <div class="mvv-item">
+                    <h4><span>💎</span>バリュー</h4>
+                    <p><strong>透明性・品質・継続性</strong><br>
+                    すべての取引において透明性を保ち、最高品質のサービスを提供し、パートナーとの長期的な関係構築を重視します。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Us -->
+        <div class="company-section">
+            <h2 class="section-title">
+                <span class="section-icon">🏢</span>
+                会社について
+            </h2>
+            <div class="section-content">
+                <p>
+                    BucksBox.aiは、2025年に設立されたiOSアプリ開発・審査代行のスペシャリストです。私たちは「誰もが持つアイデアを実際の収益に変える」という強い信念のもと、技術的な専門知識がない方でもアプリビジネスに参入できる包括的なサービスを提供しています。
+                </p>
+                <p>
+                    従来のアプリ開発業界では、優れたアイデアを持っていても、技術的なハードル、Apple審査の複雑さ、継続的な運営ノウハウの不足により、多くの可能性が眠ったままになっていました。私たちはこの課題を解決するため、アイデア提供から開発、審査代行、収益分配まで一貫してサポートする革新的なビジネスモデルを構築しました。
+                </p>
+                <p>
+                    特に、当社独自の「アイデアのアプリ化サービス」と「iOS審査代行サービス」により、これまでアプリ開発の世界に参入することが困難だった多くのクリエイターや事業者に、新たなビジネス機会を提供しています。
+                </p>
+            </div>
+        </div>
+
+        <!-- Our Services -->
+        <div class="company-section">
+            <h2 class="section-title">
+                <span class="section-icon">⚙️</span>
+                サービス概要
+            </h2>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h4>
+                        <span class="service-icon">📱</span>
+                        自社開発アプリ
+                    </h4>
+                    <p class="service-description">
+                        市場ニーズを徹底的に分析して開発した高品質なiOSアプリを、App Storeを通じて販売しています。
+                    </p>
+                    <ul class="service-features">
+                        <li>VisionNote - OCR・文字認識アプリ</li>
+                        <li>Park-Pin - 駐車位置記録アプリ</li>
+                        <li>Medi-Tap - 服薬管理アプリ</li>
+                        <li>150円〜300円の買い切り型価格設定</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <h4>
+                        <span class="service-icon">💡</span>
+                        アイデアのアプリ化
+                    </h4>
+                    <p class="service-description">
+                        優れたアイデアを当社が開発・販売し、初月売上の18%を報酬として還元する革新的なサービスです。
+                    </p>
+                    <ul class="service-features">
+                        <li>初期費用・月額費用完全無料</li>
+                        <li>当社が開発リスクを完全負担</li>
+                        <li>専門的な技術知識不要</li>
+                        <li>市場分析から販売戦略まで一括サポート</li>
+                    </ul>
+                </div>
+
+                <div class="service-card">
+                    <h4>
+                        <span class="service-icon">🛡️</span>
+                        iOS審査代行
+                    </h4>
+                    <p class="service-description">
+                        開発済みアプリを当社名義でApp Storeへ申請・公開し、継続的な収益管理を代行するサービスです。
+                    </p>
+                    <ul class="service-features">
+                        <li>Apple審査の専門ノウハウ</li>
+                        <li>継続的な55%収益分配</li>
+                        <li>アプリ運営・アップデート代行</li>
+                        <li>技術サポート・問題解決</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Our Approach -->
+        <div class="company-section">
+            <h2 class="section-title">
+                <span class="section-icon">🎨</span>
+                私たちのアプローチ
+            </h2>
+            <div class="section-content">
+                <h4 style="color: var(--primary-color); margin-bottom: 15px;">🔍 徹底的な市場分析</h4>
+                <p>App Store動向、競合分析、ユーザーニーズの調査を基に、収益性の高いアプリ開発・選定を行います。</p>
+
+                <h4 style="color: var(--primary-color); margin-bottom: 15px; margin-top: 25px;">⚡ スピーディな対応</h4>
+                <p>アイデア審査から開発完了まで、業界最速クラスのスケジュールで対応。お客様の機会損失を最小限に抑制します。</p>
+
+                <h4 style="color: var(--primary-color); margin-bottom: 15px; margin-top: 25px;">📊 透明性のある収益分配</h4>
+                <p>売上データ、分配計算、支払い履歴をすべて透明化。パートナーとの信頼関係を最重視したビジネス運営を行います。</p>
+
+                <h4 style="color: var(--primary-color); margin-bottom: 15px; margin-top: 25px;">🔒 法的リスク管理</h4>
+                <p>著作権管理、税務処理、Apple規約遵守など、法的・規制面でのリスクを当社が完全に管理します。</p>
+            </div>
+        </div>
+
+        <!-- Team Philosophy -->
+        <div class="team-philosophy">
+            <h4>🤝 パートナーシップへのコミットメント</h4>
+            <p>
+                私たちは単なるサービス提供者ではなく、お客様の成功を共に追求するパートナーです。<br>
+                一つ一つのプロジェクトに真摯に向き合い、全力でサポートすることをお約束します。
+            </p>
+        </div>
+
+        <!-- Technology & Innovation -->
+        <div class="company-section">
+            <h2 class="section-title">
+                <span class="section-icon">🚀</span>
+                技術・イノベーション
+            </h2>
+            <div class="section-content">
+                <p>
+                    BucksBox.aiは最新の開発技術とツールを活用し、高品質なアプリ開発を実現しています。SwiftUI、Core MLなどのApple最新技術の積極的な採用により、ユーザーエクスペリエンスに優れたアプリを提供しています。
+                </p>
+                <p>
+                    また、AI・機械学習技術を市場分析やアプリ最適化に活用し、収益性の向上を図っています。継続的な技術研究開発により、常に業界をリードするサービス品質を維持しています。
+                </p>
+                
+                <div class="highlight-box">
+                    <h4>🔧 主要技術スタック</h4>
+                    <p>Swift・SwiftUI・Core Data・CloudKit・Core ML・ARKit・Combine・Async/Await</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quality & Compliance -->
+        <div class="company-section">
+            <h2 class="section-title">
+                <span class="section-icon">✅</span>
+                品質・コンプライアンス
+            </h2>
+            <div class="section-content">
+                <p>
+                    当社では、すべてのアプリ開発プロジェクトにおいて厳格な品質基準を設けています。Apple Human Interface Guidelines完全準拠、ゼロビルドエラー、包括的テストの実施を必須としており、App Store審査通過率の向上を実現しています。
+                </p>
+                <p>
+                    法的コンプライアンスについても、個人情報保護法、特定商取引法、知的財産権法等の関連法規を遵守し、お客様に安心してご利用いただける体制を整備しています。
+                </p>
+                
+                <ul style="margin-top: 20px;">
+                    <li><strong>品質保証：</strong>全アプリに対する包括的テスト・品質監査</li>
+                    <li><strong>セキュリティ：</strong>SSL/TLS暗号化、定期的セキュリティ診断</li>
+                    <li><strong>プライバシー：</strong>GDPR・CCPA対応、透明性のあるデータ処理</li>
+                    <li><strong>法的保護：</strong>著作権管理、契約書整備、紛争解決体制</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="company-section">
+            <h2 class="section-title">
+                <span class="section-icon">📞</span>
+                お問い合わせ
+            </h2>
+            
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h4>
+                        <span class="contact-icon">✉️</span>
+                        メール
+                    </h4>
+                    <p>
+                        <a href="mailto:bucksboxaiqa.2025@gmail.com">bucksboxaiqa.2025@gmail.com</a><br>
+                        <small>標準応答時間：72時間以内</small>
+                    </p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>
+                        <span class="contact-icon">🕐</span>
+                        対応時間
+                    </h4>
+                    <p>
+                        メールにて24時間受付<br>
+                        <small>緊急時は優先対応いたします</small>
+                    </p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>
+                        <span class="contact-icon">🌍</span>
+                        拠点
+                    </h4>
+                    <p>
+                        Tokyo, Japan<br>
+                        <small>リモートワーク中心の運営体制</small>
+                    </p>
+                </div>
+
+                <div class="contact-item">
+                    <h4>
+                        <span class="contact-icon">🔗</span>
+                        関連情報
+                    </h4>
+                    <p>
+                        <a href="bucksbox-terms-of-service.html">利用規約</a><br>
+                        <a href="specified-commercial-transaction.html">特定商取引法表記</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Vision -->
+        <div class="highlight-box">
+            <h4>🌟 2025年の展望</h4>
+            <p>
+                国内外のアプリマーケットへの展開、AI技術を活用したサービス拡充、<br>
+                より多くのクリエイターとのパートナーシップ構築を目指します。<br>
+                <strong>「アイデアある場所に、BucksBox.aiあり」</strong>を合言葉に、<br>
+                次世代のモバイルアプリビジネスをリードしてまいります。
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 BucksBox.ai - All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Generate space background
+        function createSpaceBackground() {
+            const spaceBackground = document.getElementById('spaceBackground');
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                spaceBackground.appendChild(star);
+            }
+        }
+
+        window.addEventListener('load', createSpaceBackground);
+
+        // Add scroll-triggered animations
+        function addScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            document.querySelectorAll('.company-section, .stat-item, .mvv-item, .service-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        window.addEventListener('load', addScrollAnimations);
+    </script>
+</body>
+</html>

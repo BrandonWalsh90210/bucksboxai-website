@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問（FAQ） - BucksBox.ai | サービスに関する質問と回答</title>
+    <meta name="description" content="BucksBox.aiのサービスに関するよくある質問と回答。iOS開発、アプリレビュー代行、アイデア実現サービスについての疑問を解決します。">
+    <meta name="keywords" content="FAQ,よくある質問,サポート,iOS開発,アプリレビュー,アイデア実現,BucksBox">
+    <meta name="author" content="BucksBox.ai">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bucksbox.ai/faq">
+    <meta property="og:title" content="よくある質問（FAQ） - BucksBox.ai">
+    <meta property="og:description" content="BucksBox.aiのサービスに関するよくある質問と回答。iOS開発、アプリレビュー代行、アイデア実現の疑問を解決。">
+    <meta property="og:image" content="https://bucksbox.ai/images/faq-og.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary">
+    <meta property="twitter:title" content="よくある質問（FAQ） - BucksBox.ai">
+    <meta property="twitter:description" content="BucksBox.aiのサービスに関するよくある質問と回答。">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bucksbox.ai/faq">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF3B30;
+            --success-color: #34C759;
+            --dark-bg: #000000;
+            --light-text: #FFFFFF;
+            --gray-text: #8E8E93;
+            --section-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            line-height: 1.8;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Space Background */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            padding: 40px 20px 80px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(0, 122, 255, 0.1));
+            border-radius: 20px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: var(--gray-text);
+            font-size: 1.2rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--section-bg);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            color: var(--light-text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-text);
+            font-size: 1.2rem;
+        }
+
+        /* Category Tabs */
+        .category-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--section-bg);
+            border-radius: 15px;
+        }
+
+        .category-tab {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: var(--light-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .category-tab:hover,
+        .category-tab.active {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3);
+        }
+
+        /* FAQ Sections */
+        .faq-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+        }
+
+        /* FAQ Items */
+        .faq-item {
+            background: var(--section-bg);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .faq-question {
+            padding: 25px 30px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(0, 122, 255, 0.1);
+        }
+
+        .faq-question.active {
+            background: rgba(0, 122, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .faq-question h4 {
+            color: var(--light-text);
+            font-size: 1.1rem;
+            font-weight: 600;
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+            font-weight: bold;
+        }
+
+        .faq-question.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .faq-answer.active {
+            padding: 25px 30px;
+            max-height: 1000px;
+        }
+
+        .faq-answer p {
+            color: var(--light-text);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .faq-answer ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .faq-answer li {
+            margin-bottom: 8px;
+            color: var(--light-text);
+        }
+
+        .faq-answer strong {
+            color: var(--primary-color);
+        }
+
+        /* Highlight Boxes */
+        .highlight-box {
+            background: rgba(0, 122, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid var(--accent-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .warning-box h5 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        /* Contact CTA */
+        .contact-cta {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(88, 86, 214, 0.1));
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .contact-cta h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .contact-cta p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .contact-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--gray-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .category-tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding: 15px;
+                gap: 8px;
+            }
+
+            .category-tab {
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .faq-question {
+                padding: 20px 20px;
+            }
+
+            .faq-question h4 {
+                font-size: 1rem;
+            }
+
+            .faq-answer.active {
+                padding: 20px 20px;
+            }
+
+            .contact-cta {
+                padding: 25px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 20px 15px 60px;
+            }
+
+            .page-title {
+                font-size: 1.7rem;
+            }
+
+            .faq-question {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .faq-answer.active {
+                padding: 15px;
+            }
+
+            .search-input {
+                padding: 12px 15px 12px 45px;
+            }
+        }
+
+        /* Hidden class for search functionality */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="bucksbox-homepage-revised.html" class="logo">BucksBox.ai</a>
+            <a href="bucksbox-homepage-revised.html" class="back-button">
+                <span>←</span> ホームへ戻る
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="page-header">
+            <h1 class="page-title">よくある質問</h1>
+            <p class="page-subtitle">サービスに関するご質問にお答えします</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="質問を検索...">
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <span class="category-tab active" data-category="all">すべて</span>
+            <span class="category-tab" data-category="general">一般的な質問</span>
+            <span class="category-tab" data-category="idea">アイデアのアプリ化</span>
+            <span class="category-tab" data-category="review">iOS審査代行</span>
+            <span class="category-tab" data-category="apps">自社開発アプリ</span>
+            <span class="category-tab" data-category="payment">料金・支払い</span>
+            <span class="category-tab" data-category="legal">法的事項</span>
+        </div>
+
+        <!-- General Questions -->
+        <div class="faq-section" data-category="general">
+            <h2 class="section-title">
+                <span class="section-icon">❓</span>
+                一般的な質問
+            </h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>BucksBox.aiはどのような会社ですか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>BucksBox.aiは、2025年に設立されたiOSアプリ開発・審査代行の専門企業です。「誰もが持つアイデアを実際の収益に変える」という理念のもと、技術的な専門知識がない方でもアプリビジネスに参入できる包括的なサービスを提供しています。</p>
+                    <p>主なサービスは以下の3つです：</p>
+                    <ul>
+                        <li>自社開発アプリの販売</li>
+                        <li>アイデアのアプリ化サービス</li>
+                        <li>iOS審査代行サービス</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>サービス利用に年齢制限はありますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>18歳以上の方にサービスをご利用いただけます。未成年者の方は、保護者の同意を得てからご利用ください。</p>
+                    <p>なお、収益分配に関する契約や著作権譲渡契約については、法的な有効性を確保するため、成人されている方のみを対象とさせていただく場合があります。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>海外在住でもサービスを利用できますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>基本的に日本在住の方を対象としたサービスとなっております。海外在住の方については、以下の点をご確認ください：</p>
+                    <ul>
+                        <li>日本語でのコミュニケーションが可能であること</li>
+                        <li>日本の銀行口座をお持ちであること（収益分配用）</li>
+                        <li>日本の税制に関する処理が可能であること</li>
+                    </ul>
+                    <p>詳細については個別にご相談ください。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Idea App Development -->
+        <div class="faq-section" data-category="idea">
+            <h2 class="section-title">
+                <span class="section-icon">💡</span>
+                アイデアのアプリ化サービス
+            </h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>どのようなアイデアが採用されやすいですか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>以下の条件を満たすアイデアが採用されやすくなります：</p>
+                    <ul>
+                        <li><strong>明確な課題解決：</strong>具体的な問題を解決するアイデア</li>
+                        <li><strong>市場性：</strong>十分な需要が見込める分野</li>
+                        <li><strong>技術的実現性：</strong>iOSアプリとして実装可能</li>
+                        <li><strong>差別化：</strong>既存アプリとの明確な違い</li>
+                        <li><strong>収益性：</strong>有料販売に適した価値提供</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <p><strong>採用されやすいカテゴリ例：</strong></p>
+                        <p>ユーティリティ、ヘルスケア、仕事効率化、ライフスタイル、教育</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>アイデアが採用されなかった場合、理由を教えてもらえますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>不採用の場合は、以下のような一般的な理由をお伝えいたします：</p>
+                    <ul>
+                        <li>市場性の課題（需要が限定的）</li>
+                        <li>技術的実現性の問題</li>
+                        <li>類似アプリとの差別化不足</li>
+                        <li>収益性の見込み不足</li>
+                        <li>App Store審査通過の可能性</li>
+                    </ul>
+                    <p>ただし、企業戦略に関わる詳細な分析内容については、開示できない場合があります。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>報酬はいつ支払われますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>支払いスケジュール：</strong></p>
+                    <ul>
+                        <li>対象期間：アプリ公開から30日間の売上</li>
+                        <li>計算：初月売上（Apple手数料控除後）の18%</li>
+                        <li>支払時期：初月終了後、翌月末までに振込</li>
+                        <li>最低支払額：1,000円（未満の場合は次月繰越なし）</li>
+                    </ul>
+                    <div class="warning-box">
+                        <h5>重要事項</h5>
+                        <p>2ヶ月目以降の売上に対する報酬は一切ありません。初月のみの1回限りの支払いとなります。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>開発期間はどのくらいかかりますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>標準的なスケジュール：</strong></p>
+                    <ul>
+                        <li>アイデア審査：1-2週間</li>
+                        <li>開発期間：2-6ヶ月（アプリの複雑性による）</li>
+                        <li>Apple審査：1-4週間</li>
+                        <li>公開：審査承認後24時間以内</li>
+                    </ul>
+                    <p>複雑な機能や高度なデザインが必要な場合は、開発期間が延長される可能性があります。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Service -->
+        <div class="faq-section" data-category="review">
+            <h2 class="section-title">
+                <span class="section-icon">🛡️</span>
+                iOS審査代行サービス
+            </h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>審査代行サービスの利用条件は何ですか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>必須条件（すべて満たす必要があります）：</strong></p>
+                    <ul>
+                        <li>ビルドエラーゼロでの完全動作保証</li>
+                        <li>アプリの著作権を含む全権利の当社への完全譲渡</li>
+                        <li>アプリトップ画面への「BucksBox.ai」社名の明確表示</li>
+                        <li>当社指定のロゴを適切なサイズ・位置で表示</li>
+                        <li>GitHubプライベートリポジトリでのソースコード提供</li>
+                    </ul>
+                    <div class="warning-box">
+                        <h5>重要</h5>
+                        <p>これらの要件を1つでも満たせない場合、審査代行をお受けできません。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>著作権譲渡は本当に必要ですか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>はい、必須条件です。</strong>以下の理由により、著作権の完全譲渡が必要です：</p>
+                    <ul>
+                        <li>App Store申請時の法的責任を当社が負担するため</li>
+                        <li>継続的なアプリ運営・アップデートの権限確保</li>
+                        <li>知的財産権に関するトラブル回避</li>
+                        <li>Apple規約との整合性確保</li>
+                    </ul>
+                    <div class="warning-box">
+                        <h5>永続的な譲渡</h5>
+                        <p>一度譲渡された権利は、契約解除等のいかなる理由でも返還されません。この点をご理解いただけない場合は、サービスをご利用いただけません。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>Apple審査で却下された場合はどうなりますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>審査却下時の対応：</strong></p>
+                    <ul>
+                        <li>却下理由の詳細分析と対応策の検討</li>
+                        <li>修正可能な問題については無料で対応</li>
+                        <li>必要に応じてApple審査チームとの調整</li>
+                        <li>再申請の実施（追加費用なし）</li>
+                    </ul>
+                    <p><strong>ただし、以下の場合は対応が困難です：</strong></p>
+                    <ul>
+                        <li>Apple規約の根本的な違反</li>
+                        <li>技術的に解決不可能な問題</li>
+                        <li>アプリのコンセプト自体の変更が必要な場合</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <p><strong>事前審査：</strong>当社では品質基準を満たすアプリのみ受付し、事前審査により審査通過率を高めています。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>収益分配率は変更されることがありますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>はい、変更の可能性があります。</strong></p>
+                    <p><strong>現在の分配率：</strong>当社45%、開発者55%（Apple手数料控除後）</p>
+                    <p><strong>変更される場合：</strong></p>
+                    <ul>
+                        <li>市場環境の大幅な変化</li>
+                        <li>App Storeの手数料変更</li>
+                        <li>法令・税制の改正</li>
+                        <li>サービス運営コストの著しい変動</li>
+                    </ul>
+                    <p><strong>変更手続き：</strong>30日前までに書面またはメールで通知いたします。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Apps -->
+        <div class="faq-section" data-category="apps">
+            <h2 class="section-title">
+                <span class="section-icon">📱</span>
+                自社開発アプリ
+            </h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>どのようなアプリを開発していますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>現在公開中のアプリ：</strong></p>
+                    <ul>
+                        <li><strong>VisionNote（150円）：</strong>OCR・文字認識アプリ。画像から文字を抽出してテキスト化</li>
+                        <li><strong>Park-Pin（150円）：</strong>駐車位置記録アプリ。駐車した場所をGPSで記録・案内</li>
+                        <li><strong>Medi-Tap（200円）：</strong>服薬管理アプリ。薬の服用時間をリマインダーで通知</li>
+                    </ul>
+                    <p>すべてiOS専用アプリで、iPhone・iPadでご利用いただけます。買い切り型の価格設定で、追加課金はありません。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>アプリのアップデートはありますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>定期的にアップデートを提供しています：</strong></p>
+                    <ul>
+                        <li>iOSバージョンアップへの対応</li>
+                        <li>バグ修正・動作改善</li>
+                        <li>新機能の追加（適宜）</li>
+                        <li>セキュリティアップデート</li>
+                    </ul>
+                    <p>アップデートは無料で提供され、App Storeを通じて自動配信されます。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>動作しない・不具合がある場合はどうすれば良いですか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>以下の手順でお問い合わせください：</strong></p>
+                    <ol>
+                        <li>アプリの再起動・iPhone/iPadの再起動を試す</li>
+                        <li>App Storeで最新版にアップデート</li>
+                        <li>問題が解決しない場合は、以下の情報と合わせてお問い合わせ
+                            <ul>
+                                <li>使用しているアプリ名・バージョン</li>
+                                <li>iOSバージョン</li>
+                                <li>使用デバイス（iPhone/iPad、機種名）</li>
+                                <li>不具合の詳細・再現手順</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p><strong>連絡先：</strong>bucksboxaiqa.2025@gmail.com</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="faq-section" data-category="payment">
+            <h2 class="section-title">
+                <span class="section-icon">💳</span>
+                料金・支払い
+            </h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>初期費用や月額費用はかかりますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>いいえ、初期費用・月額費用は一切かかりません。</strong></p>
+                    <p>当社のビジネスモデルは完全成果報酬型です：</p>
+                    <ul>
+                        <li><strong>アイデアのアプリ化：</strong>初月売上の18%のみ（2ヶ月目以降は0%）</li>
+                        <li><strong>iOS審査代行：</strong>継続的に45%の手数料（開発者は55%受取）</li>
+                        <li><strong>自社開発アプリ：</strong>App Store価格での販売（当社収益）</li>
+                    </ul>
+                    <p>売上が発生しない限り、費用は一切発生いたしません。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>支払い方法と支払日は？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>支払い方法：</strong>銀行振込（振込手数料は当社負担）</p>
+                    <p><strong>支払いスケジュール：</strong></p>
+                    <ul>
+                        <li><strong>アイデアのアプリ化：</strong>初月終了後、翌月末までに振込</li>
+                        <li><strong>iOS審査代行：</strong>毎月末締め、翌月末払い</li>
+                    </ul>
+                    <p><strong>最低支払額：</strong></p>
+                    <ul>
+                        <li>アイデアのアプリ化：1,000円</li>
+                        <li>iOS審査代行：3,000円</li>
+                    </ul>
+                    <p>最低支払額に満たない場合の取扱いが異なりますので、詳細は利用規約をご確認ください。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>税金の扱いはどうなりますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>重要：税務申告は利用者の責任です</strong></p>
+                    <p><strong>当社の対応：</strong></p>
+                    <ul>
+                        <li>年間支払総額の報告書を翌年1月末までに送付</li>
+                        <li>必要に応じて支払調書の発行</li>
+                        <li>税務署への法定調書の提出</li>
+                    </ul>
+                    <p><strong>利用者の責任：</strong></p>
+                    <ul>
+                        <li>確定申告での収入申告</li>
+                        <li>所得税・住民税の納付</li>
+                        <li>必要に応じて税理士への相談</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <p><strong>目安：</strong>年間20万円以上の収入がある場合は、確定申告が必要になる可能性があります。詳細は税理士や税務署にご相談ください。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legal -->
+        <div class="faq-section" data-category="legal">
+            <h2 class="section-title">
+                <span class="section-icon">⚖️</span>
+                法的事項
+            </h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>著作権譲渡後、自分のアイデアを他で使うことはできますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="warning-box">
+                        <h5>重要事項</h5>
+                        <p><strong>譲渡したアイデア・アプリと同一または類似のものを他で使用することはできません。</strong></p>
+                    </div>
+                    <p><strong>譲渡される権利の範囲：</strong></p>
+                    <ul>
+                        <li>アプリのアイデア・コンセプト</li>
+                        <li>機能・操作方法</li>
+                        <li>デザイン・UI/UX</li>
+                        <li>名称・ブランディング</li>
+                        <li>派生・改良版の開発権</li>
+                    </ul>
+                    <p>これらの権利は永続的に当社に帰属し、利用者は同種のサービス・アプリを開発・販売することができなくなります。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>契約を解除したい場合はどうすれば良いですか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>解除手続き：</strong></p>
+                    <ul>
+                        <li>書面またはメールでの解除通知</li>
+                        <li>理由の記載は不要</li>
+                        <li>即日または指定日での解除が可能</li>
+                    </ul>
+                    <div class="warning-box">
+                        <h5>解除後の権利関係</h5>
+                        <p><strong>契約解除後も以下の権利は当社に帰属し続けます：</strong></p>
+                        <ul>
+                            <li>既に譲渡されたアイデア・アプリの一切の権利</li>
+                            <li>著作権および知的財産権</li>
+                            <li>成果物・派生物等の権利</li>
+                        </ul>
+                        <p>当社は解除後も該当アプリの販売・改良を継続できます。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>個人情報はどのように保護されていますか？</h4>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>当社では以下の措置により個人情報を保護しています：</strong></p>
+                    <ul>
+                        <li><strong>技術的措置：</strong>SSL/TLS暗号化、ファイアウォール、ウイルス対策</li>
+                        <li><strong>物理的措置：</strong>サーバー設備の適切な管理、アクセス制限</li>
+                        <li><strong>組織的措置：</strong>個人情報保護管理者の設置、従業者教育</li>
+                        <li><strong>人的措置：</strong>秘密保持契約、アクセス権限管理</li>
+                    </ul>
+                    <p><strong>準拠法規：</strong></p>
+                    <ul>
+                        <li>個人情報保護法</li>
+                        <li>GDPR（EU居住者の情報を扱う場合）</li>
+                        <li>CCPA（カリフォルニア州居住者の情報を扱う場合）</li>
+                    </ul>
+                    <p>詳細はプライバシーポリシーをご確認ください。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact CTA -->
+        <div class="contact-cta">
+            <h3>他にご質問はありませんか？</h3>
+            <p>上記で解決しない問題については、お気軽にお問い合わせください。<br>
+            専門スタッフが72時間以内（最長1週間以内）にご回答いたします。</p>
+            <a href="mailto:bucksboxaiqa.2025@gmail.com" class="contact-button">お問い合わせする</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 BucksBox.ai - All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Generate space background
+        function createSpaceBackground() {
+            const spaceBackground = document.getElementById('spaceBackground');
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                spaceBackground.appendChild(star);
+            }
+        }
+
+        window.addEventListener('load', createSpaceBackground);
+
+        // FAQ Toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                
+                // Close all other FAQ items
+                document.querySelectorAll('.faq-question.active').forEach(activeQuestion => {
+                    if (activeQuestion !== question) {
+                        activeQuestion.classList.remove('active');
+                        activeQuestion.nextElementSibling.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current FAQ item
+                if (isActive) {
+                    question.classList.remove('active');
+                    answer.classList.remove('active');
+                } else {
+                    question.classList.add('active');
+                    answer.classList.add('active');
+                    
+                    // Scroll to question after animation
+                    setTimeout(() => {
+                        question.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'nearest' 
+                        });
+                    }, 300);
+                }
+            });
+        });
+
+        // Category filter functionality
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const category = tab.dataset.category;
+                
+                // Update active tab
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show/hide sections
+                document.querySelectorAll('.faq-section').forEach(section => {
+                    if (category === 'all' || section.dataset.category === category) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+                
+                // Close all open FAQ items
+                document.querySelectorAll('.faq-question.active').forEach(question => {
+                    question.classList.remove('active');
+                    question.nextElementSibling.classList.remove('active');
+                });
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            const sections = document.querySelectorAll('.faq-section');
+            
+            if (searchTerm === '') {
+                // Show all items and sections
+                faqItems.forEach(item => item.classList.remove('hidden'));
+                sections.forEach(section => section.classList.remove('hidden'));
+                
+                // Reapply category filter
+                const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+                if (activeCategory !== 'all') {
+                    sections.forEach(section => {
+                        if (section.dataset.category !== activeCategory) {
+                            section.classList.add('hidden');
+                        }
+                    });
+                }
+            } else {
+                // Search through FAQ items
+                let hasVisibleItems = {};
+                
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question h4').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    const section = item.closest('.faq-section');
+                    const sectionCategory = section.dataset.category;
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.classList.remove('hidden');
+                        hasVisibleItems[sectionCategory] = true;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+                
+                // Show/hide sections based on visible items
+                sections.forEach(section => {
+                    const category = section.dataset.category;
+                    if (hasVisibleItems[category]) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+                
+                // Reset category filter when searching
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                document.querySelector('.category-tab[data-category="all"]').classList.add('active');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 100;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
