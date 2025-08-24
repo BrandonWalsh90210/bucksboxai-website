@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BucksBox.ai - アプリビジネスの新しいカタチ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF3B30;
+            --dark-bg: #000000;
+            --light-text: #FFFFFF;
+            --gray-text: #8E8E93;
+            --section-padding: 80px 20px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: transparent;
+            color: var(--light-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Space Background Effects */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: planetGlow 6s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes planetGlow {
+            0%, 100% { 
+                opacity: 0.4; 
+                box-shadow: 0 0 20px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
+            }
+            50% { 
+                opacity: 0.8; 
+                box-shadow: 0 0 40px currentColor, inset -5px -5px 10px rgba(0,0,0,0.3);
+            }
+        }
+
+        /* Central Floating Logo - PC only */
+        .floating-logo-central {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .logo-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: centralRotate 30s infinite linear;
+        }
+
+        .logo-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            opacity: 0.5;
+            filter: drop-shadow(0 0 20px rgba(123, 104, 238, 0.6));
+            animation: breathe 4s ease-in-out infinite;
+            object-fit: contain;
+        }
+
+        .logo-orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(123, 104, 238, 0.2);
+            border-radius: 50%;
+            animation: orbitPulse 3s ease-in-out infinite;
+        }
+
+        .logo-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: particleOrbit 20s linear infinite reverse;
+        }
+
+        .orbit-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #FF00FF, #00BFFF);
+            border-radius: 50%;
+            filter: blur(1px);
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        @keyframes centralRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                filter: drop-shadow(0 0 20px rgba(123, 104, 238, 0.6)) brightness(1);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                filter: drop-shadow(0 0 30px rgba(123, 104, 238, 0.8)) brightness(1.2);
+            }
+        }
+
+        @keyframes orbitPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes particleOrbit {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Loading Animation - PC only */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeOut 1s 2s forwards;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 15px 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--light-text);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 900px;
+            padding: 0 20px;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 5s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--gray-text);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin: 10px 5px;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Section Styles */
+        section {
+            padding: var(--section-padding);
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Services Grid */
+        .services-main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 2px solid rgba(123, 104, 238, 0.3);
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card.featured {
+            border-color: var(--secondary-color);
+            background: linear-gradient(135deg, rgba(88, 86, 214, 0.1), rgba(255, 255, 255, 0.02));
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(123, 104, 238, 0.1) 0%, transparent 70%);
+            transition: all 0.6s ease;
+        }
+
+        .service-card:hover::before {
+            top: -150%;
+            left: -150%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(123, 104, 238, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .service-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--gray-text);
+            margin-bottom: 25px;
+        }
+
+        .service-features {
+            list-style: none;
+            text-align: left;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .service-features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* Application Buttons */
+        .service-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+            margin-top: 15px;
+        }
+
+        .service-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 122, 255, 0.3);
+        }
+
+        .service-button.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+        }
+
+        .service-button.secondary:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+
+        /* Revenue Model Cards */
+        .revenue-highlight {
+            background: rgba(88, 86, 214, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .revenue-highlight h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .revenue-example {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .about-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2);
+        }
+
+        .about-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        /* Process Steps */
+        .process-container {
+            margin: 50px 0;
+        }
+
+        .process-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .process-title {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 1.4rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .step h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            color: var(--gray-text);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--gray-text);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .contact-info {
+            padding: 40px;
+        }
+
+        .info-item {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 50px 20px 30px;
+            margin-top: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: var(--gray-text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-text);
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        /* =================================================================== */
+        /* 🎯 MOBILE OPTIMIZATION - 成功事例パターン（申請・会員登録ページ）に完全準拠 */
+        /* =================================================================== */
+        @media (max-width: 768px) {
+
+            /* === PC版の重い要素を完全削除 === */
+            .loader {
+                display: none !important; /* ローディング画面完全削除 */
+            }
+
+            .floating-logo-central {
+                display: none !important; /* フローティングロゴ完全削除 */
+            }
+
+            .planet {
+                display: none !important; /* 惑星完全削除 */
+            }
+
+            /* === ナビゲーション簡素化 === */
+            .nav-menu {
+                display: none;
+            }
+
+            nav {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                background: rgba(0, 0, 0, 0.95) !important;
+                padding: 15px 0 !important;
+            }
+
+            /* === 星のアニメーション簡素化（成功ページと同じレベル） === */
+            .star {
+                animation: twinkle 4s infinite; /* 成功ページと同じ設定維持 */
+            }
+
+            /* === ヒーローセクション調整 === */
+            .hero {
+                min-height: 100vh;
+                padding: 120px 20px 40px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem !important;
+                animation: none !important; /* グラデーションシフト無効化 */
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-size: 100% 100% !important;
+            }
+
+            .hero p {
+                font-size: 1.1rem !important;
+                margin-bottom: 30px;
+            }
+
+            .hero-content {
+                animation: none !important; /* フェードインアップ無効化 */
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+
+            /* === セクション調整 === */
+            section {
+                padding: 60px 20px !important;
+                animation: none !important; /* セクションアニメーション無効化 */
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+
+            .section-title {
+                font-size: 2rem !important;
+                margin-bottom: 40px;
+            }
+
+            /* === サービスカード簡素化 === */
+            .services-main {
+                grid-template-columns: 1fr !important;
+                gap: 30px;
+            }
+
+            .service-card {
+                padding: 30px 20px !important;
+                border-radius: 15px !important;
+                animation: none !important;
+            }
+
+            .service-card::before {
+                display: none !important; /* ホバーエフェクト削除 */
+            }
+
+            .service-card:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            .service-icon {
+                font-size: 2.5rem !important;
+                animation: none !important; /* バウンスアニメーション削除 */
+            }
+
+            .service-button:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            /* === About Cards 簡素化 === */
+            .about-grid {
+                grid-template-columns: 1fr !important;
+                gap: 25px;
+            }
+
+            .about-card {
+                padding: 30px 20px !important;
+                border-radius: 15px !important;
+            }
+
+            .about-card:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            .about-icon {
+                font-size: 2.5rem !important;
+            }
+
+            /* === プロセス簡素化 === */
+            .steps {
+                grid-template-columns: 1fr !important;
+                gap: 20px;
+            }
+
+            .process-section {
+                padding: 30px 20px !important;
+            }
+
+            /* === コンタクト調整 === */
+            .contact-container {
+                grid-template-columns: 1fr !important;
+                gap: 30px;
+            }
+
+            .contact-form {
+                padding: 30px 20px !important;
+            }
+
+            .contact-info {
+                padding: 20px !important;
+            }
+
+            /* === CTAボタン調整 === */
+            .cta-button {
+                padding: 12px 24px !important;
+                font-size: 1rem !important;
+            }
+
+            .cta-button::before {
+                display: none !important; /* ホバーエフェクト削除 */
+            }
+
+            .cta-button:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            /* === フッター調整 === */
+            .footer-content {
+                grid-template-columns: 1fr !important;
+                gap: 30px;
+            }
+
+            footer {
+                padding: 40px 20px 20px !important;
+            }
+
+            /* === スクロールトップボタン調整 === */
+            .scroll-top {
+                bottom: 20px !important;
+                right: 20px !important;
+                width: 45px !important;
+                height: 45px !important;
+            }
+
+            .scroll-top:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            /* === フォームボタン調整 === */
+            .form-button:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+            /* === 全アニメーション最適化 === */
+            .service-card h3,
+            .section-title {
+                animation: none !important;
+            }
+
+            /* === テキストのレスポンシブ調整 === */
+            body {
+                font-size: 14px;
+            }
+
+            .hero-content {
+                max-width: 100% !important;
+                padding: 0 15px !important;
+            }
+        }
+
+        /* =================================================================== */
+        /* 🖥️ PC版（769px以上）では従来の効果を完全維持 */
+        /* =================================================================== */
+        @media (min-width: 769px) {
+            /* PC版では全ての効果を維持 */
+            .loader {
+                display: flex;
+            }
+            
+            .floating-logo-central {
+                display: block;
+            }
+
+            .planet {
+                display: block;
+            }
+
+            /* PC版での左上ロゴは非表示 */
+            .logo-left-top {
+                display: none;
+            }
+        }
+
+        /* =================================================================== */
+        /* 📱 モバイル版専用の左上ロゴ（シンプル版） */
+        /* =================================================================== */
+        @media (max-width: 768px) {
+            .logo-left-top {
+                position: fixed !important;
+                top: 80px !important;
+                left: 20px !important;
+                width: 60px !important;
+                height: 60px !important;
+                z-index: 2;
+                opacity: 0.7;
+            }
+
+            .logo-left-top .logo-wrapper {
+                animation: none !important;
+                transform: none !important;
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo-left-top .logo-image {
+                animation: none !important;
+                transform: translate(-50%, -50%) !important;
+                filter: drop-shadow(0 0 10px rgba(123, 104, 238, 0.4)) !important;
+                width: 50px !important;
+                height: 50px !important;
+                opacity: 1 !important;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+            }
+
+            .logo-left-top .logo-orbit,
+            .logo-left-top .logo-particles {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
+
+    <!-- Logo positioned at left top for mobile only -->
+    <div class="logo-left-top" style="display: none;">
+        <div class="logo-wrapper">
+            <img src="BucksBox.ai_logo.png" alt="BucksBox.ai Logo" class="logo-image">
+        </div>
+    </div>
+
+    <!-- Loading Screen (PC Only) -->
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-logo">BucksBox.ai</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">BucksBox.ai</a>
+            <ul class="nav-menu">
+                <li><a href="#about">企業理念</a></li>
+                <li><a href="#our-apps">開発アプリ</a></li>
+                <li><a href="#service">サービス</a></li>
+                <li><a href="#how-it-works">ご利用の流れ</a></li>
+                <li><a href="#pricing">料金体系</a></li>
+                <li><a href="bucksbox-terms-of-service.html">利用規約</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+                <li><a href="bucksbox-register-page.html" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); padding: 8px 20px; border-radius: 20px; color: white !important;">会員登録</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>アプリビジネスの<br>新しいカタチ</h1>
+            <p>アイデアから収益化まで、すべてをサポート<br>
+            BucksBox.aiが実現する3つのアプリビジネスソリューション</p>
+            <a href="#service" class="cta-button">サービスを見る</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="section-title">企業理念</h2>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--gray-text); max-width: 800px; margin: 0 auto;">
+                BucksBox.aiは、自社アプリ開発の実績と経験を基盤に、<br>
+                すべての人がアプリビジネスに参加できる世界を実現します。<br>
+                アイデアの提供から、開発、そして販売まで、<br>
+                私たちは新しいアプリエコシステムの構築を目指しています。
+            </p>
+        </div>
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-icon">🚀</div>
+                <h3>実績に基づく開発力</h3>
+                <p>自社アプリ開発で培った技術とノウハウを活かし、確実な品質を提供</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">💡</div>
+                <h3>アイデアの価値化</h3>
+                <p>技術的な知識がなくても、優れたアイデアを収益化できる仕組みを構築</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">🤝</div>
+                <h3>継続的なパートナーシップ</h3>
+                <p>開発者・アイデア提供者と共に成長し、成功を分かち合う関係を構築</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Apps Section -->
+    <section id="our-apps">
+        <h2 class="section-title">自社開発アプリ</h2>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--gray-text); max-width: 800px; margin: 0 auto;">
+                BucksBox.aiは、日常の課題を解決する実用的なアプリを開発・販売しています。<br>
+                $1前後の手頃な価格で、ユーザーに価値を提供し続けています。
+            </p>
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.05); padding: 40px; border-radius: 20px; text-align: center;">
+            <h3 style="color: var(--primary-color); margin-bottom: 20px;">開発実績が証明する技術力</h3>
+            <p style="color: var(--gray-text); margin-bottom: 30px;">
+                私たちの開発したアプリは、App Storeで実際に販売されています。<br>
+                この実績と経験が、お客様のアイデアを確実に形にする基盤となっています。
+            </p>
+            <a href="bucksbox-our-apps-page.html" class="cta-button" style="background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));">
+                開発アプリ一覧を見る
+            </a>
+        </div>
+    </section>
+
+    <!-- Service Section -->
+    <section id="service">
+        <h2 class="section-title">3つのメインサービス</h2>
+        <div style="text-align: center; margin-bottom: 60px;">
+            <p style="font-size: 1.2rem; line-height: 1.8; color: var(--gray-text); max-width: 900px; margin: 0 auto;">
+                BucksBox.aiは、アプリビジネスに関わるすべての段階をサポートする<br>
+                3つのメインサービスを提供しています
+            </p>
+        </div>
+        
+        <div class="services-main">
+            <!-- Service 1: 自社アプリ販売 -->
+            <div class="service-card featured">
+                <div class="service-icon">📱</div>
+                <h3>自社開発アプリ販売</h3>
+                <p class="service-description">
+                    BucksBox.aiが企画・開発した<br>
+                    実用的なアプリをApp Storeで販売
+                </p>
+                <ul class="service-features">
+                    <li>日常の課題を解決するアプリ</li>
+                    <li>$1前後の手頃な価格設定</li>
+                    <li>継続的なアップデート</li>
+                    <li>グローバル市場対応</li>
+                </ul>
+                <div style="margin-top: 25px;">
+                    <a href="bucksbox-our-apps-page.html" class="service-button">
+                        開発実績を見る
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Service 2: アイデアのアプリ化 -->
+            <div class="service-card">
+                <div class="service-icon">💡</div>
+                <h3>アイデアのアプリ化サービス</h3>
+                <p class="service-description">
+                    あなたのアイデアを当社が開発<br>
+                    技術的な知識は一切不要
+                </p>
+                <ul class="service-features">
+                    <li>アイデアの審査・評価</li>
+                    <li>機能仕様の再定義</li>
+                    <li>当社による完全開発</li>
+                    <li>App Storeで販売</li>
+                </ul>
+                <div class="revenue-highlight">
+                    <h4>報酬モデル</h4>
+                    <p style="font-size: 0.9rem;">初月売上（Apple手数料控除後）の<br><strong style="font-size: 1.3rem;">18%を還元</strong></p>
+                    <p style="font-size: 0.85rem; color: #FF9500; margin-top: 10px;">
+                        ※報酬はアプリ公開から30日間の売上のみ対象（2ヶ月目以降なし）
+                    </p>
+                    <div class="revenue-example">
+                        <p style="font-size: 0.85rem;">
+                            例：500DL × ¥150 = ¥75,000の場合<br>
+                            Apple手数料(30%)：¥22,500<br>
+                            残額：¥52,500<br>
+                            <strong style="color: var(--secondary-color);">あなたへの報酬：¥9,450</strong>
+                        </p>
+                    </div>
+                </div>
+                <div style="margin-top: 25px;">
+                    <a href="idea_application.html" class="service-button">
+                        アイデアを申請する
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Service 3: 審査代行 -->
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3>Apple Store審査代行</h3>
+                <p class="service-description">
+                    開発済みアプリの申請を完全代行<br>
+                    複雑な手続きから解放
+                </p>
+                <ul class="service-features">
+                    <li>当社名義での申請代行</li>
+                    <li>審査対策サポート</li>
+                    <li>継続的な収益管理</li>
+                    <li>アップデート対応</li>
+                </ul>
+                <div style="background: rgba(255, 59, 48, 0.1); border: 1px solid var(--accent-color); border-radius: 10px; padding: 15px; margin: 20px 0;">
+                    <h4 style="color: var(--accent-color); margin-bottom: 10px; font-size: 1rem;">必須要件</h4>
+                    <ul style="list-style: none; font-size: 0.85rem;">
+                        <li style="padding: 5px 0;">• アプリの著作権を当社へ完全譲渡</li>
+                        <li style="padding: 5px 0;">• トップ画面に「BucksBox.ai」社名を明確に表示</li>
+                        <li style="padding: 5px 0;">• 当社指定のロゴを表示</li>
+                    </ul>
+                </div>
+                <div class="revenue-highlight">
+                    <h4>収益分配モデル</h4>
+                    <p style="font-size: 0.9rem;">売上（Apple手数料控除後）から<br>
+                    <strong>当社：45%</strong> / <strong>開発者：55%</strong></p>
+                    <p style="font-size: 0.85rem; color: #34C759; margin-top: 10px;">
+                        ※アプリ公開期間中は継続的に収益分配
+                    </p>
+                    <div class="revenue-example">
+                        <p style="font-size: 0.85rem;">
+                            例：500DL × ¥150 = ¥75,000の場合<br>
+                            Apple手数料(30%)：¥22,500<br>
+                            残額：¥52,500<br>
+                            当社手数料：¥23,625<br>
+                            <strong style="color: var(--secondary-color);">開発者収益：¥28,875</strong>
+                        </p>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--gray-text); margin-top: 10px;">
+                        ※収益配分率は当社事情により変更される場合があります
+                    </p>
+                </div>
+                <div style="margin-top: 25px;">
+                    <a href="review_application.html" class="service-button">
+                        審査代行を申請する
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 20px; margin-top: 50px;">
+            <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 30px;">すべてのサービスで提供する価値</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="padding: 20px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">✓ 初期費用・月額費用なし</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-text);">成果報酬型の透明な料金体系</p>
+                </div>
+                <div style="padding: 20px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">✓ 審査対策完全サポート</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-text);">Appleガイドライン準拠を保証</p>
+                </div>
+                <div style="padding: 20px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">✓ 透明な収益管理</h4>
+                    <p style="font-size: 0.9rem; color: var(--gray-text);">リアルタイムで売上確認可能</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works">
+        <h2 class="section-title">ご利用の流れ</h2>
+        
+        <div class="process-container">
+            <!-- Process 1: アイデアのアプリ化 -->
+            <div class="process-section">
+                <h3 class="process-title">1. アイデアのアプリ化サービス</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>アイデア投稿</h4>
+                        <p>お問い合わせフォームからアイデアをご提案</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>審査・評価</h4>
+                        <p>実現可能性と市場性を当社で審査</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>仕様策定</h4>
+                        <p>機能仕様の再定義と開発計画立案</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>開発・公開</h4>
+                        <p>当社が開発しApp Storeで販売開始</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h4>報酬受取</h4>
+                        <p>初月売上の18%（Apple手数料控除後）をお支払い</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Process 2: 審査代行サービス -->
+            <div class="process-section">
+                <h3 class="process-title">2. Apple Store審査代行サービス</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>アプリ提出</h4>
+                        <p>開発済みアプリと必要情報を提供<br>
+                        <span style="color: #FF9500; font-size: 0.85rem;">※著作権譲渡・ロゴ実装必須</span></p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>審査準備</h4>
+                        <p>ガイドライン準拠確認と修正提案</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>申請代行</h4>
+                        <p>当社名義でApp Store Connectへ申請</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>公開管理</h4>
+                        <p>審査通過後の公開とアップデート管理</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h4>収益分配</h4>
+                        <p>毎月売上の55%（Apple手数料控除後）をお支払い</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <h2 class="section-title">料金体系</h2>
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p style="font-size: 1.3rem; color: var(--primary-color); font-weight: 600;">
+                初期費用・月額費用は一切不要
+            </p>
+            <p style="font-size: 1.1rem; color: var(--gray-text); margin-top: 10px;">
+                すべて成果報酬型の透明な料金体系です
+            </p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 900px; margin: 0 auto;">
+            <!-- アイデアのアプリ化 料金 -->
+            <div style="background: linear-gradient(135deg, rgba(88, 86, 214, 0.15), rgba(0, 122, 255, 0.05)); border: 2px solid var(--secondary-color); border-radius: 25px; padding: 40px 30px; text-align: center;">
+                <h3 style="font-size: 1.6rem; margin-bottom: 20px; color: var(--secondary-color);">アイデアのアプリ化</h3>
+                <div style="font-size: 2.5rem; font-weight: bold; color: var(--primary-color); margin: 20px 0;">
+                    初月売上の18%
+                </div>
+                <p style="color: var(--gray-text); margin-bottom: 25px;">
+                    Apple手数料控除後の売上から計算
+                </p>
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 15px;">報酬計算例</h4>
+                    <div style="text-align: left; font-size: 0.9rem;">
+                        <p>500DL × ¥150 = ¥75,000</p>
+                        <p>Apple手数料(30%)：-¥22,500</p>
+                        <p style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; margin-top: 10px;">
+                            控除後売上：¥52,500
+                        </p>
+                        <p style="font-size: 1.1rem; color: var(--secondary-color); font-weight: bold; margin-top: 10px;">
+                            あなたへの報酬：¥9,450
+                        </p>
+                        <p style="font-size: 0.85rem; color: #FF9500; margin-top: 10px;">
+                            ※初月（30日間）のみ
+                        </p>
+                    </div>
+                </div>
+                <ul style="list-style: none; text-align: left; font-size: 0.9rem;">
+                    <li style="padding: 8px 0;">✓ 開発費用は当社が全額負担</li>
+                    <li style="padding: 8px 0;">✓ アイデア採用時のみ報酬発生</li>
+                    <li style="padding: 8px 0;">✓ 初月のみの単発報酬</li>
+                </ul>
+            </div>
+            
+            <!-- 審査代行 料金 -->
+            <div style="background: linear-gradient(135deg, rgba(0, 122, 255, 0.15), rgba(88, 86, 214, 0.05)); border: 2px solid var(--primary-color); border-radius: 25px; padding: 40px 30px; text-align: center;">
+                <h3 style="font-size: 1.6rem; margin-bottom: 20px; color: var(--primary-color);">審査代行サービス</h3>
+                <div style="font-size: 2rem; font-weight: bold; margin: 20px 0;">
+                    <span style="color: var(--secondary-color);">当社 45%</span>
+                    <span style="color: var(--gray-text); font-size: 1.2rem; margin: 0 10px;">/</span>
+                    <span style="color: var(--primary-color);">開発者 55%</span>
+                </div>
+                <p style="color: var(--gray-text); margin-bottom: 25px;">
+                    Apple手数料控除後の売上から分配
+                </p>
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; margin: 20px 0;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 15px;">収益分配例</h4>
+                    <div style="text-align: left; font-size: 0.9rem;">
+                        <p>500DL × ¥150 = ¥75,000</p>
+                        <p>Apple手数料(30%)：-¥22,500</p>
+                        <p style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; margin-top: 10px;">
+                            控除後売上：¥52,500
+                        </p>
+                        <p>当社手数料(45%)：¥23,625</p>
+                        <p style="font-size: 1.1rem; color: var(--primary-color); font-weight: bold; margin-top: 10px;">
+                            開発者収益：¥28,875
+                        </p>
+                        <p style="font-size: 0.85rem; color: #34C759; margin-top: 10px;">
+                            ※毎月継続
+                        </p>
+                    </div>
+                </div>
+                <ul style="list-style: none; text-align: left; font-size: 0.9rem;">
+                    <li style="padding: 8px 0;">✓ 継続的な収益分配</li>
+                    <li style="padding: 8px 0;">✓ 当社名義での申請・管理</li>
+                    <li style="padding: 8px 0;">✓ 月次精算・送金</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px;">
+            <p style="color: var(--gray-text); margin-bottom: 20px;">
+                詳細な条件や審査基準については、お気軽にお問い合わせください
+            </p>
+            <a href="#contact" class="cta-button">サービスについて問い合わせる</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">お問い合わせ</h2>
+        <div class="contact-container">
+            <form class="contact-form" action="https://formspree.io/f/mkgzardz" method="POST" id="contactForm">
+                <div class="form-group">
+                    <label for="service-type">お問い合わせ内容</label>
+                    <select id="service-type" name="service-type" required>
+                        <option value="">選択してください</option>
+                        <option value="idea">アイデアのアプリ化について</option>
+                        <option value="deploy">審査代行サービスについて</option>
+                        <option value="apps">自社開発アプリについて</option>
+                        <option value="other">その他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">お名前</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">メールアドレス</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">詳細内容</label>
+                    <textarea id="message" name="message" rows="5" required placeholder="アイデアの概要、開発済みアプリの詳細など"></textarea>
+                </div>
+                <!-- Formspree用の隠しフィールド（スパム対策） -->
+                <input type="text" name="_gotcha" style="display:none">
+                <!-- 送信後のリダイレクト先（オプション） -->
+                <input type="hidden" name="_subject" value="BucksBox.ai お問い合わせ">
+                <button type="submit" class="form-button" id="submitButton">送信する</button>
+                <div id="formStatus" style="margin-top: 20px; text-align: center; font-weight: bold;"></div>
+            </form>
+            <div class="contact-info">
+                <div class="info-item">
+                    <div class="info-icon">📍</div>
+                    <div>
+                        <h4>本社所在地</h4>
+                        <p>Tokyo, Japan</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">📧</div>
+                    <div>
+                        <h4>メール</h4>
+                        <p>bucksboxaiqa.2025@gmail.com</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon">🐦</div>
+                    <div>
+                        <h4>SNS</h4>
+                        <p><a href="https://x.com/bucksboxai" target="_blank" style="color: var(--primary-color);">@bucksboxai</a></p>
+                    </div>
+                </div>
+                <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; margin-top: 30px;">
+                    <h4 style="color: var(--secondary-color); margin-bottom: 10px;">対応時間</h4>
+                    <p style="font-size: 0.9rem;">ご質問に対する標準応答時間は72時間（最長一週間以内）となります。<br>
+                    (業務の状況により、前倒し、後ろ倒しの場合もありますことをご了承ください)<br>
+                    受付は、メールにてお願いします。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>BucksBox.ai</h4>
+                <p>アプリビジネスの新しいカタチ</p>
+                <p style="margin-top: 10px;">
+                    <a href="https://x.com/bucksboxai" target="_blank">Follow us on X</a>
+                </p>
+            </div>
+            <div class="footer-section">
+                <h4>サービス</h4>
+                <ul>
+                    <li><a href="#our-apps">自社開発アプリ</a></li>
+                    <li><a href="#service">アイデアのアプリ化</a></li>
+                    <li><a href="#service">審査代行サービス</a></li>
+                    <li><a href="#pricing">料金体系</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>会社情報</h4>
+                <ul>
+                    <li><a href="#about">企業理念</a></li>
+                    <li><a href="#how-it-works">ご利用の流れ</a></li>
+                    <li><a href="bucksbox-terms-of-service.html">利用規約</a></li>
+                    <li><a href="#">プライバシーポリシー</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>サポート</h4>
+                <ul>
+                    <li><a href="#contact">お問い合わせ</a></li>
+                    <li><a href="#">よくある質問</a></li>
+                    <li><a href="bucksbox-terms-of-service.html">審査基準・利用規約</a></li>
+                    <li><a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank">App Store ガイドライン</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 BucksBox.ai - All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" id="scrollTop">
+        <span style="font-size: 1.5rem;">↑</span>
+    </div>
+
+    <script>
+        // Generate space background elements - 成功事例パターンに完全準拠
+        function createSpaceBackground() {
+            const spaceBackground = document.getElementById('spaceBackground');
+            
+            // スマホ判定（成功ページと同じ基準）
+            const isMobile = window.innerWidth <= 768;
+            
+            // 星の生成のみ（成功ページと同じシンプル処理）
+            const starCount = 100; // PC・スマホ共通で100個（成功ページと同じ）
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                // PCでのみアニメーション設定（成功ページと同じ設定）
+                if (!isMobile) {
+                    star.style.animationDelay = Math.random() * 4 + 's';
+                    star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                }
+                
+                spaceBackground.appendChild(star);
+            }
+            
+            // 惑星生成（PCのみ）
+            if (!isMobile) {
+                const planetColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#DDA0DD'];
+                for (let i = 0; i < 5; i++) {
+                    const planet = document.createElement('div');
+                    planet.className = 'planet';
+                    const size = Math.random() * 30 + 20;
+                    planet.style.width = size + 'px';
+                    planet.style.height = size + 'px';
+                    planet.style.left = Math.random() * 90 + 5 + '%';
+                    planet.style.top = Math.random() * 90 + 5 + '%';
+                    planet.style.background = `radial-gradient(circle at 30% 30%, ${planetColors[i]}, ${planetColors[i]}88)`;
+                    planet.style.color = planetColors[i];
+                    planet.style.animationDelay = Math.random() * 6 + 's';
+                    spaceBackground.appendChild(planet);
+                }
+            }
+        }
+
+        // Initialize space background on load
+        window.addEventListener('load', createSpaceBackground);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Show/hide scroll to top button
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.scrollY > 300) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        // Scroll to top functionality
+        document.getElementById('scrollTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Intersection Observer for section animations - スマホ時は簡素化
+        const isMobile = window.innerWidth <= 768;
+        
+        if (!isMobile) {
+            // PCでのみIntersection Observerを使用
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        } else {
+            // スマホでは即座に全セクションを表示（成功ページと同じ軽量処理）
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.add('visible');
+            });
+        }
+
+        // Form submission handling with Formspree（成功ページと同じ処理）
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var form = e.target;
+            var formData = new FormData(form);
+            var submitButton = document.getElementById('submitButton');
+            var formStatus = document.getElementById('formStatus');
+            
+            // ボタンを無効化して二重送信を防ぐ
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+            formStatus.innerHTML = '';
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(function(response) {
+                if (response.ok) {
+                    // 送信成功
+                    formStatus.innerHTML = '<span style="color: #34C759;">✓ お問い合わせを受け付けました。<br>標準72時間以内（最長一週間以内）にご返信させていただきます。</span>';
+                    form.reset();
+                    
+                    // 5秒後にメッセージを消す
+                    setTimeout(function() {
+                        formStatus.innerHTML = '';
+                    }, 5000);
+                } else {
+                    // エラーレスポンスの処理
+                    return response.json().then(function(data) {
+                        if (data.errors) {
+                            var errorMessages = data.errors.map(function(error) {
+                                return error.message;
+                            }).join('<br>');
+                            throw new Error(errorMessages);
+                        } else {
+                            throw new Error('送信に失敗しました。しばらくしてから再度お試しください。');
+                        }
+                    });
+                }
+            })
+            .catch(function(error) {
+                // エラー表示
+                formStatus.innerHTML = '<span style="color: #FF3B30;">✗ ' + (error.message || '送信エラーが発生しました。直接メール（bucksboxaiqa.2025@gmail.com）でお問い合わせください。') + '</span>';
+            })
+            .finally(function() {
+                // ボタンを再度有効化
+                submitButton.disabled = false;
+                submitButton.textContent = '送信する';
+            });
+        });
+
+        // Dynamic year in footer
+        var currentYear = new Date().getFullYear();
+        document.querySelector('.footer-bottom p').textContent = '© ' + currentYear + ' BucksBox.ai - All rights reserved.';
+    </script>
+</body>
+</html>

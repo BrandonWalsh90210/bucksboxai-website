@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録 - BucksBox.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5856D6;
+            --accent-color: #FF3B30;
+            --success-color: #34C759;
+            --dark-bg: #000000;
+            --light-text: #FFFFFF;
+            --gray-text: #8E8E93;
+            --error-color: #FF3B30;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Space Background */
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            min-height: calc(100vh - 100px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Registration Container */
+        .register-container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .register-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .register-subtitle {
+            color: var(--gray-text);
+            font-size: 1rem;
+        }
+
+        /* Form Styles */
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray-text);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .required {
+            color: var(--accent-color);
+        }
+
+        .password-requirements {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: var(--gray-text);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: start;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--gray-text);
+            cursor: pointer;
+        }
+
+        .checkbox-group a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .form-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        .form-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(52, 199, 89, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-text);
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .register-container {
+                padding: 40px 30px;
+            }
+
+            .register-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Space Background -->
+    <div class="space-background" id="spaceBackground"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="bucksbox-homepage-revised.html" class="logo">BucksBox.ai</a>
+            <a href="bucksbox-homepage-revised.html" class="back-button">
+                <span>←</span> ホームへ戻る
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="register-container">
+            <div class="register-header">
+                <h1 class="register-title">会員登録</h1>
+                <p class="register-subtitle">無料でアカウントを作成</p>
+            </div>
+
+            <form id="registerForm">
+                <!-- 基本情報 -->
+                <div class="form-section">
+                    <h2 class="section-title">基本情報</h2>
+                    
+                    <div class="form-group">
+                        <label for="email">メールアドレス <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required placeholder="example@email.com">
+                        <div class="error-message" id="emailError">有効なメールアドレスを入力してください</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">パスワード <span class="required">*</span></label>
+                        <input type="password" id="password" name="password" required placeholder="8文字以上">
+                        <div class="password-requirements">※ 8文字以上、英数字を含む</div>
+                        <div class="error-message" id="passwordError">パスワードは8文字以上で、英数字を含む必要があります</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">パスワード（確認） <span class="required">*</span></label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="パスワードを再入力">
+                        <div class="error-message" id="confirmPasswordError">パスワードが一致しません</div>
+                    </div>
+                </div>
+
+                <!-- プロフィール情報 -->
+                <div class="form-section">
+                    <h2 class="section-title">プロフィール情報</h2>
+                    
+                    <div class="form-group">
+                        <label for="companyName">会社名・組織名</label>
+                        <input type="text" id="companyName" name="companyName" placeholder="株式会社〇〇">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fullName">担当者名 <span class="required">*</span></label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="山田 太郎">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">電話番号</label>
+                        <input type="tel" id="phone" name="phone" placeholder="090-1234-5678">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountType">アカウントタイプ <span class="required">*</span></label>
+                        <select id="accountType" name="accountType" required>
+                            <option value="">選択してください</option>
+                            <option value="developer">アプリ開発者</option>
+                            <option value="idea-provider">アイデア提供者</option>
+                            <option value="both">両方</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 利用規約 -->
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">
+                        <a href="#" target="_blank">利用規約</a>および
+                        <a href="#" target="_blank">プライバシーポリシー</a>に同意します
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    <label for="newsletter">
+                        BucksBox.aiからのお知らせメールを受け取る
+                    </label>
+                </div>
+
+                <button type="submit" class="form-button" id="submitButton">
+                    無料で登録する
+                </button>
+
+                <div class="spinner" id="loadingSpinner"></div>
+                <div class="success-message" id="successMessage">
+                    登録が完了しました！確認メールをご確認ください。
+                </div>
+            </form>
+
+            <div class="login-link">
+                既にアカウントをお持ちの方は <a href="#">ログイン</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate space background
+        function createSpaceBackground() {
+            const spaceBackground = document.getElementById('spaceBackground');
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                spaceBackground.appendChild(star);
+            }
+        }
+
+        window.addEventListener('load', createSpaceBackground);
+
+        // Form validation and submission
+        const form = document.getElementById('registerForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const submitButton = document.getElementById('submitButton');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const successMessage = document.getElementById('successMessage');
+
+        // Email validation
+        emailInput.addEventListener('blur', () => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailError = document.getElementById('emailError');
+            
+            if (!emailRegex.test(emailInput.value)) {
+                emailError.style.display = 'block';
+                emailInput.style.borderColor = 'var(--error-color)';
+            } else {
+                emailError.style.display = 'none';
+                emailInput.style.borderColor = '';
+            }
+        });
+
+        // Password validation
+        passwordInput.addEventListener('blur', () => {
+            const passwordError = document.getElementById('passwordError');
+            const password = passwordInput.value;
+            
+            if (password.length < 8 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+                passwordError.style.display = 'block';
+                passwordInput.style.borderColor = 'var(--error-color)';
+            } else {
+                passwordError.style.display = 'none';
+                passwordInput.style.borderColor = '';
+            }
+        });
+
+        // Confirm password validation
+        confirmPasswordInput.addEventListener('blur', () => {
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                confirmPasswordError.style.display = 'block';
+                confirmPasswordInput.style.borderColor = 'var(--error-color)';
+            } else {
+                confirmPasswordError.style.display = 'none';
+                confirmPasswordInput.style.borderColor = '';
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validate all fields
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const password = passwordInput.value;
+            
+            if (!emailRegex.test(emailInput.value) || 
+                password.length < 8 || 
+                !/[A-Za-z]/.test(password) || 
+                !/[0-9]/.test(password) || 
+                passwordInput.value !== confirmPasswordInput.value) {
+                alert('入力内容を確認してください');
+                return;
+            }
+            
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = '登録中...';
+            loadingSpinner.style.display = 'block';
+            
+            // TODO: ここでSupabaseまたはFirebaseへの登録処理を実装
+            // 現在は仮の処理として2秒後に成功メッセージを表示
+            setTimeout(() => {
+                loadingSpinner.style.display = 'none';
+                successMessage.style.display = 'block';
+                form.style.display = 'none';
+                
+                // 3秒後にホームページへリダイレクト（実装時は要調整）
+                setTimeout(() => {
+                    // window.location.href = 'bucksbox-homepage-revised.html';
+                    alert('会員登録機能は現在準備中です。バックエンドシステムの実装が必要です。');
+                }, 3000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
