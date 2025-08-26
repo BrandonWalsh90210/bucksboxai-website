@@ -895,8 +895,62 @@
             opacity: 1;
         }
 
-        /* Responsive */
+        /* 🎯 MOBILE OPTIMIZATION - 実機端末完全対応（アニメーション制御） */
+        /* =================================================================== */
         @media (max-width: 768px) {
+            /* === PC版の重いアニメーションを完全無効化 === */
+            .floating-logo-central {
+                top: 70px !important;
+                left: 15px !important;
+                width: 120px !important;
+                height: 120px !important;
+                opacity: 0.6 !important;
+                transform: none !important;
+                position: fixed !important;
+                pointer-events: none;
+            }
+            
+            .logo-wrapper {
+                width: 100% !important;
+                height: 100% !important;
+                animation: none !important; /* 3D回転アニメーション無効化 */
+                transform: none !important;
+                transform-style: initial !important;
+            }
+            
+            .logo-image {
+                width: 80px !important;
+                height: 80px !important;
+                opacity: 0.6 !important;
+                animation: none !important; /* breatheアニメーション無効化 */
+                transform: translate(-50%, -50%) !important;
+                filter: drop-shadow(0 0 8px rgba(123, 104, 238, 0.3)) !important; /* 軽量化 */
+            }
+            
+            .logo-orbit {
+                display: none !important; /* オービット完全削除 */
+            }
+            
+            .logo-particles {
+                display: none !important; /* パーティクル完全削除 */
+            }
+            
+            .orbit-particle {
+                display: none !important; /* パーティクル完全削除 */
+            }
+            
+            /* === 星・惑星の軽量化 === */
+            .star {
+                animation-duration: 10s !important; /* アニメーションをゆっくりに */
+                opacity: 0.4 !important;
+            }
+            
+            .planet {
+                animation: none !important; /* 惑星アニメーション無効化 */
+                opacity: 0.2 !important;
+            }
+            
+            /* === ナビゲーション === */
             .nav-toggle {
                 display: flex;
             }
@@ -912,19 +966,51 @@
             .nav-container {
                 position: relative;
             }
-
-            .floating-logo-central {
-                top: 70px;
-                left: 15px;
-                width: 120px;
-                height: 120px;
-                opacity: 0.3;
+            
+            /* === 実機端末動作確認用の追加設定 === */
+            /* タッチイベントの遅延を解消 */
+            * {
+                touch-action: manipulation !important;
+                -webkit-touch-callout: none !important;
+                -webkit-user-select: none !important;
+                -moz-user-select: none !important;
+                -ms-user-select: none !important;
+                user-select: none !important;
             }
-
-            .logo-image {
-                width: 80px;
-                height: 80px;
-                opacity: 0.3;
+            
+            /* スクロール性能の最適化 */
+            body {
+                -webkit-overflow-scrolling: touch !important;
+                overflow-scrolling: touch !important;
+            }
+            
+            /* GPUアクセラレーションを無効化（重い処理を防ぐ） */
+            .space-background {
+                will-change: auto !important;
+                transform: translateZ(0) !important;
+                backface-visibility: hidden !important;
+            }
+            
+            /* ホバーエフェクトを無効化 */
+            .service-button:hover,
+            .cta-button:hover,
+            .back-link:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            
+            /* フォーカス状態の最適化 */
+            input, textarea {
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                border-radius: 8px !important;
+            }
+            
+            /* iOS Safari特有の問題を解決 */
+            input[type="text"],
+            input[type="email"],
+            textarea {
+                font-size: 16px !important; /* ズームを防ぐ */
             }
 
             .hero {
@@ -1084,6 +1170,7 @@
                 <li><a href="#service" aria-label="サービスセクションへ移動">サービス</a></li>
                 <li><a href="#how-it-works" aria-label="ご利用の流れセクションへ移動">ご利用の流れ</a></li>
                 <li><a href="#pricing" aria-label="料金体系セクションへ移動">料金体系</a></li>
+                <li><a href="faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
                 <li><a href="bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
                 <li><a href="bucksbox-register-page.html" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); padding: 8px 20px; border-radius: 20px; color: white !important;">会員登録</a></li>
@@ -1542,14 +1629,14 @@
                     <li><a href="#about">企業理念</a></li>
                     <li><a href="#how-it-works">ご利用の流れ</a></li>
                     <li><a href="bucksbox-terms-of-service.html">利用規約</a></li>
-                    <li><a href="#">プライバシーポリシー</a></li>
+                    <li><a href="privacy-policy.html">プライバシーポリシー</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h4>サポート</h4>
                 <ul>
                     <li><a href="#contact">お問い合わせ</a></li>
-                    <li><a href="#">よくある質問</a></li>
+                    <li><a href="faq.html">よくある質問</a></li>
                     <li><a href="bucksbox-terms-of-service.html">審査基準・利用規約</a></li>
                     <li><a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank">App Store ガイドライン</a></li>
                 </ul>
@@ -1741,6 +1828,37 @@
         // Dynamic year in footer
         const currentYear = new Date().getFullYear();
         document.querySelector('.footer-bottom p').textContent = `© ${currentYear} BucksBox.ai - All rights reserved.`;
+        
+        // 実機端末動作確認用の設定
+        // モバイル端末の検知と最適化
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                   window.innerWidth <= 768;
+        }
+        
+        if (isMobileDevice()) {
+            // モバイル用の軽量化処理
+            console.log('📱 Mobile device detected - optimizations applied');
+            
+            // パフォーマンスモニタリング（デバッグ用）
+            if (window.performance && window.performance.memory) {
+                console.log('📊Memory usage:', {
+                    used: Math.round(window.performance.memory.usedJSHeapSize / 1048576) + 'MB',
+                    total: Math.round(window.performance.memory.totalJSHeapSize / 1048576) + 'MB',
+                    limit: Math.round(window.performance.memory.jsHeapSizeLimit / 1048576) + 'MB'
+                });
+            }
+            
+            // タッチイベントの最適化
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            document.addEventListener('touchmove', function() {}, {passive: true});
+            
+            // Viewportの固定（ズーム防止）
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
+            }
+        }
         
         // Lazy loading for images
         const images = document.querySelectorAll('img[data-src]');
