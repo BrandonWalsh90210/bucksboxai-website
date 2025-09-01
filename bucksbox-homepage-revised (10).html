@@ -124,16 +124,19 @@
             }
         }
 
-        /* Central Floating Logo */
-        .floating-logo-central {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            height: 400px;
-            z-index: 2;
-            pointer-events: none;
+        /* Central Floating Logo - PC only */
+        @media (min-width: 769px) {
+            .floating-logo-central {
+                display: block !important;
+                position: fixed;
+                top: 80px;
+                left: 110px;
+                transform: translate(0, 0);
+                width: 280px;
+                height: 280px;
+                z-index: 2;
+                pointer-events: none;
+            }
         }
 
         .logo-wrapper {
@@ -149,9 +152,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 150px;
-            height: 150px;
-            opacity: 0.5;
+            width: 130px;
+            height: 130px;
+            opacity: 0.6;
             filter: drop-shadow(0 0 20px rgba(123, 104, 238, 0.6));
             animation: breathe 4s ease-in-out infinite;
             object-fit: contain;
@@ -895,76 +898,205 @@
             opacity: 1;
         }
 
-        /* 🎯 MOBILE OPTIMIZATION - 実機端末完全対応（アニメーション制御） */
+        /* 🎯 MOBILE OPTIMIZATION - 成功事例完全準拠（実機端末完全対応） */
         /* =================================================================== */
         @media (max-width: 768px) {
-            /* === PC版の重いアニメーションを完全無効化 === */
+            
+            /* === PC版の重い要素を完全削除 === */
             .floating-logo-central {
-                top: 70px !important;
-                left: 15px !important;
-                width: 120px !important;
-                height: 120px !important;
-                opacity: 0.6 !important;
-                transform: none !important;
-                position: fixed !important;
-                pointer-events: none;
+                display: none !important; /* フローティングロゴ完全削除 */
+                visibility: hidden !important;
+                opacity: 0 !important;
             }
             
-            .logo-wrapper {
-                width: 100% !important;
-                height: 100% !important;
-                animation: none !important; /* 3D回転アニメーション無効化 */
-                transform: none !important;
-                transform-style: initial !important;
-            }
-            
-            .logo-image {
-                width: 80px !important;
-                height: 80px !important;
-                opacity: 0.6 !important;
-                animation: none !important; /* breatheアニメーション無効化 */
-                transform: translate(-50%, -50%) !important;
-                filter: drop-shadow(0 0 8px rgba(123, 104, 238, 0.3)) !important; /* 軽量化 */
-            }
-            
-            .logo-orbit {
-                display: none !important; /* オービット完全削除 */
-            }
-            
-            .logo-particles {
-                display: none !important; /* パーティクル完全削除 */
-            }
-            
-            .orbit-particle {
-                display: none !important; /* パーティクル完全削除 */
-            }
-            
-            /* === 星・惑星の軽量化 === */
-            .star {
-                animation-duration: 10s !important; /* アニメーションをゆっくりに */
-                opacity: 0.4 !important;
+            .floating-logo-central * {
+                display: none !important;
+                animation: none !important;
             }
             
             .planet {
-                animation: none !important; /* 惑星アニメーション無効化 */
-                opacity: 0.2 !important;
+                display: none !important; /* 惑星完全削除 */
             }
             
-            /* === ナビゲーション === */
-            .nav-toggle {
-                display: flex;
+            /* === ナビゲーション簡素化 === */
+            nav {
+                padding: 15px 0 !important;
             }
-
-            .nav-menu {
-                display: none;
-            }
-
-            .nav-menu.mobile-menu {
-                display: flex;
-            }
-
+            
             .nav-container {
+                padding: 0 15px !important;
                 position: relative;
+            }
+            
+            .logo {
+                font-size: 1.5rem !important;
+            }
+            
+            .nav-menu {
+                display: none !important;
+            }
+            
+            .nav-toggle {
+                display: flex !important;
+            }
+            
+            .nav-menu.mobile-menu {
+                display: flex !important;
+                padding: 15px !important;
+                border-radius: 0 0 10px 10px !important;
+            }
+            
+            .nav-menu.mobile-menu a {
+                padding: 12px 0 !important;
+                font-size: 1rem !important;
+                border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+            }
+            
+            /* === ヒーローセクション最適化 === */
+            .hero {
+                padding: 120px 20px 40px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem !important;
+                animation: none !important; /* グラデーションシフト無効化 */
+                background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-size: 100% 100% !important;
+            }
+            
+            .hero p {
+                font-size: 1.1rem !important;
+                margin-bottom: 30px;
+            }
+            
+            .hero-content {
+                animation: none !important; /* フェードインアップ無効化 */
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+            
+            /* === セクション調整 === */
+            section {
+                padding: 60px 20px !important;
+                animation: none !important; /* セクションアニメーション無効化 */
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+            
+            .section-title {
+                font-size: 2rem !important;
+                margin-bottom: 30px !important;
+            }
+            
+            .services-main {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+                margin: 40px 0 !important;
+            }
+            
+            .service-card {
+                padding: 30px 20px !important;
+                border-radius: 15px !important;
+                animation: none !important;
+            }
+            
+            .service-card::before {
+                display: none !important; /* ホバーエフェクト削除 */
+            }
+            
+            .service-card:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            
+            .service-icon {
+                font-size: 2.5rem !important;
+                animation: none !important; /* バウンスアニメーション削除 */
+            }
+            
+            .service-button:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            
+            /* === CTAボタン最適化 === */
+            .cta-button {
+                padding: 12px 24px !important;
+                font-size: 1rem !important;
+            }
+            
+            .cta-button::before {
+                display: none !important; /* ホバーエフェクト削除 */
+            }
+            
+            .cta-button:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            
+            /* === コンタクトフォーム最適化 === */
+            .contact-container {
+                grid-template-columns: 1fr !important;
+                gap: 30px !important;
+            }
+            
+            .form-button:hover {
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            
+            /* === 全アニメーション最適化 === */
+            .service-card h3,
+            .section-title {
+                animation: none !important;
+            }
+            
+            /* === テキストのレスポンシブ調整 === */
+            body {
+                font-size: 14px;
+            }
+            
+            .container {
+                max-width: 100% !important;
+                padding: 0 15px !important;
+            }
+            
+            /* === 📱 モバイル版専用の左上ロゴ（シンプル版） === */
+            .logo-left-top {
+                display: block !important;
+                position: fixed !important;
+                top: 80px !important;
+                left: 20px !important;
+                width: 60px !important;
+                height: 60px !important;
+                z-index: 2;
+                opacity: 0.7;
+            }
+            
+            .logo-left-top .logo-wrapper {
+                animation: none !important;
+                transform: none !important;
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo-left-top .logo-image {
+                animation: none !important;
+                transform: translate(-50%, -50%) !important;
+                filter: drop-shadow(0 0 10px rgba(123, 104, 238, 0.4)) !important;
+                width: 50px !important;
+                height: 50px !important;
+                opacity: 1 !important;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+            }
+            
+            .logo-left-top .logo-orbit,
+            .logo-left-top .logo-particles {
+                display: none !important;
             }
             
             /* === 実機端末動作確認用の追加設定 === */
@@ -1014,31 +1146,47 @@
             }
 
             .hero {
-                padding: 120px 20px 80px;
+                padding: 120px 15px 60px !important;
                 text-align: center;
+                min-height: auto !important;
+                height: auto !important;
             }
 
             .hero h1 {
-                font-size: 2rem;
-                line-height: 1.2;
+                font-size: 2rem !important;
+                line-height: 1.3 !important;
+                margin-bottom: 20px !important;
+                padding: 0 10px !important;
             }
 
             .hero p {
-                font-size: 1.1rem;
-                padding: 0 10px;
+                font-size: 1rem !important;
+                padding: 0 15px !important;
+                margin-bottom: 25px !important;
+                line-height: 1.6 !important;
             }
 
-            .section {
-                padding: 60px 15px;
+            .hero-content {
+                max-width: 100% !important;
+                padding: 0 10px !important;
             }
 
-            .section h2 {
-                font-size: 2rem;
-                margin-bottom: 30px;
+            section {
+                padding: 50px 15px !important;
+                margin: 0 !important;
+            }
+
+            .section-title {
+                font-size: 1.8rem !important;
+                margin-bottom: 25px !important;
+                padding: 0 10px !important;
             }
 
             .container {
-                padding: 0 10px;
+                padding: 0 10px !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
             }
 
             .contact-container {
@@ -1134,21 +1282,39 @@
             }
         }
     </style>
+    <script>
+        // 最初にモバイル判定してロゴを非表示
+        if (window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            document.addEventListener('DOMContentLoaded', function() {
+                var logo = document.querySelector('.floating-logo-central');
+                if (logo) {
+                    logo.remove(); // 完全に削除
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <!-- Space Background -->
     <div class="space-background" id="spaceBackground"></div>
 
-    <!-- Logo positioned at left top -->
-    <div class="logo-left-top" style="position: fixed; top: 60px; left: 110px; width: 200px; height: 200px; z-index: 2;">
+    <!-- Central Floating Logo (PC Only) -->
+    <div class="floating-logo-central" style="display: none;">
         <div class="logo-wrapper">
             <div class="logo-orbit"></div>
+            <img src="BucksBox.ai_logo.png" alt="BucksBox.ai Logo" class="logo-image">
             <div class="logo-particles">
-                <div class="orbit-particle orbit-particle-top"></div>
-                <div class="orbit-particle orbit-particle-right"></div>
-                <div class="orbit-particle orbit-particle-bottom"></div>
-                <div class="orbit-particle orbit-particle-left"></div>
+                <div class="orbit-particle" style="top: 0%; left: 50%;"></div>
+                <div class="orbit-particle" style="top: 50%; left: 100%;"></div>
+                <div class="orbit-particle" style="top: 100%; left: 50%;"></div>
+                <div class="orbit-particle" style="top: 50%; left: 0%;"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- 📱 モバイル用左上ロゴ（シンプル版） -->
+    <div class="logo-left-top" style="display: none;">
+        <div class="logo-wrapper">
             <img src="BucksBox.ai_logo.png" alt="BucksBox.ai Logo" class="logo-image">
         </div>
     </div>
@@ -1170,10 +1336,30 @@
                 <li><a href="#service" aria-label="サービスセクションへ移動">サービス</a></li>
                 <li><a href="#how-it-works" aria-label="ご利用の流れセクションへ移動">ご利用の流れ</a></li>
                 <li><a href="#pricing" aria-label="料金体系セクションへ移動">料金体系</a></li>
-                <li><a href="faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
-                <li><a href="bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
+                <li><a href="./faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
+                <li><a href="./bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
-                <li><a href="bucksbox-register-page.html" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); padding: 8px 20px; border-radius: 20px; color: white !important;">会員登録</a></li>
+                <li><a href="./bucksbox-register-page.html" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); padding: 8px 20px; border-radius: 20px; color: white !important;">会員登録</a></li>
+            </ul>
+            
+            <!-- Mobile Navigation Toggle -->
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <ul class="nav-menu mobile-menu" role="navigation">
+                <li><a href="#about" aria-label="企業理念セクションへ移動">企業理念</a></li>
+                <li><a href="#our-apps" aria-label="開発アプリセクションへ移動">開発アプリ</a></li>
+                <li><a href="#service" aria-label="サービスセクションへ移動">サービス</a></li>
+                <li><a href="#how-it-works" aria-label="ご利用の流れセクションへ移動">ご利用の流れ</a></li>
+                <li><a href="#pricing" aria-label="料金体系セクションへ移動">料金体系</a></li>
+                <li><a href="./faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
+                <li><a href="./bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
+                <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
+                <li><a href="./bucksbox-register-page.html" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); padding: 8px 20px; border-radius: 20px; color: white !important;">会員登録</a></li>
             </ul>
         </div>
     </nav>
@@ -1234,7 +1420,7 @@
                 私たちの開発したアプリは、App Storeで実際に販売されています。<br>
                 この実績と経験が、お客様のアイデアを確実に形にする基盤となっています。
             </p>
-            <a href="bucksbox-our-apps-page.html" class="cta-button" style="background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));">
+            <a href="./bucksbox-our-apps-page.html" class="cta-button" style="background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));">
                 開発アプリ一覧を見る
             </a>
         </div>
@@ -1266,7 +1452,7 @@
                     <li>グローバル市場対応</li>
                 </ul>
                 <div style="margin-top: 25px;">
-                    <a href="bucksbox-our-apps-page.html" class="service-button" aria-label="自社開発アプリの一覧を見る">
+                    <a href="./bucksbox-our-apps-page.html" class="service-button" aria-label="自社開発アプリの一覧を見る">
                         開発実績を見る
                     </a>
                 </div>
@@ -1302,7 +1488,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 25px;">
-                    <a href="idea_application.html" class="service-button" aria-label="アイデアのアプリ化を申請する">
+                    <a href="./idea_application.html" class="service-button" aria-label="アイデアのアプリ化を申請する">
                         アイデアを申請する
                     </a>
                 </div>
@@ -1351,7 +1537,7 @@
                     </p>
                 </div>
                 <div style="margin-top: 25px;">
-                    <a href="review_application.html" class="service-button" aria-label="iOS審査代行を申請する">
+                    <a href="./review_application.html" class="service-button" aria-label="iOS審査代行を申請する">
                         審査代行を申請する
                     </a>
                 </div>
@@ -1584,7 +1770,7 @@
                     <div class="info-icon">📧</div>
                     <div>
                         <h4>メール</h4>
-                        <p>bucksboxaiqa.2025@gmail.com</p>
+                        <p>bucksboxaiqa@gmail.com</p>
                     </div>
                 </div>
                 <div class="info-item">
@@ -1628,16 +1814,16 @@
                 <ul>
                     <li><a href="#about">企業理念</a></li>
                     <li><a href="#how-it-works">ご利用の流れ</a></li>
-                    <li><a href="bucksbox-terms-of-service.html">利用規約</a></li>
-                    <li><a href="privacy-policy.html">プライバシーポリシー</a></li>
+                    <li><a href="./bucksbox-terms-of-service.html">利用規約</a></li>
+                    <li><a href="./privacy-policy.html">プライバシーポリシー</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h4>サポート</h4>
                 <ul>
                     <li><a href="#contact">お問い合わせ</a></li>
-                    <li><a href="faq.html">よくある質問</a></li>
-                    <li><a href="bucksbox-terms-of-service.html">審査基準・利用規約</a></li>
+                    <li><a href="./faq.html">よくある質問</a></li>
+                    <li><a href="./bucksbox-terms-of-service.html">審査基準・利用規約</a></li>
                     <li><a href="https://developer.apple.com/app-store/review/guidelines/" target="_blank">App Store ガイドライン</a></li>
                 </ul>
             </div>
@@ -1653,6 +1839,15 @@
     </div>
 
     <script>
+        // モバイル端末で即座にロゴを非表示
+        if (window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            var logo = document.querySelector('.floating-logo-central');
+            if (logo) {
+                logo.style.display = 'none';
+                logo.style.visibility = 'hidden';
+            }
+        }
+        
         // Generate space background elements
         function createSpaceBackground() {
             const spaceBackground = document.getElementById('spaceBackground');
@@ -1792,7 +1987,7 @@
                 }
             } catch (error) {
                 // エラー表示
-                formStatus.innerHTML = `<span style="color: #FF3B30;">✗ ${error.message || '送信エラーが発生しました。直接メール（bucksboxaiqa.2025@gmail.com）でお問い合わせください。'}</span>`;
+                formStatus.innerHTML = `<span style="color: #FF3B30;">✗ ${error.message || '送信エラーが発生しました。直接メール（bucksboxaiqa@gmail.com）でお問い合わせください。'}</span>`;
             } finally {
                 // ボタンを再度有効化
                 submitButton.disabled = false;
@@ -1804,60 +1999,95 @@
         const navToggle = document.querySelector('.nav-toggle');
         const mobileMenu = document.querySelector('.nav-menu.mobile-menu');
         
-        navToggle.addEventListener('click', () => {
-            navToggle.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-        });
-        
-        // Close mobile menu when clicking on links
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                navToggle.classList.remove('active');
-                mobileMenu.classList.remove('active');
+        if (navToggle && mobileMenu) {
+            navToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navToggle.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
             });
-        });
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
-                navToggle.classList.remove('active');
-                mobileMenu.classList.remove('active');
-            }
-        });
+            
+            // Close mobile menu when clicking on links (but not prevent default for external links)
+            document.querySelectorAll('.mobile-menu a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // Only close menu, don't prevent navigation
+                    navToggle.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    // Let the link navigate normally
+                });
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (navToggle && mobileMenu && !navToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    navToggle.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        }
 
         // Dynamic year in footer
         const currentYear = new Date().getFullYear();
         document.querySelector('.footer-bottom p').textContent = `© ${currentYear} BucksBox.ai - All rights reserved.`;
         
-        // 実機端末動作確認用の設定
-        // モバイル端末の検知と最適化
+        // 🔧 実機端末動作確認用の設定（成功事例ベース）
         function isMobileDevice() {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
                    window.innerWidth <= 768;
         }
         
+        // モバイル端末の場合の最適化処理
         if (isMobileDevice()) {
-            // モバイル用の軽量化処理
-            console.log('📱 Mobile device detected - optimizations applied');
+            console.log('📱 Mobile device detected - applying lightweight optimizations');
             
-            // パフォーマンスモニタリング（デバッグ用）
+            // 1. パフォーマンスモニタリング
             if (window.performance && window.performance.memory) {
-                console.log('📊Memory usage:', {
+                console.log('📊 Memory usage:', {
                     used: Math.round(window.performance.memory.usedJSHeapSize / 1048576) + 'MB',
                     total: Math.round(window.performance.memory.totalJSHeapSize / 1048576) + 'MB',
                     limit: Math.round(window.performance.memory.jsHeapSizeLimit / 1048576) + 'MB'
                 });
             }
             
-            // タッチイベントの最適化
+            // 2. タッチイベントの最適化（パッシブイベント）
             document.addEventListener('touchstart', function() {}, {passive: true});
             document.addEventListener('touchmove', function() {}, {passive: true});
+            document.addEventListener('touchend', function() {}, {passive: true});
             
-            // Viewportの固定（ズーム防止）
+            // 3. iOS Safari特有の問題を解決
+            // ズーム防止とビューポート固定
             const viewport = document.querySelector('meta[name="viewport"]');
             if (viewport) {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover');
             }
+            
+            // 4. 重いアニメーション要素を完全除去（CSSでカバーできない部分）
+            document.addEventListener('DOMContentLoaded', function() {
+                // 重い要素を完全削除
+                const heavyElements = document.querySelectorAll('.planet, .floating-logo-central, .logo-orbit, .logo-particles, .orbit-particle');
+                heavyElements.forEach(element => {
+                    if (element) element.remove();
+                });
+                
+                // アニメーションを強制停止
+                const animatedElements = document.querySelectorAll('*');
+                animatedElements.forEach(element => {
+                    element.style.animation = 'none';
+                    element.style.transition = 'none';
+                });
+                
+                console.log('✅ Mobile optimizations completed - animations disabled');
+            });
+            
+            // 5. メモリリーク防止
+            window.addEventListener('beforeunload', function() {
+                // イベントリスナーをクリーンアップ
+                document.removeEventListener('touchstart', function() {});
+                document.removeEventListener('touchmove', function() {});
+                document.removeEventListener('touchend', function() {});
+            });
+            
+        } else {
+            console.log('🖥️ Desktop device detected - full animations enabled');
         }
         
         // Lazy loading for images
