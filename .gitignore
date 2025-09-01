@@ -1,0 +1,43 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Thumbnails
+Thumbs.db
+
+# Backup folders
+削除候補_backup/
+backup/
+old/
+archive/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+logs/
+
+# Node.js (if used later)
+node_modules/
+npm-debug.log*
+
+# Build files
+dist/
+build/
+
+# Private/sensitive files
+*.env
+.env.local
+config.local.js

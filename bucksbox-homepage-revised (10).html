@@ -124,19 +124,19 @@
             }
         }
 
-        /* Central Floating Logo - PC only */
-        @media (min-width: 769px) {
-            .floating-logo-central {
-                display: block !important;
-                position: fixed;
-                top: 80px;
-                left: 110px;
-                transform: translate(0, 0);
-                width: 280px;
-                height: 280px;
-                z-index: 2;
-                pointer-events: none;
-            }
+        /* Central Floating Logo - デフォルトで非表示 */
+        .floating-logo-central {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            position: fixed;
+            top: 80px;
+            left: 110px;
+            transform: translate(0, 0);
+            width: 280px;
+            height: 280px;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .logo-wrapper {
@@ -1283,15 +1283,18 @@
         }
     </style>
     <script>
-        // 最初にモバイル判定してロゴを非表示
-        if (window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            document.addEventListener('DOMContentLoaded', function() {
+        // PC版でのみロゴを表示（モバイルではデフォルトで非表示）
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.innerWidth > 768 && !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                // PC版の場合のみロゴを表示
                 var logo = document.querySelector('.floating-logo-central');
                 if (logo) {
-                    logo.remove(); // 完全に削除
+                    logo.style.display = 'block';
+                    logo.style.visibility = 'visible';
+                    logo.style.opacity = '1';
                 }
-            });
-        }
+            }
+        });
     </script>
 </head>
 <body>
@@ -1299,7 +1302,7 @@
     <div class="space-background" id="spaceBackground"></div>
 
     <!-- Central Floating Logo (PC Only) -->
-    <div class="floating-logo-central" style="display: none;">
+    <div class="floating-logo-central pc-only" style="display: none; visibility: hidden; opacity: 0;">
         <div class="logo-wrapper">
             <div class="logo-orbit"></div>
             <img src="BucksBox.ai_logo.png" alt="BucksBox.ai Logo" class="logo-image">
@@ -1839,15 +1842,6 @@
     </div>
 
     <script>
-        // モバイル端末で即座にロゴを非表示
-        if (window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            var logo = document.querySelector('.floating-logo-central');
-            if (logo) {
-                logo.style.display = 'none';
-                logo.style.visibility = 'hidden';
-            }
-        }
-        
         // Generate space background elements
         function createSpaceBackground() {
             const spaceBackground = document.getElementById('spaceBackground');
