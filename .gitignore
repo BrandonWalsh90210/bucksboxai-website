@@ -13,6 +13,15 @@ backup/
 old/
 archive/
 
+# Documentation and internal files (keep local, don't push)
+ACTION_ITEMS.md
+BucksBox_改善提案書.md
+GitHub_Pages_公開ガイド.md
+Privacy-Policy.md
+README.md
+robots.txt
+sw.js
+
 # Temporary files
 *.tmp
 *.temp
