@@ -138,6 +138,13 @@
             z-index: 2;
             pointer-events: none;
         }
+        
+        /* PC版でロゴを表示するクラス */
+        .floating-logo-central.show-logo {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
 
         .logo-wrapper {
             width: 100%;
@@ -1285,13 +1292,18 @@
     <script>
         // PC版でのみロゴを表示（モバイルではデフォルトで非表示）
         document.addEventListener('DOMContentLoaded', function() {
-            if (window.innerWidth > 768 && !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            // PC判定：画面幅が768pxより大きく、かつモバイルデバイスではない
+            var isPC = window.innerWidth > 768 && !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isPC) {
                 // PC版の場合のみロゴを表示
                 var logo = document.querySelector('.floating-logo-central');
                 if (logo) {
-                    logo.style.display = 'block';
-                    logo.style.visibility = 'visible';
-                    logo.style.opacity = '1';
+                    // インラインスタイルを削除してCSSクラスで制御
+                    logo.style.removeProperty('display');
+                    logo.style.removeProperty('visibility');
+                    logo.style.removeProperty('opacity');
+                    logo.classList.add('show-logo');
                 }
             }
         });
@@ -1302,7 +1314,7 @@
     <div class="space-background" id="spaceBackground"></div>
 
     <!-- Central Floating Logo (PC Only) -->
-    <div class="floating-logo-central pc-only" style="display: none; visibility: hidden; opacity: 0;">
+    <div class="floating-logo-central pc-only">
         <div class="logo-wrapper">
             <div class="logo-orbit"></div>
             <img src="BucksBox.ai_logo.png" alt="BucksBox.ai Logo" class="logo-image">

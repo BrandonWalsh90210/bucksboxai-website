@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- ホームページ -->
+  <url>
+    <loc>https://bucksbox.ai/</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- サービスページ -->
+  <url>
+    <loc>https://bucksbox.ai/our-apps</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 申請フォーム -->
+  <url>
+    <loc>https://bucksbox.ai/review-application</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://bucksbox.ai/idea-application</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 企業情報 -->
+  <url>
+    <loc>https://bucksbox.ai/company-profile</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- サポート -->
+  <url>
+    <loc>https://bucksbox.ai/faq</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- 法的情報 -->
+  <url>
+    <loc>https://bucksbox.ai/terms-of-service</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://bucksbox.ai/specified-commercial-transaction</loc>
+    <lastmod>2024-08-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+</urlset>
