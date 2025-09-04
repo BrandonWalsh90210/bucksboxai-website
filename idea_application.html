@@ -492,7 +492,7 @@
 
         <!-- Application Form -->
         <div class="form-container">
-            <form id="ideaApplicationForm" action="https://formspree.io/f/xvgpgngz" method="POST">
+            <form id="ideaApplicationForm">
                 <!-- Hidden Fields -->
                 <input type="hidden" name="service_type" value="idea-application">
                 <input type="hidden" name="_subject" value="【BucksBox.ai】アイデアのアプリ化申請">
@@ -844,6 +844,114 @@
                         checkboxGroup.style.backgroundColor = 'rgba(255, 59, 48, 0.1)';
                     }
                 });
+            }
+        });
+    </script>
+
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Supabase Integration Script -->
+    <script>
+        // Supabase設定
+        const SUPABASE_URL = 'https://lgspizsitxyspipqglgz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxnc3BpenNpdHh5c3BpcHFnbGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU4ODMzMzIsImV4cCI6MjA1MTQ1OTMzMn0.cKylfXEOaUrHOqBNbXXv3-Fhm3H-K_mPnAauRtTBV8w';
+        
+        // Supabaseクライアントの初期化
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Supabase版フォーム送信処理を追加
+        document.getElementById('ideaApplicationForm').removeEventListener('submit', document.getElementById('ideaApplicationForm')._submitHandler);
+        
+        document.getElementById('ideaApplicationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            const submitButton = document.getElementById('submitButton');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.textContent = '送信中...';
+            loadingSpinner.style.display = 'block';
+            
+            try {
+                // ログインチェック（オプション - 現在はログイン不要）
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                const member_id = session?.user?.id || null;
+                
+                // フォームデータをオブジェクトに変換
+                const applicationData = {
+                    member_id: member_id,
+                    title: formData.get('app_idea_title'),
+                    description: formData.get('app_idea_description'),
+                    target_users: formData.get('target_users'),
+                    category: formData.get('app_category'),
+                    market_analysis: formData.get('market_analysis') || null,
+                    expected_price: formData.get('expected_price') || null,
+                    technical_requirements: formData.get('technical_requirements') || null,
+                    reference_apps: formData.get('reference_apps') || null,
+                    additional_info: formData.get('additional_info') || null,
+                    copyright_agreed: formData.get('copyright_agreement') === 'on',
+                    terms_agreed: formData.get('terms_agreement') === 'on',
+                    revenue_understood: formData.get('revenue_understanding') === 'on',
+                    status: 'pending'
+                };
+                
+                // 申請者情報を別途保存（inquiriesテーブルに保存）
+                const inquiryData = {
+                    member_id: member_id,
+                    inquiry_type: 'idea_application',
+                    subject: `アイデア申請: ${formData.get('app_idea_title')}`,
+                    message: `申請者: ${formData.get('applicant_name')}\n会社: ${formData.get('company_name') || 'なし'}\nメール: ${formData.get('email')}\n電話: ${formData.get('phone') || 'なし'}`,
+                    status: 'unread'
+                };
+                
+                // Supabaseにデータを保存（両方のテーブルに保存）
+                const { data: ideaData, error: ideaError } = await supabaseClient
+                    .from('idea_applications')
+                    .insert([applicationData]);
+                
+                if (ideaError) {
+                    console.error('Idea Application Error:', ideaError);
+                    throw new Error('アイデア申請の保存に失敗しました');
+                }
+                
+                // 申請者情報も保存
+                const { data: inquiryDataResult, error: inquiryError } = await supabaseClient
+                    .from('inquiries')
+                    .insert([inquiryData]);
+                
+                if (inquiryError) {
+                    console.error('Inquiry Error:', inquiryError);
+                    // エラーでも続行（メインデータは保存済み）
+                }
+                
+                // Success
+                successMessage.style.display = 'block';
+                form.reset();
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+            } catch (error) {
+                // Error handling
+                console.error('送信エラー:', error);
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } finally {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.textContent = 'アイデアを申請する';
+                loadingSpinner.style.display = 'none';
             }
         });
     </script>

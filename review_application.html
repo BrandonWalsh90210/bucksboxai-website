@@ -461,6 +461,9 @@
         </div>
     </nav>
 
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- Main Content -->
     <div class="main-content">
         <!-- Header -->
@@ -543,7 +546,7 @@
 
         <!-- Application Form -->
         <div class="form-container">
-            <form id="reviewApplicationForm" action="https://formspree.io/f/xvgpgngz" method="POST">
+            <form id="reviewApplicationForm">
                 <!-- Hidden Fields -->
                 <input type="hidden" name="service_type" value="ios-review-application">
                 <input type="hidden" name="_subject" value="【BucksBox.ai】iOS審査代行サービス申請">
@@ -849,6 +852,11 @@
 
         window.addEventListener('load', createSpaceBackground);
 
+        // Supabase configuration
+        const SUPABASE_URL = 'https://nyeihlozvadcqbnpbwqe.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // Form submission handling
         document.getElementById('reviewApplicationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -870,27 +878,104 @@
             loadingSpinner.style.display = 'block';
             
             try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (response.ok) {
-                    // Success
-                    successMessage.style.display = 'block';
-                    form.reset();
-                    
-                    // Scroll to success message
-                    successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    // Error response
-                    throw new Error('Server response error');
+                // Check if user is logged in
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                const member_id = user ? user.id : null;
+
+                // Prepare review application data
+                const reviewData = {
+                    member_id: member_id,
+                    app_name: formData.get('app_name'),
+                    app_url: formData.get('github_repository'),
+                    app_description: formData.get('app_description'),
+                    app_category: formData.get('app_category'),
+                    target_price: formData.get('target_price'),
+                    development_status: formData.get('development_status'),
+                    ios_version: formData.get('ios_version'),
+                    xcode_version: formData.get('xcode_version'),
+                    build_instructions: formData.get('build_instructions') || null,
+                    external_services: formData.get('external_services') || null,
+                    data_handling: formData.get('data_handling') || null,
+                    company_display_location: formData.get('company_display_location'),
+                    logo_implementation: formData.get('logo_implementation'),
+                    display_confirmation_url: formData.get('display_confirmation_url') || null,
+                    previous_rejections: formData.get('previous_rejections') || null,
+                    special_requirements: formData.get('special_requirements') || null,
+                    additional_notes: formData.get('additional_notes') || null,
+                    submitted_at: new Date().toISOString()
+                };
+
+                // Insert review application
+                const { data: reviewResult, error: reviewError } = await supabaseClient
+                    .from('review_applications')
+                    .insert([reviewData]);
+
+                if (reviewError) {
+                    console.error('Review application error:', reviewError);
+                    throw reviewError;
                 }
+
+                // Also create an inquiry record for tracking
+                const inquiryData = {
+                    member_id: member_id,
+                    inquiry_type: 'review_application',
+                    subject: `iOS審査代行申請: ${formData.get('app_name')}`,
+                    message: `
+開発者: ${formData.get('developer_name')}
+会社名: ${formData.get('company_name') || 'N/A'}
+メール: ${formData.get('email')}
+電話: ${formData.get('phone')}
+アプリ名: ${formData.get('app_name')}
+カテゴリ: ${formData.get('app_category')}
+価格: ${formData.get('target_price')}
+開発経験: ${formData.get('development_experience') || 'N/A'}
+ビルド状況: ${formData.get('development_status')}
+Xcode: ${formData.get('xcode_version')}
+iOS: ${formData.get('ios_version')}
+GitHub: ${formData.get('github_repository')}
+社名表示位置: ${formData.get('company_display_location')}
+ロゴ実装: ${formData.get('logo_implementation')}
+
+アプリ説明:
+${formData.get('app_description')}
+
+${formData.get('build_instructions') ? `ビルド手順:\n${formData.get('build_instructions')}\n` : ''}
+${formData.get('external_services') ? `外部サービス:\n${formData.get('external_services')}\n` : ''}
+${formData.get('data_handling') ? `データ取扱い:\n${formData.get('data_handling')}\n` : ''}
+${formData.get('previous_rejections') ? `過去の審査:\n${formData.get('previous_rejections')}\n` : ''}
+${formData.get('special_requirements') ? `特別要件:\n${formData.get('special_requirements')}\n` : ''}
+${formData.get('additional_notes') ? `補足:\n${formData.get('additional_notes')}\n` : ''}
+
+同意事項:
+- 著作権譲渡: ${formData.get('copyright_transfer') ? '同意' : '未同意'}
+- 品質基準: ${formData.get('quality_standards') ? '同意' : '未同意'}
+- 社名・ロゴ表示: ${formData.get('company_display') ? '同意' : '未同意'}
+- 収益分配: ${formData.get('revenue_sharing') ? '同意' : '未同意'}
+- GitHubアクセス: ${formData.get('github_access') ? '同意' : '未同意'}
+- 利用規約: ${formData.get('terms_agreement') ? '同意' : '未同意'}
+                    `.trim(),
+                    submitted_at: new Date().toISOString()
+                };
+
+                const { data: inquiryResult, error: inquiryError } = await supabaseClient
+                    .from('inquiries')
+                    .insert([inquiryData]);
+
+                if (inquiryError) {
+                    console.error('Inquiry creation error:', inquiryError);
+                    // Don't throw here, as the main application was saved
+                }
+
+                // Success
+                successMessage.style.display = 'block';
+                form.reset();
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
             } catch (error) {
                 // Error handling
+                console.error('Submission error:', error);
                 errorMessage.style.display = 'block';
                 errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {

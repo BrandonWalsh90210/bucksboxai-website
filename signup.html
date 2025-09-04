@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規登録 - BucksBox.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .info-message {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+        
+        .divider {
+            margin: 15px 0;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+        }
+        
+        .password-requirements {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="BucksBox.ai_logo.png" alt="BucksBox.ai">
+        </div>
+        
+        <h1>新規登録</h1>
+        
+        <div class="info-message">
+            メールアドレス確認が必要です。登録後、確認メールが送信されます。
+        </div>
+        
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+        
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="email">メールアドレス <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">パスワード <span class="required">*</span></label>
+                <input type="password" id="password" name="password" required>
+                <div class="password-requirements">
+                    ・8文字以上
+                    ・大文字と小文字を含む
+                    ・数字を含む
+                    ・特殊文字を含む
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">パスワード（確認） <span class="required">*</span></label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="fullName">お名前</label>
+                <input type="text" id="fullName" name="fullName">
+            </div>
+            
+            <div class="form-group">
+                <label for="companyName">会社名</label>
+                <input type="text" id="companyName" name="companyName">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">電話番号</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+            
+            <button type="submit">登録する</button>
+        </form>
+        
+        <div class="loading" id="loading">
+            処理中...
+        </div>
+        
+        <div class="links">
+            <div class="divider">既にアカウントをお持ちの方</div>
+            <a href="login.html">ログインはこちら</a>
+            <div class="divider">その他</div>
+            <a href="index.html">ホームに戻る</a>
+        </div>
+    </div>
+    
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Configuration -->
+    <script>
+        // Supabase設定
+        const SUPABASE_URL = 'https://lgspizsitxyspipqglgz.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxnc3BpenNpdHh5c3BpcHFnbGd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU4ODMzMzIsImV4cCI6MjA1MTQ1OTMzMn0.cKylfXEOaUrHOqBNbXXv3-Fhm3H-K_mPnAauRtTBV8w';
+        
+        // Supabaseクライアントの初期化
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // フォーム要素の取得
+        const signupForm = document.getElementById('signupForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loading = document.getElementById('loading');
+        
+        // パスワード検証関数
+        function validatePassword(password) {
+            const minLength = password.length >= 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumbers = /\d/.test(password);
+            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+            
+            return {
+                isValid: minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar,
+                errors: []
+            };
+        }
+        
+        // 新規登録フォームの処理
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // エラー/成功メッセージをクリア
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // フォームデータの取得
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const fullName = document.getElementById('fullName').value;
+            const companyName = document.getElementById('companyName').value;
+            const phone = document.getElementById('phone').value;
+            
+            // パスワード確認
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'パスワードが一致しません。';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            // パスワード検証
+            const passwordValidation = validatePassword(password);
+            if (!passwordValidation.isValid) {
+                errorMessage.textContent = 'パスワードは8文字以上で、大文字・小文字・数字・特殊文字を含む必要があります。';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            // ローディング表示
+            loading.style.display = 'block';
+            signupForm.style.display = 'none';
+            
+            try {
+                // 1. Supabaseでユーザー登録
+                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password
+                });
+                
+                if (authError) {
+                    throw authError;
+                }
+                
+                // 2. プロファイル情報を保存
+                if (authData.user) {
+                    const { error: profileError } = await supabaseClient
+                        .from('member_profiles')
+                        .insert({
+                            id: authData.user.id,
+                            email: email,
+                            full_name: fullName,
+                            company_name: companyName,
+                            phone: phone
+                        });
+                    
+                    if (profileError) {
+                        console.error('プロファイル作成エラー:', profileError);
+                        // プロファイル作成に失敗してもユーザー登録は成功
+                    }
+                }
+                
+                // 登録成功
+                successMessage.innerHTML = `
+                    登録が完了しました！<br>
+                    確認メールを送信しました。<br>
+                    メールに記載されたリンクをクリックして、メールアドレスを確認してください。<br>
+                    <strong>メールアドレスの確認が完了するまで、ログインできません。</strong>
+                `;
+                successMessage.style.display = 'block';
+                
+                // フォームを非表示
+                loading.style.display = 'none';
+                
+            } catch (error) {
+                // エラー表示
+                let errorText = '登録に失敗しました。';
+                
+                if (error.message) {
+                    if (error.message.includes('User already registered')) {
+                        errorText = 'このメールアドレスは既に登録されています。';
+                    } else {
+                        errorText = error.message;
+                    }
+                }
+                
+                errorMessage.textContent = errorText;
+                errorMessage.style.display = 'block';
+                
+                // フォーム表示を戻す
+                loading.style.display = 'none';
+                signupForm.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
