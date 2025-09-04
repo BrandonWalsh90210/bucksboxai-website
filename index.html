@@ -1289,18 +1289,8 @@
             }
         }
     </style>
-    <!-- Supabase Client Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
-        // Supabase設定
-        const SUPABASE_URL = 'https://nyeihlozvadcqbnpbwqe.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE';
-        
-        // Supabaseクライアントの初期化
-        const { createClient } = supabase;
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
         // PC版でのみロゴを表示（モバイルではデフォルトで非表示）
         document.addEventListener('DOMContentLoaded', function() {
             // PC判定：画面幅が768pxより大きく、かつモバイルデバイスではない
@@ -1317,141 +1307,7 @@
                     logo.classList.add('show-logo');
                 }
             }
-            
-            // 認証状態をチェックしてナビゲーションを更新
-            checkAuthStateAndUpdateNav();
         });
-        
-        // 認証状態をチェックしてナビゲーションを更新する関数
-        async function checkAuthStateAndUpdateNav() {
-            try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                
-                // 会員登録リンクを取得（デスクトップとモバイル両方）
-                const signupLinksDesktop = document.querySelectorAll('.nav-menu:not(.mobile-menu) a[href="./signup.html"]');
-                const signupLinksMobile = document.querySelectorAll('.nav-menu.mobile-menu a[href="./signup.html"]');
-                const allSignupLinks = [...signupLinksDesktop, ...signupLinksMobile];
-                
-                if (session) {
-                    // ログイン済みの場合：「ダッシュボード」に変更
-                    allSignupLinks.forEach(link => {
-                        link.href = './dashboard.html';
-                        link.textContent = 'ダッシュボード';
-                        link.setAttribute('aria-label', 'ダッシュボードページへ移動');
-                    });
-                    
-                    // ログインリンクがあれば「ログアウト」機能を追加
-                    addLogoutFunctionality();
-                } else {
-                    // 未ログインの場合：「会員登録」のまま
-                    allSignupLinks.forEach(link => {
-                        link.href = './signup.html';
-                        link.textContent = '会員登録';
-                        link.setAttribute('aria-label', '会員登録ページへ移動');
-                    });
-                    
-                    // ログインリンクを追加
-                    addLoginLink();
-                }
-            } catch (error) {
-                console.error('認証状態の確認に失敗:', error);
-                // エラーの場合は未ログイン扱い
-                addLoginLink();
-            }
-        }
-        
-        // ログインリンクを追加する関数
-        function addLoginLink() {
-            // 既存のログインリンクがあるかチェック
-            if (document.querySelector('.auth-login-link')) return;
-            
-            // デスクトップメニューにログインリンクを追加
-            const desktopMenu = document.querySelector('.nav-menu:not(.mobile-menu)');
-            if (desktopMenu) {
-                const loginLi = document.createElement('li');
-                loginLi.innerHTML = '<a href="./login.html" class="auth-login-link" aria-label="ログインページへ移動">ログイン</a>';
-                // 会員登録の前に挿入
-                const signupLi = desktopMenu.querySelector('li:last-child');
-                if (signupLi) {
-                    desktopMenu.insertBefore(loginLi, signupLi);
-                } else {
-                    desktopMenu.appendChild(loginLi);
-                }
-            }
-            
-            // モバイルメニューにログインリンクを追加
-            const mobileMenu = document.querySelector('.nav-menu.mobile-menu');
-            if (mobileMenu) {
-                const loginLi = document.createElement('li');
-                loginLi.innerHTML = '<a href="./login.html" class="auth-login-link" aria-label="ログインページへ移動">ログイン</a>';
-                // 会員登録の前に挿入
-                const signupLi = mobileMenu.querySelector('li:last-child');
-                if (signupLi) {
-                    mobileMenu.insertBefore(loginLi, signupLi);
-                } else {
-                    mobileMenu.appendChild(loginLi);
-                }
-            }
-        }
-        
-        // ログアウト機能を追加する関数
-        function addLogoutFunctionality() {
-            // 既存のログインリンクを削除
-            const existingLoginLinks = document.querySelectorAll('.auth-login-link');
-            existingLoginLinks.forEach(link => {
-                link.parentElement.remove();
-            });
-            
-            // ログアウトリンクがあるかチェック
-            if (document.querySelector('.auth-logout-link')) return;
-            
-            // デスクトップメニューにログアウトリンクを追加
-            const desktopMenu = document.querySelector('.nav-menu:not(.mobile-menu)');
-            if (desktopMenu) {
-                const logoutLi = document.createElement('li');
-                logoutLi.innerHTML = '<a href="#" class="auth-logout-link" aria-label="ログアウト" onclick="performLogout(event)">ログアウト</a>';
-                // ダッシュボードの後に挿入
-                const dashboardLi = desktopMenu.querySelector('li:last-child');
-                if (dashboardLi) {
-                    desktopMenu.insertBefore(logoutLi, dashboardLi.nextSibling);
-                } else {
-                    desktopMenu.appendChild(logoutLi);
-                }
-            }
-            
-            // モバイルメニューにログアウトリンクを追加
-            const mobileMenu = document.querySelector('.nav-menu.mobile-menu');
-            if (mobileMenu) {
-                const logoutLi = document.createElement('li');
-                logoutLi.innerHTML = '<a href="#" class="auth-logout-link" aria-label="ログアウト" onclick="performLogout(event)">ログアウト</a>';
-                // ダッシュボードの後に挿入
-                const dashboardLi = mobileMenu.querySelector('li:last-child');
-                if (dashboardLi) {
-                    mobileMenu.insertBefore(logoutLi, dashboardLi.nextSibling);
-                } else {
-                    mobileMenu.appendChild(logoutLi);
-                }
-            }
-        }
-        
-        // ログアウト実行関数
-        async function performLogout(event) {
-            event.preventDefault();
-            
-            try {
-                const { error } = await supabaseClient.auth.signOut();
-                if (!error) {
-                    // ログアウト成功時はページをリロードして表示を更新
-                    window.location.reload();
-                } else {
-                    console.error('ログアウトエラー:', error);
-                    alert('ログアウトに失敗しました。');
-                }
-            } catch (error) {
-                console.error('ログアウトエラー:', error);
-                alert('ログアウトに失敗しました。');
-            }
-        }
     </script>
 </head>
 <body>
