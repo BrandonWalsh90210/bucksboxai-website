@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規登録 - BucksBox.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c00;
+            border: 1px solid #fcc;
+        }
+        
+        .success {
+            background: #efe;
+            color: #060;
+            border: 1px solid #cfc;
+        }
+        
+        .info {
+            background: #e7f3ff;
+            color: #0066cc;
+            border: 1px solid #b3d9ff;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>新規登録</h1>
+        
+        <div class="info">
+            メールアドレス確認が必要です。登録後、確認メールが送信されます。
+        </div>
+        
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="email">メールアドレス *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">パスワード *</label>
+                <input type="password" id="password" name="password" required>
+                <small style="color: #999;">8文字以上・大文字と小文字を含む・数字を含む・特殊文字を含む</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">パスワード（確認）*</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="displayName">お名前</label>
+                <input type="text" id="displayName" name="displayName">
+            </div>
+            
+            <button type="submit">登録する</button>
+        </form>
+        
+        <div id="errorMessage" class="message error" style="display: none;"></div>
+        <div id="successMessage" class="message success" style="display: none;"></div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <script>
+        // Supabase設定
+        const SUPABASE_URL = 'https://nyeihlozvadcqbnpbwqe.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE';
+        
+        // Supabase初期化
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // フォーム処理
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            
+            // メッセージをクリア
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            // フォームデータ取得
+            const formData = new FormData(e.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+            const displayName = formData.get('displayName');
+            
+            // パスワード確認
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'パスワードが一致しません';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // パスワード検証
+            if (password.length < 8) {
+                errorDiv.textContent = 'パスワードは8文字以上で入力してください';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (!/[A-Z]/.test(password) || !/[a-z]/.test(password)) {
+                errorDiv.textContent = 'パスワードは大文字と小文字を含む必要があります';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (!/\d/.test(password)) {
+                errorDiv.textContent = 'パスワードは数字を含む必要があります';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (!/[!@#$%^&*]/.test(password)) {
+                errorDiv.textContent = 'パスワードは特殊文字を含む必要があります';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // ボタンを無効化
+            submitButton.disabled = true;
+            submitButton.textContent = '登録中...';
+            
+            try {
+                // Supabaseで登録
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            display_name: displayName || email.split('@')[0]
+                        }
+                    }
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                // 成功
+                successDiv.textContent = '登録が完了しました！確認メールをご確認ください。';
+                successDiv.style.display = 'block';
+                e.target.reset();
+                
+                // 3秒後にログインページへ
+                setTimeout(() => {
+                    window.location.href = '/bucksboxai-website/login.html';
+                }, 3000);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                errorDiv.textContent = error.message || '登録に失敗しました';
+                errorDiv.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = '登録する';
+            }
+        });
+    </script>
+</body>
+</html>
