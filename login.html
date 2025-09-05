@@ -314,9 +314,9 @@
                     successMessage.textContent = 'ログインに成功しました。リダイレクト中...';
                     successMessage.style.display = 'block';
                     
-                    // 2秒後にダッシュボードへリダイレクト
+                    // 2秒後にメインページへリダイレクト
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = '/bucksboxai-website/index.html';
                     }, 2000);
                     
                 } catch (error) {
@@ -357,8 +357,8 @@
                         
                         if (session) {
                             console.log('User already logged in, redirecting...');
-                            // 既にログイン済みの場合、ダッシュボードへリダイレクト
-                            window.location.href = 'dashboard.html';
+                            // 既にログイン済みの場合、メインページへリダイレクト
+                            window.location.href = '/bucksboxai-website/index.html';
                         }
                     } catch (error) {
                         console.error('Session check error:', error);

@@ -1309,6 +1309,10 @@
             }
         });
     </script>
+    <!-- Supabase SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Auth Check Script -->
+    <script src="/bucksboxai-website/auth-check.js"></script>
 </head>
 <body>
     <!-- Space Background -->
@@ -1355,7 +1359,7 @@
                 <li><a href="/bucksboxai-website/faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
                 <li><a href="/bucksboxai-website/bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
-                <li><a href="/bucksboxai-website/signup.html" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); padding: 8px 20px; border-radius: 20px; color: white !important;">会員登録</a></li>
+                <li><a href="#" onclick="authModule.logout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
             </ul>
             
             <!-- Mobile Navigation Toggle -->
@@ -1375,7 +1379,7 @@
                 <li><a href="/bucksboxai-website/faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
                 <li><a href="/bucksboxai-website/bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
-                <li><a href="/bucksboxai-website/signup.html" style="background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); padding: 8px 20px; border-radius: 20px; color: white !important;">会員登録</a></li>
+                <li><a href="#" onclick="authModule.logout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
             </ul>
         </div>
     </nav>
