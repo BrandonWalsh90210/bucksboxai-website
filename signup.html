@@ -387,11 +387,22 @@
                 
                 try {
                     console.log('Starting user registration...');
+                    console.log('Registration data:', { email, password_length: password.length });
+                    console.log('Supabase client:', supabaseClient);
+                    console.log('Current URL:', window.location.href);
                     
                     // 1. Supabaseでユーザー登録
                     const { data: authData, error: authError } = await supabaseClient.auth.signUp({
                         email: email,
-                        password: password
+                        password: password,
+                        options: {
+                            emailRedirectTo: `${window.location.origin}/bucksboxai-website/welcome.html`,
+                            data: {
+                                full_name: fullName,
+                                company_name: companyName,
+                                phone: phone
+                            }
+                        }
                     });
                     
                     if (authError) {
@@ -401,24 +412,16 @@
                     
                     console.log('User registration successful:', authData);
                     
-                    // 2. プロファイル情報を保存
+                    // Store profile data in user metadata instead of database
+                    // Profile will be created after email confirmation
                     if (authData.user) {
-                        const { error: profileError } = await supabaseClient
-                            .from('member_profiles')
-                            .insert({
-                                id: authData.user.id,
-                                email: email,
-                                full_name: fullName,
-                                company_name: companyName,
-                                phone: phone
-                            });
-                        
-                        if (profileError) {
-                            console.error('プロファイル作成エラー:', profileError);
-                            // プロファイル作成に失敗してもユーザー登録は成功
-                        } else {
-                            console.log('Profile created successfully');
-                        }
+                        console.log('User created with metadata for profile creation after confirmation');
+                        console.log('Profile data will be:', {
+                            email: email,
+                            full_name: fullName,
+                            company_name: companyName,
+                            phone: phone
+                        });
                     }
                     
                     // 登録成功
@@ -435,6 +438,14 @@
                     
                 } catch (error) {
                     console.error('Registration error:', error);
+                    console.error('Error details:', {
+                        message: error.message,
+                        code: error.code,
+                        status: error.status,
+                        details: error.details,
+                        hint: error.hint,
+                        full_error: error
+                    });
                     
                     // エラー表示
                     let errorText = '登録に失敗しました。';
@@ -448,7 +459,16 @@
                             errorText = 'パスワードの要件を満たしていません。';
                         } else {
                             errorText = 'エラー: ' + error.message;
+                            // Add error code and details for debugging
+                            if (error.code) {
+                                errorText += ` (Code: ${error.code})`;
+                            }
+                            if (error.details) {
+                                errorText += ` Details: ${error.details}`;
+                            }
                         }
+                    } else {
+                        errorText = 'Unknown registration error occurred. Check console for details.';
                     }
                     
                     errorMessage.textContent = errorText;

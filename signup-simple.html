@@ -214,11 +214,16 @@
             submitButton.textContent = '登録中...';
             
             try {
+                console.log('Attempting signup with:', { email, password_length: password.length });
+                console.log('Supabase client:', supabaseClient);
+                console.log('Current URL:', window.location.href);
+                
                 // Supabaseで登録
                 const { data, error } = await supabaseClient.auth.signUp({
                     email: email,
                     password: password,
                     options: {
+                        emailRedirectTo: `${window.location.origin}/bucksboxai-website/welcome.html`,
                         data: {
                             display_name: displayName || email.split('@')[0]
                         }
@@ -241,7 +246,34 @@
                 
             } catch (error) {
                 console.error('Registration error:', error);
-                errorDiv.textContent = error.message || '登録に失敗しました';
+                console.error('Error details:', {
+                    message: error.message,
+                    code: error.code,
+                    status: error.status,
+                    details: error.details,
+                    hint: error.hint,
+                    full_error: error
+                });
+                
+                // Show detailed error information
+                let errorMessage = 'Registration failed: ';
+                if (error.message) {
+                    errorMessage += error.message;
+                } else {
+                    errorMessage += 'Unknown error occurred';
+                }
+                
+                // Add error code if available
+                if (error.code) {
+                    errorMessage += ` (Code: ${error.code})`;
+                }
+                
+                // Add additional details for debugging
+                if (error.details) {
+                    errorMessage += ` Details: ${error.details}`;
+                }
+                
+                errorDiv.textContent = errorMessage;
                 errorDiv.style.display = 'block';
             } finally {
                 submitButton.disabled = false;
