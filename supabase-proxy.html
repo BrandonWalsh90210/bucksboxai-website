@@ -78,15 +78,15 @@
             const password = document.getElementById('password').value;
             
             log('=== 直接API呼び出し開始 ===', 'info');
-            log('URL: https://nyeihlozvadcqbnpbwqe.supabase.co/auth/v1/signup', 'info');
+            log('URL: https://ypesemlagxsdixjxvrpb.supabase.co/auth/v1/signup', 'info');
             
             try {
-                const response = await fetch('https://nyeihlozvadcqbnpbwqe.supabase.co/auth/v1/signup', {
+                const response = await fetch('https://ypesemlagxsdixjxvrpb.supabase.co/auth/v1/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE',
-                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE'
+                        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZXNlbWxhZ3hzZGl4anh2cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYzODgsImV4cCI6MjA3MjU1MjM4OH0.Q6OnAHRJCpIAdWP3fCgtsaVF_YLM0ov9-p6nhluUPm8',
+                        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZXNlbWxhZ3hzZGl4anh2cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYzODgsImV4cCI6MjA3MjU1MjM4OH0.Q6OnAHRJCpIAdWP3fCgtsaVF_YLM0ov9-p6nhluUPm8'
                     },
                     body: JSON.stringify({
                         email: email,
