@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase接続テスト - BucksBox.ai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .warning { background: #fff3cd; color: #856404; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .console-output {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Supabase接続テスト</h1>
+        
+        <div id="debugStatus" class="status info">
+            テスト開始中...
+        </div>
+        
+        <div class="test-controls">
+            <button class="test-button" onclick="testConnection()">接続テスト</button>
+            <button class="test-button" onclick="testAuth()">認証テスト</button>
+            <button class="test-button" onclick="clearConsole()">コンソールクリア</button>
+        </div>
+        
+        <div id="consoleOutput" class="console-output">
+コンソール出力がここに表示されます...
+        </div>
+    </div>
+    
+    <!-- Debug Script -->
+    <script>
+        let consoleElement = document.getElementById('consoleOutput');
+        let originalLog = console.log;
+        let originalError = console.error;
+        
+        // コンソールをHTMLに出力
+        function addToConsole(message, type = 'log') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff6b6b' : '#00ff00';
+            consoleElement.innerHTML += `<span style="color: ${color}">[${timestamp}] ${message}</span>\n`;
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        }
+        
+        console.log = function(message) {
+            originalLog.apply(console, arguments);
+            addToConsole(message, 'log');
+        };
+        
+        console.error = function(message) {
+            originalError.apply(console, arguments);
+            addToConsole(message, 'error');
+        };
+        
+        function clearConsole() {
+            consoleElement.innerHTML = '';
+        }
+        
+        console.log('テストページが読み込まれました');
+        
+        // デバッグ用のステータス表示
+        function showDebugStatus(message, type = 'info') {
+            const debugDiv = document.getElementById('debugStatus');
+            debugDiv.textContent = message;
+            debugDiv.className = `status ${type}`;
+            console.log('DEBUG:', message);
+        }
+        
+        // フォールバック用のSupabaseクライアント初期化
+        let supabaseClient = null;
+        
+        // Supabase設定
+        const SUPABASE_URL = 'https://nyeihlozvadcqbnpbwqe.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE';
+        
+        // 初期化関数
+        function initializeSupabase() {
+            try {
+                if (typeof supabase !== 'undefined' && supabase.createClient) {
+                    showDebugStatus('Supabaseクライアントを初期化中...', 'info');
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    showDebugStatus('Supabaseクライアントの初期化が完了しました', 'success');
+                    console.log('Supabase client initialized:', supabaseClient);
+                    return true;
+                } else {
+                    showDebugStatus('Supabaseオブジェクトが利用できません', 'error');
+                    return false;
+                }
+            } catch (error) {
+                showDebugStatus('Supabase初期化エラー: ' + error.message, 'error');
+                console.error('Supabase initialization error:', error);
+                return false;
+            }
+        }
+        
+        // 接続テスト
+        async function testConnection() {
+            console.log('=== 接続テスト開始 ===');
+            
+            if (!supabaseClient) {
+                showDebugStatus('エラー: Supabaseクライアントが初期化されていません', 'error');
+                return;
+            }
+            
+            try {
+                // 簡単な接続テスト
+                const { data, error } = await supabaseClient.auth.getSession();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                showDebugStatus('接続テスト成功: Supabaseに正常に接続されています', 'success');
+                console.log('Connection test successful, session data:', data);
+                
+            } catch (error) {
+                showDebugStatus('接続テストエラー: ' + error.message, 'error');
+                console.error('Connection test error:', error);
+            }
+        }
+        
+        // 認証テスト（テスト用のダミーメールで）
+        async function testAuth() {
+            console.log('=== 認証テスト開始 ===');
+            
+            if (!supabaseClient) {
+                showDebugStatus('エラー: Supabaseクライアントが初期化されていません', 'error');
+                return;
+            }
+            
+            try {
+                showDebugStatus('認証システムのテスト中...', 'info');
+                
+                // 認証機能が利用可能かテスト
+                const testEmail = 'test@example.com';
+                const testPassword = 'TestPassword123!';
+                
+                console.log(`Testing auth functions with dummy data...`);
+                
+                // signUpメソッドが利用可能かチェック（実際には実行しない）
+                if (typeof supabaseClient.auth.signUp === 'function') {
+                    console.log('✓ signUp method is available');
+                } else {
+                    throw new Error('signUp method not available');
+                }
+                
+                // signInWithPasswordメソッドが利用可能かチェック（実際には実行しない）
+                if (typeof supabaseClient.auth.signInWithPassword === 'function') {
+                    console.log('✓ signInWithPassword method is available');
+                } else {
+                    throw new Error('signInWithPassword method not available');
+                }
+                
+                showDebugStatus('認証テスト成功: すべての認証メソッドが利用可能です', 'success');
+                
+            } catch (error) {
+                showDebugStatus('認証テストエラー: ' + error.message, 'error');
+                console.error('Auth test error:', error);
+            }
+        }
+    </script>
+    
+    <!-- Primary CDN -->
+    <script 
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+        onload="showDebugStatus('Primary CDN loaded successfully', 'success'); initializeSupabase();"
+        onerror="showDebugStatus('Primary CDN failed, trying fallback...', 'warning'); loadFallbackCDN();">
+    </script>
+    
+    <!-- Fallback CDN loader -->
+    <script>
+        function loadFallbackCDN() {
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/@supabase/supabase-js@2';
+            script.onload = function() {
+                showDebugStatus('Fallback CDN loaded successfully', 'success');
+                initializeSupabase();
+            };
+            script.onerror = function() {
+                showDebugStatus('All CDN sources failed. Check your internet connection.', 'error');
+            };
+            document.head.appendChild(script);
+        }
+        
+        // ページ読み込み完了後の最終チェック
+        setTimeout(function() {
+            if (!supabaseClient) {
+                showDebugStatus('WARNING: Supabase client not initialized after 3 seconds', 'warning');
+            } else {
+                showDebugStatus('System ready - すべてのテストが利用可能です', 'success');
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
