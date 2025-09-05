@@ -151,6 +151,8 @@
         
         <h1>ログイン</h1>
         
+        <div id="debugStatus" style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none;"></div>
+        
         <div id="errorMessage" class="error-message"></div>
         <div id="successMessage" class="success-message"></div>
         
@@ -182,92 +184,187 @@
         </div>
     </div>
     
-    <!-- Supabase Client Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Configuration -->
+    <!-- Debug Script -->
     <script>
+        console.log('Page loaded, starting Supabase initialization...');
+        
+        // デバッグ用のステータス表示
+        function showDebugStatus(message) {
+            const debugDiv = document.getElementById('debugStatus');
+            if (debugDiv) {
+                debugDiv.textContent = message;
+                debugDiv.style.display = 'block';
+                console.log('DEBUG:', message);
+            }
+        }
+        
+        // フォールバック用のSupabaseクライアント初期化
+        let supabaseClient = null;
+        
         // Supabase設定
         const SUPABASE_URL = 'https://nyeihlozvadcqbnpbwqe.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE';
         
-        // Supabaseクライアントの初期化
-        const { createClient } = supabase;
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // フォーム要素の取得
-        const loginForm = document.getElementById('loginForm');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-        const loading = document.getElementById('loading');
-        
-        // ログインフォームの処理
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // エラー/成功メッセージをクリア
-            errorMessage.style.display = 'none';
-            successMessage.style.display = 'none';
-            
-            // フォームデータの取得
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // ローディング表示
-            loading.style.display = 'block';
-            loginForm.style.display = 'none';
-            
+        // 初期化関数
+        function initializeSupabase() {
             try {
-                // Supabaseでログイン
-                const { data, error } = await supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
+                if (typeof supabase !== 'undefined' && supabase.createClient) {
+                    showDebugStatus('Initializing Supabase client...');
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    showDebugStatus('Supabase client initialized successfully');
+                    return true;
+                } else {
+                    showDebugStatus('Supabase object not available');
+                    return false;
+                }
+            } catch (error) {
+                showDebugStatus('Error initializing Supabase: ' + error.message);
+                console.error('Supabase initialization error:', error);
+                return false;
+            }
+        }
+    </script>
+    
+    <!-- Primary CDN -->
+    <script 
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+        onload="showDebugStatus('Primary CDN loaded'); initializeSupabase();"
+        onerror="showDebugStatus('Primary CDN failed, trying fallback...'); loadFallbackCDN();">
+    </script>
+    
+    <!-- Fallback CDN loader -->
+    <script>
+        function loadFallbackCDN() {
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/@supabase/supabase-js@2';
+            script.onload = function() {
+                showDebugStatus('Fallback CDN loaded successfully');
+                initializeSupabase();
+            };
+            script.onerror = function() {
+                showDebugStatus('All CDN sources failed. Please check your internet connection.');
+                document.getElementById('errorMessage').textContent = 'ネットワークエラー: Supabaseライブラリを読み込めませんでした。インターネット接続を確認してください。';
+                document.getElementById('errorMessage').style.display = 'block';
+            };
+            document.head.appendChild(script);
+        }
+    </script>
+    
+    <!-- Main Application Script -->
+    <script>
+        // DOM読み込み完了後に実行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing login form handlers...');
+            
+            // フォーム要素の取得
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const loading = document.getElementById('loading');
+            
+            // Supabaseクライアントの可用性チェック
+            function checkSupabaseAvailability() {
+                if (!supabaseClient) {
+                    errorMessage.textContent = 'システムエラー: データベースに接続できません。ページを再読み込みしてください。';
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+                return true;
+            }
+            
+            // ログインフォームの処理
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                console.log('Login form submitted');
                 
-                if (error) {
-                    throw error;
+                // Supabaseクライアントのチェック
+                if (!checkSupabaseAvailability()) {
+                    return;
                 }
                 
-                // ログイン成功
-                successMessage.textContent = 'ログインに成功しました。リダイレクト中...';
-                successMessage.style.display = 'block';
+                // エラー/成功メッセージをクリア
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
                 
-                // 2秒後にダッシュボードへリダイレクト
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 2000);
+                // フォームデータの取得
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
                 
-            } catch (error) {
-                // エラー表示
-                let errorText = 'ログインに失敗しました。';
+                // ローディング表示
+                loading.style.display = 'block';
+                loginForm.style.display = 'none';
                 
-                if (error.message) {
-                    if (error.message.includes('Invalid login credentials')) {
-                        errorText = 'メールアドレスまたはパスワードが正しくありません。';
-                    } else if (error.message.includes('Email not confirmed')) {
-                        errorText = 'メールアドレスの確認が完了していません。確認メールをご確認ください。';
-                    } else {
-                        errorText = error.message;
+                try {
+                    console.log('Starting login process...');
+                    
+                    // Supabaseでログイン
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+                    
+                    if (error) {
+                        console.error('Login error:', error);
+                        throw error;
+                    }
+                    
+                    console.log('Login successful:', data);
+                    
+                    // ログイン成功
+                    successMessage.textContent = 'ログインに成功しました。リダイレクト中...';
+                    successMessage.style.display = 'block';
+                    
+                    // 2秒後にダッシュボードへリダイレクト
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                    
+                } catch (error) {
+                    console.error('Login error:', error);
+                    
+                    // エラー表示
+                    let errorText = 'ログインに失敗しました。';
+                    
+                    if (error.message) {
+                        if (error.message.includes('Invalid login credentials')) {
+                            errorText = 'メールアドレスまたはパスワードが正しくありません。';
+                        } else if (error.message.includes('Email not confirmed')) {
+                            errorText = 'メールアドレスの確認が完了していません。確認メールをご確認ください。';
+                        } else {
+                            errorText = 'エラー: ' + error.message;
+                        }
+                    }
+                    
+                    errorMessage.textContent = errorText;
+                    errorMessage.style.display = 'block';
+                    
+                    // フォーム表示を戻す
+                    loading.style.display = 'none';
+                    loginForm.style.display = 'block';
+                }
+            });
+            
+            // ページ読み込み完了後の初期化確認とセッションチェック
+            setTimeout(async function() {
+                if (!supabaseClient) {
+                    showDebugStatus('Warning: Supabase client not initialized after 3 seconds');
+                } else {
+                    showDebugStatus('System ready');
+                    
+                    // 既にログイン済みかチェック
+                    try {
+                        const { data: { session } } = await supabaseClient.auth.getSession();
+                        
+                        if (session) {
+                            console.log('User already logged in, redirecting...');
+                            // 既にログイン済みの場合、ダッシュボードへリダイレクト
+                            window.location.href = 'dashboard.html';
+                        }
+                    } catch (error) {
+                        console.error('Session check error:', error);
                     }
                 }
-                
-                errorMessage.textContent = errorText;
-                errorMessage.style.display = 'block';
-                
-                // フォーム表示を戻す
-                loading.style.display = 'none';
-                loginForm.style.display = 'block';
-            }
-        });
-        
-        // ページ読み込み時、既にログイン済みかチェック
-        window.addEventListener('load', async () => {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            
-            if (session) {
-                // 既にログイン済みの場合、ダッシュボードへリダイレクト
-                window.location.href = 'dashboard.html';
-            }
+            }, 3000);
         });
     </script>
 </body>

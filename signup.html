@@ -174,6 +174,8 @@
             メールアドレス確認が必要です。登録後、確認メールが送信されます。
         </div>
         
+        <div id="debugStatus" style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none;"></div>
+        
         <div id="errorMessage" class="error-message"></div>
         <div id="successMessage" class="success-message"></div>
         
@@ -229,134 +231,243 @@
         </div>
     </div>
     
-    <!-- Supabase Client Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Configuration -->
+    <!-- Debug Script -->
     <script>
+        console.log('Page loaded, starting Supabase initialization...');
+        
+        // デバッグ用のステータス表示
+        function showDebugStatus(message) {
+            const debugDiv = document.getElementById('debugStatus');
+            if (debugDiv) {
+                debugDiv.textContent = message;
+                debugDiv.style.display = 'block';
+                console.log('DEBUG:', message);
+            }
+        }
+        
+        // CDN読み込み確認用の関数
+        function checkSupabaseLoad() {
+            if (typeof supabase !== 'undefined') {
+                showDebugStatus('Supabase CDN loaded successfully');
+                return true;
+            } else {
+                showDebugStatus('Supabase CDN failed to load');
+                return false;
+            }
+        }
+        
+        // フォールバック用のSupabaseクライアント初期化
+        let supabaseClient = null;
+        
         // Supabase設定
         const SUPABASE_URL = 'https://nyeihlozvadcqbnpbwqe.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55ZWlobG96dmFkY3FibnBid3FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzU5ODE5MTksImV4cCI6MjA1MTU1NzkxOX0.ZxYC2BnIb90DPP0ZPSBsz_Y6g5Fc79vB5J3E8_82qVE';
         
-        // Supabaseクライアントの初期化
-        const { createClient } = supabase;
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // フォーム要素の取得
-        const signupForm = document.getElementById('signupForm');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-        const loading = document.getElementById('loading');
-        
-        // パスワード検証関数
-        function validatePassword(password) {
-            const minLength = password.length >= 8;
-            const hasUpperCase = /[A-Z]/.test(password);
-            const hasLowerCase = /[a-z]/.test(password);
-            const hasNumbers = /\d/.test(password);
-            const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-            
-            return {
-                isValid: minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar,
-                errors: []
-            };
-        }
-        
-        // 新規登録フォームの処理
-        signupForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // エラー/成功メッセージをクリア
-            errorMessage.style.display = 'none';
-            successMessage.style.display = 'none';
-            
-            // フォームデータの取得
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const fullName = document.getElementById('fullName').value;
-            const companyName = document.getElementById('companyName').value;
-            const phone = document.getElementById('phone').value;
-            
-            // パスワード確認
-            if (password !== confirmPassword) {
-                errorMessage.textContent = 'パスワードが一致しません。';
-                errorMessage.style.display = 'block';
-                return;
-            }
-            
-            // パスワード検証
-            const passwordValidation = validatePassword(password);
-            if (!passwordValidation.isValid) {
-                errorMessage.textContent = 'パスワードは8文字以上で、大文字・小文字・数字・特殊文字を含む必要があります。';
-                errorMessage.style.display = 'block';
-                return;
-            }
-            
-            // ローディング表示
-            loading.style.display = 'block';
-            signupForm.style.display = 'none';
-            
+        // 初期化関数
+        function initializeSupabase() {
             try {
-                // 1. Supabaseでユーザー登録
-                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-                    email: email,
-                    password: password
-                });
-                
-                if (authError) {
-                    throw authError;
+                if (typeof supabase !== 'undefined' && supabase.createClient) {
+                    showDebugStatus('Initializing Supabase client...');
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    showDebugStatus('Supabase client initialized successfully');
+                    return true;
+                } else {
+                    showDebugStatus('Supabase object not available');
+                    return false;
                 }
-                
-                // 2. プロファイル情報を保存
-                if (authData.user) {
-                    const { error: profileError } = await supabaseClient
-                        .from('member_profiles')
-                        .insert({
-                            id: authData.user.id,
-                            email: email,
-                            full_name: fullName,
-                            company_name: companyName,
-                            phone: phone
-                        });
-                    
-                    if (profileError) {
-                        console.error('プロファイル作成エラー:', profileError);
-                        // プロファイル作成に失敗してもユーザー登録は成功
-                    }
-                }
-                
-                // 登録成功
-                successMessage.innerHTML = `
-                    登録が完了しました！<br>
-                    確認メールを送信しました。<br>
-                    メールに記載されたリンクをクリックして、メールアドレスを確認してください。<br>
-                    <strong>メールアドレスの確認が完了するまで、ログインできません。</strong>
-                `;
-                successMessage.style.display = 'block';
-                
-                // フォームを非表示
-                loading.style.display = 'none';
-                
             } catch (error) {
-                // エラー表示
-                let errorText = '登録に失敗しました。';
+                showDebugStatus('Error initializing Supabase: ' + error.message);
+                console.error('Supabase initialization error:', error);
+                return false;
+            }
+        }
+    </script>
+    
+    <!-- Primary CDN -->
+    <script 
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+        onload="showDebugStatus('Primary CDN loaded'); initializeSupabase();"
+        onerror="showDebugStatus('Primary CDN failed, trying fallback...'); loadFallbackCDN();">
+    </script>
+    
+    <!-- Fallback CDN loader -->
+    <script>
+        function loadFallbackCDN() {
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/@supabase/supabase-js@2';
+            script.onload = function() {
+                showDebugStatus('Fallback CDN loaded successfully');
+                initializeSupabase();
+            };
+            script.onerror = function() {
+                showDebugStatus('All CDN sources failed. Please check your internet connection.');
+                document.getElementById('errorMessage').textContent = 'ネットワークエラー: Supabaseライブラリを読み込めませんでした。インターネット接続を確認してください。';
+                document.getElementById('errorMessage').style.display = 'block';
+            };
+            document.head.appendChild(script);
+        }
+    </script>
+    
+    <!-- Main Application Script -->
+    <script>
+        // DOM読み込み完了後に実行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing form handlers...');
+            
+            // フォーム要素の取得
+            const signupForm = document.getElementById('signupForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const loading = document.getElementById('loading');
+            
+            // パスワード検証関数
+            function validatePassword(password) {
+                const minLength = password.length >= 8;
+                const hasUpperCase = /[A-Z]/.test(password);
+                const hasLowerCase = /[a-z]/.test(password);
+                const hasNumbers = /\d/.test(password);
+                const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
                 
-                if (error.message) {
-                    if (error.message.includes('User already registered')) {
-                        errorText = 'このメールアドレスは既に登録されています。';
-                    } else {
-                        errorText = error.message;
-                    }
+                return {
+                    isValid: minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar,
+                    errors: []
+                };
+            }
+            
+            // Supabaseクライアントの可用性チェック
+            function checkSupabaseAvailability() {
+                if (!supabaseClient) {
+                    errorMessage.textContent = 'システムエラー: データベースに接続できません。ページを再読み込みしてください。';
+                    errorMessage.style.display = 'block';
+                    return false;
+                }
+                return true;
+            }
+            
+            // 新規登録フォームの処理
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                console.log('Form submitted');
+                
+                // Supabaseクライアントのチェック
+                if (!checkSupabaseAvailability()) {
+                    return;
                 }
                 
-                errorMessage.textContent = errorText;
-                errorMessage.style.display = 'block';
+                // エラー/成功メッセージをクリア
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
                 
-                // フォーム表示を戻す
-                loading.style.display = 'none';
-                signupForm.style.display = 'block';
-            }
+                // フォームデータの取得
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const fullName = document.getElementById('fullName').value;
+                const companyName = document.getElementById('companyName').value;
+                const phone = document.getElementById('phone').value;
+                
+                // パスワード確認
+                if (password !== confirmPassword) {
+                    errorMessage.textContent = 'パスワードが一致しません。';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                
+                // パスワード検証
+                const passwordValidation = validatePassword(password);
+                if (!passwordValidation.isValid) {
+                    errorMessage.textContent = 'パスワードは8文字以上で、大文字・小文字・数字・特殊文字を含む必要があります。';
+                    errorMessage.style.display = 'block';
+                    return;
+                }
+                
+                // ローディング表示
+                loading.style.display = 'block';
+                signupForm.style.display = 'none';
+                
+                try {
+                    console.log('Starting user registration...');
+                    
+                    // 1. Supabaseでユーザー登録
+                    const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                        email: email,
+                        password: password
+                    });
+                    
+                    if (authError) {
+                        console.error('Auth error:', authError);
+                        throw authError;
+                    }
+                    
+                    console.log('User registration successful:', authData);
+                    
+                    // 2. プロファイル情報を保存
+                    if (authData.user) {
+                        const { error: profileError } = await supabaseClient
+                            .from('member_profiles')
+                            .insert({
+                                id: authData.user.id,
+                                email: email,
+                                full_name: fullName,
+                                company_name: companyName,
+                                phone: phone
+                            });
+                        
+                        if (profileError) {
+                            console.error('プロファイル作成エラー:', profileError);
+                            // プロファイル作成に失敗してもユーザー登録は成功
+                        } else {
+                            console.log('Profile created successfully');
+                        }
+                    }
+                    
+                    // 登録成功
+                    successMessage.innerHTML = `
+                        登録が完了しました！<br>
+                        確認メールを送信しました。<br>
+                        メールに記載されたリンクをクリックして、メールアドレスを確認してください。<br>
+                        <strong>メールアドレスの確認が完了するまで、ログインできません。</strong>
+                    `;
+                    successMessage.style.display = 'block';
+                    
+                    // フォームを非表示
+                    loading.style.display = 'none';
+                    
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    
+                    // エラー表示
+                    let errorText = '登録に失敗しました。';
+                    
+                    if (error.message) {
+                        if (error.message.includes('User already registered')) {
+                            errorText = 'このメールアドレスは既に登録されています。';
+                        } else if (error.message.includes('Invalid email')) {
+                            errorText = 'メールアドレスの形式が正しくありません。';
+                        } else if (error.message.includes('Password')) {
+                            errorText = 'パスワードの要件を満たしていません。';
+                        } else {
+                            errorText = 'エラー: ' + error.message;
+                        }
+                    }
+                    
+                    errorMessage.textContent = errorText;
+                    errorMessage.style.display = 'block';
+                    
+                    // フォーム表示を戻す
+                    loading.style.display = 'none';
+                    signupForm.style.display = 'block';
+                }
+            });
+            
+            // ページ読み込み完了後の初期化確認
+            setTimeout(function() {
+                if (!supabaseClient) {
+                    showDebugStatus('Warning: Supabase client not initialized after 3 seconds');
+                } else {
+                    showDebugStatus('System ready');
+                }
+            }, 3000);
         });
     </script>
 </body>
