@@ -316,7 +316,7 @@
                     
                     // 2秒後にメインページへリダイレクト
                     setTimeout(() => {
-                        window.location.href = '/bucksboxai-website/index.html';
+                        window.location.href = 'index.html';
                     }, 2000);
                     
                 } catch (error) {
@@ -358,7 +358,7 @@
                         if (session) {
                             console.log('User already logged in, redirecting...');
                             // 既にログイン済みの場合、メインページへリダイレクト
-                            window.location.href = '/bucksboxai-website/index.html';
+                            window.location.href = 'index.html';
                         }
                     } catch (error) {
                         console.error('Session check error:', error);

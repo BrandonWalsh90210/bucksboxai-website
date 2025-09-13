@@ -449,7 +449,7 @@
     <!-- Supabase SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <!-- Auth Check Script -->
-    <script src="/bucksboxai-website/auth-check.js"></script>
+    <script src="auth-check.js"></script>
 </head>
 <body>
     <!-- Space Background -->
@@ -882,92 +882,80 @@
             loadingSpinner.style.display = 'block';
             
             try {
+                // Get supabaseClient from auth module
+                const supabaseClient = await window.getSupabaseClient();
+                if (!supabaseClient) {
+                    throw new Error('認証システムの初期化に失敗しました');
+                }
+                
                 // Check if user is logged in
-                const { data: { user } } = await supabaseClient.auth.getUser();
-                const member_id = user ? user.id : null;
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                const member_id = session?.user?.id || null;
 
-                // Prepare review application data
+                // Prepare detailed message for contact_submissions
+                const detailedMessage = `
+【iOS審査代行申請詳細】
+
+■ 申請者情報
+・開発者名: ${formData.get('developer_name')}
+・会社名: ${formData.get('company_name') || 'なし'}
+・メールアドレス: ${formData.get('email')}
+・電話番号: ${formData.get('phone')}
+・開発経験: ${formData.get('development_experience') || 'なし'}
+
+■ アプリ基本情報
+・アプリ名: ${formData.get('app_name')}
+・アプリ説明: ${formData.get('app_description')}
+・カテゴリ: ${formData.get('app_category')}
+・販売価格: ${formData.get('target_price')}
+
+■ 開発環境
+・ビルド状況: ${formData.get('development_status')}
+・Xcodeバージョン: ${formData.get('xcode_version')}
+・iOS最小バージョン: ${formData.get('ios_version')}
+・GitHubリポジトリ: ${formData.get('github_repository')}
+
+■ ビルド・技術情報
+${formData.get('build_instructions') ? `・ビルド手順:\n${formData.get('build_instructions')}` : '・ビルド手順: なし'}
+${formData.get('external_services') ? `・外部サービス:\n${formData.get('external_services')}` : '・外部サービス: なし'}
+${formData.get('data_handling') ? `・データ取扱い:\n${formData.get('data_handling')}` : '・データ取扱い: なし'}
+
+■ 表示要件
+・社名表示位置: ${formData.get('company_display_location')}
+・ロゴ実装方法: ${formData.get('logo_implementation')}
+${formData.get('display_confirmation_url') ? `・表示確認URL: ${formData.get('display_confirmation_url')}` : ''}
+
+■ 審査関連
+${formData.get('previous_rejections') ? `・過去の審査履歴:\n${formData.get('previous_rejections')}` : '・過去の審査履歴: なし'}
+${formData.get('special_requirements') ? `・特別要件:\n${formData.get('special_requirements')}` : '・特別要件: なし'}
+${formData.get('additional_notes') ? `・補足事項:\n${formData.get('additional_notes')}` : '・補足事項: なし'}
+
+■ 同意事項
+・著作権譲渡: ${formData.get('copyright_transfer') ? '同意済み' : '未同意'}
+・品質基準: ${formData.get('quality_standards') ? '同意済み' : '未同意'}
+・社名・ロゴ表示: ${formData.get('company_display') ? '同意済み' : '未同意'}
+・収益分配: ${formData.get('revenue_sharing') ? '同意済み' : '未同意'}
+・GitHubアクセス: ${formData.get('github_access') ? '同意済み' : '未同意'}
+・利用規約: ${formData.get('terms_agreement') ? '同意済み' : '未同意'}
+                `.trim();
+
+                // Save to contact_submissions table for unified webhook handling
                 const reviewData = {
-                    member_id: member_id,
-                    app_name: formData.get('app_name'),
-                    app_url: formData.get('github_repository'),
-                    app_description: formData.get('app_description'),
-                    app_category: formData.get('app_category'),
-                    target_price: formData.get('target_price'),
-                    development_status: formData.get('development_status'),
-                    ios_version: formData.get('ios_version'),
-                    xcode_version: formData.get('xcode_version'),
-                    build_instructions: formData.get('build_instructions') || null,
-                    external_services: formData.get('external_services') || null,
-                    data_handling: formData.get('data_handling') || null,
-                    company_display_location: formData.get('company_display_location'),
-                    logo_implementation: formData.get('logo_implementation'),
-                    display_confirmation_url: formData.get('display_confirmation_url') || null,
-                    previous_rejections: formData.get('previous_rejections') || null,
-                    special_requirements: formData.get('special_requirements') || null,
-                    additional_notes: formData.get('additional_notes') || null,
-                    submitted_at: new Date().toISOString()
+                    user_id: member_id || 'guest',
+                    inquiry_type: 'iOS審査代行申請',
+                    subject: `【新規】iOS審査代行申請: ${formData.get('app_name')}`,
+                    message: detailedMessage,
+                    status: 'unread'
                 };
 
-                // Insert review application
-                const { data: reviewResult, error: reviewError } = await supabaseClient
-                    .from('review_applications')
+                // Insert into contact_submissions
+                const { data, error } = await supabaseClient
+                    .from('contact_submissions')
                     .insert([reviewData]);
 
-                if (reviewError) {
-                    console.error('Review application error:', reviewError);
-                    throw reviewError;
-                }
-
-                // Also create an inquiry record for tracking
-                const inquiryData = {
-                    member_id: member_id,
-                    inquiry_type: 'review_application',
-                    subject: `iOS審査代行申請: ${formData.get('app_name')}`,
-                    message: `
-開発者: ${formData.get('developer_name')}
-会社名: ${formData.get('company_name') || 'N/A'}
-メール: ${formData.get('email')}
-電話: ${formData.get('phone')}
-アプリ名: ${formData.get('app_name')}
-カテゴリ: ${formData.get('app_category')}
-価格: ${formData.get('target_price')}
-開発経験: ${formData.get('development_experience') || 'N/A'}
-ビルド状況: ${formData.get('development_status')}
-Xcode: ${formData.get('xcode_version')}
-iOS: ${formData.get('ios_version')}
-GitHub: ${formData.get('github_repository')}
-社名表示位置: ${formData.get('company_display_location')}
-ロゴ実装: ${formData.get('logo_implementation')}
-
-アプリ説明:
-${formData.get('app_description')}
-
-${formData.get('build_instructions') ? `ビルド手順:\n${formData.get('build_instructions')}\n` : ''}
-${formData.get('external_services') ? `外部サービス:\n${formData.get('external_services')}\n` : ''}
-${formData.get('data_handling') ? `データ取扱い:\n${formData.get('data_handling')}\n` : ''}
-${formData.get('previous_rejections') ? `過去の審査:\n${formData.get('previous_rejections')}\n` : ''}
-${formData.get('special_requirements') ? `特別要件:\n${formData.get('special_requirements')}\n` : ''}
-${formData.get('additional_notes') ? `補足:\n${formData.get('additional_notes')}\n` : ''}
-
-同意事項:
-- 著作権譲渡: ${formData.get('copyright_transfer') ? '同意' : '未同意'}
-- 品質基準: ${formData.get('quality_standards') ? '同意' : '未同意'}
-- 社名・ロゴ表示: ${formData.get('company_display') ? '同意' : '未同意'}
-- 収益分配: ${formData.get('revenue_sharing') ? '同意' : '未同意'}
-- GitHubアクセス: ${formData.get('github_access') ? '同意' : '未同意'}
-- 利用規約: ${formData.get('terms_agreement') ? '同意' : '未同意'}
-                    `.trim(),
-                    submitted_at: new Date().toISOString()
-                };
-
-                const { data: inquiryResult, error: inquiryError } = await supabaseClient
-                    .from('inquiries')
-                    .insert([inquiryData]);
-
-                if (inquiryError) {
-                    console.error('Inquiry creation error:', inquiryError);
-                    // Don't throw here, as the main application was saved
+                if (error) {
+                    console.error('保存エラー:', error);
+                    throw new Error(`送信に失敗しました: ${error.message}`);
                 }
 
                 // Success

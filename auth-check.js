@@ -56,7 +56,7 @@ async function checkAuth() {
         } else if (session && isPublicPage && currentPath.includes('login.html')) {
             // Already logged in but on login page, redirect to main app
             console.log('Already logged in, redirecting to main app');
-            window.location.href = '/bucksboxai-website/index.html';
+            window.location.href = 'index.html';
         }
         
         // Set up auth state listener
@@ -64,7 +64,7 @@ async function checkAuth() {
             if (event === 'SIGNED_OUT') {
                 redirectToLogin();
             } else if (event === 'SIGNED_IN' && isPublicPage) {
-                window.location.href = '/bucksboxai-website/index.html';
+                window.location.href = 'index.html';
             }
         });
         
@@ -78,7 +78,7 @@ async function checkAuth() {
 function redirectToLogin() {
     const currentPath = window.location.pathname;
     if (!currentPath.includes('login.html')) {
-        window.location.href = '/bucksboxai-website/login.html';
+        window.location.href = 'login.html';
     }
 }
 
@@ -91,7 +91,7 @@ async function logout() {
         const { error } = await supabaseClient.auth.signOut();
         if (error) throw error;
         
-        window.location.href = '/bucksboxai-website/login.html';
+        window.location.href = 'login.html';
     } catch (error) {
         console.error('Logout error:', error);
     }
@@ -112,4 +112,12 @@ window.authModule = {
         if (!supabaseClient) await initializeAuth();
         return supabaseClient.auth.getSession();
     }
+};
+
+// Export supabaseClient getter function
+window.getSupabaseClient = async () => {
+    if (!supabaseClient) {
+        await initializeAuth();
+    }
+    return supabaseClient;
 };

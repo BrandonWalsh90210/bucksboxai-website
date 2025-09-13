@@ -431,7 +431,7 @@
     <!-- Supabase SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <!-- Auth Check Script -->
-    <script src="/bucksboxai-website/auth-check.js"></script>
+    <script src="auth-check.js"></script>
 </head>
 <body>
     <!-- Space Background -->
@@ -857,13 +857,8 @@
     
     <!-- Supabase Integration Script -->
     <script>
-        // Supabase設定
-        const SUPABASE_URL = 'https://ypesemlagxsdixjxvrpb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZXNlbWxhZ3hzZGl4anh2cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYzODgsImV4cCI6MjA3MjU1MjM4OH0.Q6OnAHRJCpIAdWP3fCgtsaVF_YLM0ov9-p6nhluUPm8';
-        
-        // Supabaseクライアントの初期化
-        const { createClient } = supabase;
-        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase configuration is handled by auth-check.js
+        // Use global supabaseClient from auth module
         
         // Supabase版フォーム送信処理を追加
         document.getElementById('ideaApplicationForm').removeEventListener('submit', document.getElementById('ideaApplicationForm')._submitHandler);
@@ -888,55 +883,67 @@
             loadingSpinner.style.display = 'block';
             
             try {
-                // ログインチェック（オプション - 現在はログイン不要）
+                // Get supabaseClient from auth module
+                const supabaseClient = await window.getSupabaseClient();
+                if (!supabaseClient) {
+                    throw new Error('認証システムの初期化に失敗しました');
+                }
+                
+                // ログインユーザー情報取得
                 const { data: { session } } = await supabaseClient.auth.getSession();
                 const member_id = session?.user?.id || null;
                 
-                // フォームデータをオブジェクトに変換
-                const applicationData = {
-                    member_id: member_id,
-                    title: formData.get('app_idea_title'),
-                    description: formData.get('app_idea_description'),
-                    target_users: formData.get('target_users'),
-                    category: formData.get('app_category'),
-                    market_analysis: formData.get('market_analysis') || null,
-                    expected_price: formData.get('expected_price') || null,
-                    technical_requirements: formData.get('technical_requirements') || null,
-                    reference_apps: formData.get('reference_apps') || null,
-                    additional_info: formData.get('additional_info') || null,
-                    copyright_agreed: formData.get('copyright_agreement') === 'on',
-                    terms_agreed: formData.get('terms_agreement') === 'on',
-                    revenue_understood: formData.get('revenue_understanding') === 'on',
-                    status: 'pending'
-                };
+                // 完全なアイデア申請データを作成
+                const detailedMessage = `
+【アイデア申請詳細】
+
+■ 申請者情報
+・お名前: ${formData.get('applicant_name')}
+・会社名: ${formData.get('company_name') || 'なし'}
+・メールアドレス: ${formData.get('email')}
+・電話番号: ${formData.get('phone') || 'なし'}
+
+■ アイデア概要
+・アプリ名: ${formData.get('app_idea_title')}
+・アプリ説明: ${formData.get('app_idea_description')}
+・ターゲットユーザー: ${formData.get('target_users')}
+・アプリカテゴリ: ${formData.get('app_category')}
+
+■ 市場分析・価格設定
+・市場分析: ${formData.get('market_analysis') || 'なし'}
+・予想価格: ${formData.get('expected_price') || 'なし'}
+
+■ 技術要件・参考情報
+・技術要件: ${formData.get('technical_requirements') || 'なし'}
+・参考アプリ: ${formData.get('reference_apps') || 'なし'}
+・追加情報: ${formData.get('additional_info') || 'なし'}
+
+■ 同意事項
+・著作権同意: ${formData.get('copyright_agreement') === 'on' ? '同意済み' : '未同意'}
+・利用規約同意: ${formData.get('terms_agreement') === 'on' ? '同意済み' : '未同意'}
+・収益性理解: ${formData.get('revenue_understanding') === 'on' ? '理解済み' : '未理解'}
+                `.trim();
                 
-                // 申請者情報を別途保存（inquiriesテーブルに保存）
-                const inquiryData = {
-                    member_id: member_id,
-                    inquiry_type: 'idea_application',
-                    subject: `アイデア申請: ${formData.get('app_idea_title')}`,
-                    message: `申請者: ${formData.get('applicant_name')}\n会社: ${formData.get('company_name') || 'なし'}\nメール: ${formData.get('email')}\n電話: ${formData.get('phone') || 'なし'}`,
+                // 権限問題を回避した安全なデータ保存
+                const ideaData = {
+                    user_id: member_id || 'guest', // TEXTフィールドとして保存
+                    inquiry_type: 'アイデア申請',
+                    subject: `【新規】アイデア申請: ${formData.get('app_idea_title')}`,
+                    message: detailedMessage,
                     status: 'unread'
+                    // applicant_email と applicant_name フィールドを削除
+                    // （全ての情報は既にdetailedMessageに含まれています）
                 };
                 
-                // Supabaseにデータを保存（両方のテーブルに保存）
-                const { data: ideaData, error: ideaError } = await supabaseClient
-                    .from('idea_applications')
-                    .insert([applicationData]);
+                // 推奨実装: contact_submissionsテーブルを直接使用
+                // 権限問題を回避し、確実にデータを保存
+                const { data, error } = await supabaseClient
+                    .from('contact_submissions')
+                    .insert([ideaData]);
                 
-                if (ideaError) {
-                    console.error('Idea Application Error:', ideaError);
-                    throw new Error('アイデア申請の保存に失敗しました');
-                }
-                
-                // 申請者情報も保存
-                const { data: inquiryDataResult, error: inquiryError } = await supabaseClient
-                    .from('inquiries')
-                    .insert([inquiryData]);
-                
-                if (inquiryError) {
-                    console.error('Inquiry Error:', inquiryError);
-                    // エラーでも続行（メインデータは保存済み）
+                if (error) {
+                    console.error('保存エラー:', error);
+                    throw new Error(`送信に失敗しました: ${error.message}`);
                 }
                 
                 // Success
