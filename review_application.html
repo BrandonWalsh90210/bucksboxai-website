@@ -550,7 +550,7 @@
 
         <!-- Application Form -->
         <div class="form-container">
-            <form id="reviewApplicationForm">
+            <form id="reviewApplicationForm" action="javascript:void(0)" method="post">
                 <!-- Hidden Fields -->
                 <input type="hidden" name="service_type" value="ios-review-application">
                 <input type="hidden" name="_subject" value="【BucksBox.ai】iOS審査代行サービス申請">
@@ -862,8 +862,14 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Form submission handling
+        // Remove all existing submit handlers
+        const reviewForm = document.getElementById('reviewApplicationForm');
+        const newForm = reviewForm.cloneNode(true);
+        reviewForm.parentNode.replaceChild(newForm, reviewForm);
+
         document.getElementById('reviewApplicationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            e.stopPropagation();
             
             const form = e.target;
             const formData = new FormData(form);
@@ -958,16 +964,22 @@ ${formData.get('additional_notes') ? `・補足事項:\n${formData.get('addition
                     throw new Error(`送信に失敗しました: ${error.message}`);
                 }
 
-                // Success
+                // Success - Hide error message first, then show success
+                errorMessage.style.display = 'none';
                 successMessage.style.display = 'block';
-                form.reset();
+                
+                // Reset form after showing success message
+                setTimeout(() => {
+                    form.reset();
+                }, 100);
                 
                 // Scroll to success message
                 successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             } catch (error) {
-                // Error handling
+                // Error handling - Hide success message first, then show error
                 console.error('Submission error:', error);
+                successMessage.style.display = 'none';
                 errorMessage.style.display = 'block';
                 errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {

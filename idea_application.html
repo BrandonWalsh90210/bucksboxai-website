@@ -496,7 +496,7 @@
 
         <!-- Application Form -->
         <div class="form-container">
-            <form id="ideaApplicationForm">
+            <form id="ideaApplicationForm" action="javascript:void(0)" method="post">
                 <!-- Hidden Fields -->
                 <input type="hidden" name="service_type" value="idea-application">
                 <input type="hidden" name="_subject" value="【BucksBox.ai】アイデアのアプリ化申請">
@@ -861,10 +861,15 @@
         // Use global supabaseClient from auth module
         
         // Supabase版フォーム送信処理を追加
-        document.getElementById('ideaApplicationForm').removeEventListener('submit', document.getElementById('ideaApplicationForm')._submitHandler);
+        const ideaForm = document.getElementById('ideaApplicationForm');
+        
+        // Remove all existing submit handlers
+        const newForm = ideaForm.cloneNode(true);
+        ideaForm.parentNode.replaceChild(newForm, ideaForm);
         
         document.getElementById('ideaApplicationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            e.stopPropagation();
             
             const form = e.target;
             const formData = new FormData(form);
@@ -941,21 +946,29 @@
                     .from('contact_submissions')
                     .insert([ideaData]);
                 
+                console.log('Supabase response - data:', data, 'error:', error);
+                
                 if (error) {
                     console.error('保存エラー:', error);
                     throw new Error(`送信に失敗しました: ${error.message}`);
                 }
                 
-                // Success
+                // Success - Hide error message first, then show success
+                errorMessage.style.display = 'none';
                 successMessage.style.display = 'block';
-                form.reset();
+                
+                // Reset form after showing success message
+                setTimeout(() => {
+                    form.reset();
+                }, 100);
                 
                 // Scroll to success message
                 successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
             } catch (error) {
-                // Error handling
+                // Error handling - Hide success message first, then show error
                 console.error('送信エラー:', error);
+                successMessage.style.display = 'none';
                 errorMessage.style.display = 'block';
                 errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {
