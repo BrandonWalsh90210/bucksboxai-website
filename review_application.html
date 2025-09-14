@@ -465,8 +465,7 @@
         </div>
     </nav>
 
-    <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase Client - Already loaded above, removing duplicate -->
 
     <!-- Main Content -->
     <div class="main-content">
@@ -856,9 +855,7 @@
 
         window.addEventListener('load', createSpaceBackground);
 
-        // Supabase configuration
-        const SUPABASE_URL = 'https://ypesemlagxsdixjxvrpb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZXNlbWxhZ3hzZGl4anh2cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYzODgsImV4cCI6MjA3MjU1MjM4OH0.Q6OnAHRJCpIAdWP3fCgtsaVF_YLM0ov9-p6nhluUPm8';
+        // Supabase configuration is already defined in auth-check.js
         // Supabase client will be created using getSupabaseClient()
 
         // Handle build status change
