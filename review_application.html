@@ -859,7 +859,35 @@
         // Supabase configuration
         const SUPABASE_URL = 'https://ypesemlagxsdixjxvrpb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZXNlbWxhZ3hzZGl4anh2cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYzODgsImV4cCI6MjA3MjU1MjM4OH0.Q6OnAHRJCpIAdWP3fCgtsaVF_YLM0ov9-p6nhluUPm8';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Supabase client will be created using getSupabaseClient()
+
+        // Handle build status change
+        function handleBuildStatusChange() {
+            const buildStatus = document.getElementById('development_status');
+            const buildAlert = document.getElementById('buildErrorAlert');
+            
+            if (buildStatus && buildAlert) {
+                if (buildStatus.value === 'has-build-errors') {
+                    buildAlert.style.display = 'block';
+                } else {
+                    buildAlert.style.display = 'none';
+                }
+            }
+        }
+
+        // Handle logo implementation status change
+        function handleLogoStatusChange() {
+            const logoStatus = document.getElementById('logo_implementation');
+            const logoAlert = document.getElementById('logoImplementationAlert');
+            
+            if (logoStatus && logoAlert) {
+                if (logoStatus.value === 'not-implemented') {
+                    logoAlert.style.display = 'block';
+                } else {
+                    logoAlert.style.display = 'none';
+                }
+            }
+        }
 
         // Form submission handling
         // Remove all existing submit handlers
@@ -1093,30 +1121,6 @@ ${formData.get('additional_notes') ? `・補足事項:\n${formData.get('addition
                 });
             }
         });
-
-        // Handle build status change
-        function handleBuildStatusChange() {
-            const buildStatus = document.getElementById('development_status');
-            const buildAlert = document.getElementById('buildErrorAlert');
-            
-            if (buildStatus.value === 'has-build-errors') {
-                buildAlert.style.display = 'block';
-            } else {
-                buildAlert.style.display = 'none';
-            }
-        }
-
-        // Handle logo implementation status change
-        function handleLogoStatusChange() {
-            const logoStatus = document.getElementById('logo_implementation');
-            const logoAlert = document.getElementById('logoImplementationAlert');
-            
-            if (logoStatus.value === 'not-implemented') {
-                logoAlert.style.display = 'block';
-            } else {
-                logoAlert.style.display = 'none';
-            }
-        }
     </script>
 </body>
 </html>
