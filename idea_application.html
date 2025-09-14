@@ -935,9 +935,8 @@
                     inquiry_type: 'アイデア申請',
                     subject: `【新規】アイデア申請: ${formData.get('app_idea_title')}`,
                     message: detailedMessage,
-                    status: 'unread'
-                    // applicant_email と applicant_name フィールドを削除
-                    // （全ての情報は既にdetailedMessageに含まれています）
+                    status: 'unread',
+                    applicant_email: formData.get('email') // 申請者メール用に追加
                 };
                 
                 // 推奨実装: contact_submissionsテーブルを直接使用

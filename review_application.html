@@ -951,7 +951,8 @@ ${formData.get('additional_notes') ? `・補足事項:\n${formData.get('addition
                     inquiry_type: 'iOS審査代行申請',
                     subject: `【新規】iOS審査代行申請: ${formData.get('app_name')}`,
                     message: detailedMessage,
-                    status: 'unread'
+                    status: 'unread',
+                    applicant_email: formData.get('email') // 申請者メール用に追加
                 };
 
                 // Insert into contact_submissions
