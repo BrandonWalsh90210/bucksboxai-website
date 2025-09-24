@@ -1359,7 +1359,7 @@
                 <li><a href="faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
                 <li><a href="bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
-                <li><a href="#" onclick="authModule.logout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
+                <li><a href="#" onclick="safeLogout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
             </ul>
             
             <!-- Mobile Navigation Toggle -->
@@ -1379,7 +1379,7 @@
                 <li><a href="faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
                 <li><a href="bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
-                <li><a href="#" onclick="authModule.logout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
+                <li><a href="#" onclick="safeLogout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
             </ul>
         </div>
     </nav>
@@ -1856,6 +1856,47 @@
     </div>
 
     <script>
+        // 最優先: ローディング画面を確実に削除（エラーが起きても必ず実行）
+        (function() {
+            // DOMContentLoadedより前に設定し、確実に実行
+            function removeLoader() {
+                const loader = document.querySelector('.loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden';
+                    setTimeout(() => {
+                        if (loader && loader.parentNode) {
+                            loader.parentNode.removeChild(loader);
+                        }
+                    }, 300);
+                }
+            }
+
+            // 複数の方法でローダー削除を保証
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(removeLoader, 2000);
+                });
+            } else {
+                // 既に読み込み済みの場合
+                setTimeout(removeLoader, 2000);
+            }
+
+            // フォールバック: 3秒後に必ず削除
+            setTimeout(removeLoader, 3000);
+        })();
+
+        // 安全なログアウト関数
+        function safeLogout() {
+            if (window.authModule && typeof window.authModule.logout === 'function') {
+                window.authModule.logout();
+            } else {
+                // authModuleが無い場合はログインページへ
+                window.location.href = 'login.html';
+            }
+            return false;
+        }
+
         // Generate space background elements
         function createSpaceBackground() {
             const spaceBackground = document.getElementById('spaceBackground');
@@ -2063,21 +2104,7 @@
                    window.innerWidth <= 768;
         }
         
-        // ローディング画面を確実に削除（全デバイス共通）
-        window.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                const loader = document.querySelector('.loader');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden';
-                    setTimeout(() => {
-                        if (loader.parentNode) {
-                            loader.parentNode.removeChild(loader);
-                        }
-                    }, 300);
-                }
-            }, 2000); // 2秒後に削除
-        });
+        // 古いローダー削除処理は最上部の即時実行関数に移動済み
 
         // モバイル端末の場合の最適化処理
         if (isMobileDevice()) {
