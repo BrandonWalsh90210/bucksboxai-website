@@ -6,10 +6,13 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Pages that don't require authentication
 const PUBLIC_PAGES = [
+    '/index.html',
+    '/',
     '/login.html',
     '/signup.html',
     '/signup-simple.html',
     '/reset-password.html',
+    '/welcome.html',
     '/bucksbox-privacy-policy.html',
     '/bucksbox-terms-of-service.html',
     '/test-supabase.html',
@@ -42,18 +45,23 @@ async function checkAuth() {
             return;
         }
     }
-    
+
     try {
         const { data: { session } } = await supabaseClient.auth.getSession();
-        
-        const currentPath = window.location.pathname;
-        const isPublicPage = PUBLIC_PAGES.some(page => currentPath.includes(page));
+
+        // GitHub Pagesのサブディレクトリを考慮したパス取得
+        const currentPath = window.location.pathname.replace('/bucksboxai-website', '');
+        const normalizedPath = currentPath === '' ? '/' : currentPath;
+        const isPublicPage = PUBLIC_PAGES.some(page => {
+            if (page === '/') return normalizedPath === '/';
+            return normalizedPath.includes(page);
+        });
         
         if (!session && !isPublicPage) {
             // Not logged in and trying to access protected page
             console.log('No session found, redirecting to login');
             redirectToLogin();
-        } else if (session && isPublicPage && currentPath.includes('login.html')) {
+        } else if (session && isPublicPage && normalizedPath.includes('login.html')) {
             // Already logged in but on login page, redirect to main app
             console.log('Already logged in, redirecting to main app');
             window.location.href = 'index.html';

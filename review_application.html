@@ -16,6 +16,23 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://bucksbox.ai/review-application">
+
+    <!-- Stripe Configuration -->
+    <script src="config.js"></script>
+
+    <!-- Phase 2: Stripe.js library (conditional loading) -->
+    <script>
+        // Load Stripe.js only if payment might be needed in the future
+        if (typeof STRIPE_CONFIG !== 'undefined' && STRIPE_CONFIG.ENABLE_PAYMENT) {
+            const stripeScript = document.createElement('script');
+            stripeScript.src = 'https://js.stripe.com/v3/';
+            stripeScript.onload = function() {
+                console.log('Stripe.js library loaded successfully');
+            };
+            document.head.appendChild(stripeScript);
+        }
+    </script>
+
     <style>
         * {
             margin: 0;
@@ -818,6 +835,13 @@
                     </label>
                 </div>
 
+                <!-- Fee Display (Phase 1: UI only) -->
+                <div id="fee-display" class="fee-info" style="display: none; margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; text-align: center;">
+                    <p style="margin: 0; font-size: 1.1rem; color: white;">
+                        審査代行手数料: <span id="fee-amount" style="font-weight: bold; font-size: 1.3rem;">無料</span>
+                    </p>
+                </div>
+
                 <!-- Submit Button -->
                 <button type="submit" class="form-button" id="submitButton">
                     iOS審査代行を申請する
@@ -857,6 +881,51 @@
 
         // Supabase configuration is already defined in auth-check.js
         // Supabase client will be created using getSupabaseClient()
+
+        // Phase 1: Fee display logic (UI only)
+        window.addEventListener('load', function() {
+            // Check if STRIPE_CONFIG exists and display fee information
+            if (typeof STRIPE_CONFIG !== 'undefined') {
+                const feeDisplay = document.getElementById('fee-display');
+                const feeAmount = document.getElementById('fee-amount');
+
+                if (feeDisplay && feeAmount) {
+                    // Show fee display if configured
+                    if (STRIPE_CONFIG.REVIEW_FEE >= 0) {
+                        feeDisplay.style.display = 'block';
+
+                        // Update fee amount text
+                        if (STRIPE_CONFIG.REVIEW_FEE === 0) {
+                            feeAmount.textContent = '無料';
+                            feeAmount.style.color = '#34C759'; // Green for free
+                        } else {
+                            feeAmount.textContent = `${STRIPE_CONFIG.REVIEW_FEE.toLocaleString()}円`;
+                            feeAmount.style.color = '#FFFFFF'; // White for paid
+                        }
+
+                        console.log(`Fee display updated: ${STRIPE_CONFIG.REVIEW_FEE}円`);
+                    }
+                }
+
+                // Phase 2: Initialize Stripe if enabled (test only, no actual payment)
+                if (STRIPE_CONFIG.ENABLE_PAYMENT && typeof Stripe !== 'undefined') {
+                    try {
+                        // Initialize Stripe with test key
+                        const stripe = Stripe(STRIPE_CONFIG.PUBLISHABLE_KEY);
+                        console.log('Phase 2: Stripe initialized successfully in', STRIPE_CONFIG.MODE, 'mode');
+
+                        // Store stripe instance for future use (Phase 3)
+                        window.stripeInstance = stripe;
+
+                        // Test that Stripe is working by creating a test element
+                        const elements = stripe.elements();
+                        console.log('Stripe Elements created successfully - ready for Phase 3');
+                    } catch (error) {
+                        console.error('Stripe initialization error:', error);
+                    }
+                }
+            }
+        });
 
         // Handle build status change
         function handleBuildStatusChange() {

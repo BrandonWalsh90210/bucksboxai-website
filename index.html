@@ -1312,7 +1312,7 @@
     <!-- Supabase SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <!-- Auth Check Script -->
-    <script src="auth-check.js"></script>
+    <!-- auth-check.js removed for public landing page -->
 </head>
 <body>
     <!-- Space Background -->
@@ -2063,57 +2063,44 @@
                    window.innerWidth <= 768;
         }
         
+        // ローディング画面を確実に削除（全デバイス共通）
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const loader = document.querySelector('.loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden';
+                    setTimeout(() => {
+                        if (loader.parentNode) {
+                            loader.parentNode.removeChild(loader);
+                        }
+                    }, 300);
+                }
+            }, 2000); // 2秒後に削除
+        });
+
         // モバイル端末の場合の最適化処理
         if (isMobileDevice()) {
             console.log('📱 Mobile device detected - applying lightweight optimizations');
-            
-            // 1. パフォーマンスモニタリング
-            if (window.performance && window.performance.memory) {
-                console.log('📊 Memory usage:', {
-                    used: Math.round(window.performance.memory.usedJSHeapSize / 1048576) + 'MB',
-                    total: Math.round(window.performance.memory.totalJSHeapSize / 1048576) + 'MB',
-                    limit: Math.round(window.performance.memory.jsHeapSizeLimit / 1048576) + 'MB'
-                });
-            }
-            
-            // 2. タッチイベントの最適化（パッシブイベント）
+
+            // タッチイベントの最適化（パッシブイベント）
             document.addEventListener('touchstart', function() {}, {passive: true});
             document.addEventListener('touchmove', function() {}, {passive: true});
-            document.addEventListener('touchend', function() {}, {passive: true});
-            
-            // 3. iOS Safari特有の問題を解決
-            // ズーム防止とビューポート固定
+
+            // iOS Safari特有の問題を解決
             const viewport = document.querySelector('meta[name="viewport"]');
             if (viewport) {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover');
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0');
             }
-            
-            // 4. 重いアニメーション要素を完全除去（CSSでカバーできない部分）
+
+            // 重いアニメーション要素を削減（パフォーマンス向上）
             document.addEventListener('DOMContentLoaded', function() {
-                // 重い要素を完全削除
-                const heavyElements = document.querySelectorAll('.planet, .floating-logo-central, .logo-orbit, .logo-particles, .orbit-particle');
+                const heavyElements = document.querySelectorAll('.planet, .floating-logo-central');
                 heavyElements.forEach(element => {
-                    if (element) element.remove();
+                    if (element) element.style.display = 'none';
                 });
-                
-                // アニメーションを強制停止
-                const animatedElements = document.querySelectorAll('*');
-                animatedElements.forEach(element => {
-                    element.style.animation = 'none';
-                    element.style.transition = 'none';
-                });
-                
-                console.log('✅ Mobile optimizations completed - animations disabled');
             });
-            
-            // 5. メモリリーク防止
-            window.addEventListener('beforeunload', function() {
-                // イベントリスナーをクリーンアップ
-                document.removeEventListener('touchstart', function() {});
-                document.removeEventListener('touchmove', function() {});
-                document.removeEventListener('touchend', function() {});
-            });
-            
+
         } else {
             console.log('🖥️ Desktop device detected - full animations enabled');
         }
