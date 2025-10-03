@@ -17,20 +17,15 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://bucksbox.ai/review-application">
 
-    <!-- Stripe Configuration -->
-    <script src="config.js"></script>
-
-    <!-- Phase 2: Stripe.js library (conditional loading) -->
+    <!-- Stripe Configuration (Free Mode) -->
     <script>
-        // Load Stripe.js only if payment might be needed in the future
-        if (typeof STRIPE_CONFIG !== 'undefined' && STRIPE_CONFIG.ENABLE_PAYMENT) {
-            const stripeScript = document.createElement('script');
-            stripeScript.src = 'https://js.stripe.com/v3/';
-            stripeScript.onload = function() {
-                console.log('Stripe.js library loaded successfully');
-            };
-            document.head.appendChild(stripeScript);
-        }
+        // 無料モード設定（決済機能は無効）
+        const STRIPE_CONFIG = {
+            REVIEW_FEE: 0,
+            ENABLE_PAYMENT: false,
+            PUBLISHABLE_KEY: '',
+            MODE: 'free'
+        };
     </script>
 
     <style>
@@ -964,30 +959,84 @@
         document.getElementById('reviewApplicationForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            
+
             const form = e.target;
             const formData = new FormData(form);
             const submitButton = document.getElementById('submitButton');
             const loadingSpinner = document.getElementById('loadingSpinner');
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
-            
+
             // Hide previous messages
             successMessage.style.display = 'none';
             errorMessage.style.display = 'none';
-            
+
             // Show loading state
             submitButton.disabled = true;
             submitButton.textContent = '送信中...';
             loadingSpinner.style.display = 'block';
-            
+
             try {
+                // Check if payment is required
+                if (typeof STRIPE_CONFIG !== 'undefined' &&
+                    STRIPE_CONFIG.REVIEW_FEE > 0 &&
+                    STRIPE_CONFIG.ENABLE_PAYMENT === true) {
+
+                    console.log('Payment mode: Creating Stripe checkout session');
+
+                    // Collect all form data for storage
+                    const formDataObject = {};
+                    for (const [key, value] of formData.entries()) {
+                        formDataObject[key] = value;
+                    }
+
+                    // Store form data in sessionStorage for retrieval after payment
+                    sessionStorage.setItem('review_application_data', JSON.stringify(formDataObject));
+                    sessionStorage.setItem('review_application_timestamp', new Date().toISOString());
+
+                    // Call Edge Function to create Stripe Checkout session
+                    const response = await fetch('https://ypesemlagxsdixjxvrpb.supabase.co/functions/v1/create-checkout-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: formData.get('email'),
+                            app_name: formData.get('app_name'),
+                            amount: STRIPE_CONFIG.REVIEW_FEE
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`決済セッションの作成に失敗しました: ${errorData.error || response.statusText}`);
+                    }
+
+                    const { sessionId } = await response.json();
+
+                    // Redirect to Stripe Checkout
+                    if (window.stripeInstance) {
+                        const { error } = await window.stripeInstance.redirectToCheckout({ sessionId });
+                        if (error) {
+                            throw new Error(`決済ページへの遷移に失敗しました: ${error.message}`);
+                        }
+                    } else {
+                        throw new Error('Stripeが初期化されていません');
+                    }
+
+                    // Note: Code execution stops here as we redirect to Stripe
+                    return;
+                }
+
+                // Free mode: Continue with direct Supabase save
+                console.log('Free mode: Saving directly to Supabase');
+
                 // Get supabaseClient from auth module
                 const supabaseClient = await window.getSupabaseClient();
                 if (!supabaseClient) {
                     throw new Error('認証システムの初期化に失敗しました');
                 }
-                
+
                 // Check if user is logged in
                 const { data: { session } } = await supabaseClient.auth.getSession();
                 const member_id = session?.user?.id || null;
@@ -1072,9 +1121,79 @@ ${formData.get('additional_notes') ? `・補足事項:\n${formData.get('addition
                 successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             } catch (error) {
-                // Error handling - Hide success message first, then show error
                 console.error('Submission error:', error);
                 successMessage.style.display = 'none';
+                
+                // 503エラーまたは接続エラーの場合はメール送信にフォールバック
+                if (error.message.includes('503') || error.message.includes('upstream connect error') || error.message.includes('認証システムの初期化に失敗')) {
+                    const mailtoSubject = encodeURIComponent(`iOS審査代行申請: ${formData.get('app_name')}`);
+                    const emailBody = `
+【iOS審査代行申請】
+
+■ 申請者情報
+・開発者名: ${formData.get('developer_name')}
+・会社名: ${formData.get('company_name') || 'なし'}
+・メールアドレス: ${formData.get('email')}
+・電話番号: ${formData.get('phone')}
+・開発経験: ${formData.get('development_experience') || 'なし'}
+
+■ アプリ基本情報
+・アプリ名: ${formData.get('app_name')}
+・アプリ説明: ${formData.get('app_description')}
+・カテゴリ: ${formData.get('app_category')}
+・販売価格: ${formData.get('target_price')}
+
+■ 開発環境
+・ビルド状況: ${formData.get('development_status')}
+・Xcodeバージョン: ${formData.get('xcode_version')}
+・iOS最小バージョン: ${formData.get('ios_version')}
+・GitHubリポジトリ: ${formData.get('github_repository')}
+
+■ ビルド・技術情報
+${formData.get('build_instructions') ? `・ビルド手順:\n${formData.get('build_instructions')}` : '・ビルド手順: なし'}
+${formData.get('external_services') ? `・外部サービス:\n${formData.get('external_services')}` : '・外部サービス: なし'}
+${formData.get('data_handling') ? `・データ取扱い:\n${formData.get('data_handling')}` : '・データ取扱い: なし'}
+
+■ 表示要件
+・社名表示位置: ${formData.get('company_display_location')}
+・ロゴ実装方法: ${formData.get('logo_implementation')}
+${formData.get('display_confirmation_url') ? `・表示確認URL: ${formData.get('display_confirmation_url')}` : ''}
+
+■ 同意事項
+・著作権譲渡: ${formData.get('copyright_transfer') ? '同意済み' : '未同意'}
+・社名ロゴ表示: ${formData.get('company_branding') ? '同意済み' : '未同意'}
+・GitHubアクセス: ${formData.get('github_access') ? '同意済み' : '未同意'}
+・利用規約: ${formData.get('terms_agreement') ? '同意済み' : '未同意'}
+
+---
+送信日時: ${new Date().toLocaleString()}
+システム経由での自動送信（503エラー回避）
+                    `;
+                    const mailtoBody = encodeURIComponent(emailBody.trim());
+                    
+                    errorMessage.innerHTML = `
+                        <div style="background: rgba(255, 149, 0, 0.2); border: 1px solid #FF9500; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                            <h4 style="color: #FF9500; margin-bottom: 15px;">⚠️ システムが一時的に利用できません</h4>
+                            <p style="margin-bottom: 15px;">システムの一時的な不具合により、申請を受け付けることができませんでした。</p>
+                            <p style="margin-bottom: 20px;">以下のボタンをクリックしてメールアプリで送信するか、直接 <strong>bucksboxaiqa@gmail.com</strong> までご連絡ください。</p>
+                            <button onclick="window.location.href='mailto:bucksboxaiqa@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}'" 
+                                    style="background: linear-gradient(45deg, #007AFF, #5856D6); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                                📧 メールアプリで審査代行申請を送信
+                            </button>
+                            <p style="font-size: 14px; color: #666; margin-top: 15px;">※ 入力された内容が自動的にメール本文に記載されます</p>
+                        </div>
+                    `;
+                } else {
+                    // その他のエラー
+                    errorMessage.innerHTML = `
+                        <div style="background: rgba(255, 59, 48, 0.2); border: 1px solid #FF3B30; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                            <h4 style="color: #FF3B30; margin-bottom: 10px;">❌ 送信エラー</h4>
+                            <p>${error.message || '送信に失敗しました。しばらく時間をおいて再度お試しください。'}</p>
+                            <p style="margin-top: 10px;">問題が継続する場合は、直接 <strong>bucksboxaiqa@gmail.com</strong> までお問い合わせください。</p>
+                        </div>
+                    `;
+                }
+                
                 errorMessage.style.display = 'block';
                 errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {

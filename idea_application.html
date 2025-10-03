@@ -965,9 +965,70 @@
                 successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
             } catch (error) {
-                // Error handling - Hide success message first, then show error
                 console.error('送信エラー:', error);
                 successMessage.style.display = 'none';
+                
+                // 503エラーまたは接続エラーの場合はメール送信にフォールバック
+                if (error.message.includes('503') || error.message.includes('upstream connect error') || error.message.includes('認証システムの初期化に失敗')) {
+                    const mailtoSubject = encodeURIComponent(`アイデア申請: ${formData.get('app_idea_title')}`);
+                    const emailBody = `
+【アイデア申請】
+
+■ 申請者情報
+・お名前: ${formData.get('applicant_name')}
+・会社名: ${formData.get('company_name') || 'なし'}
+・メールアドレス: ${formData.get('email')}
+・電話番号: ${formData.get('phone') || 'なし'}
+
+■ アイデア概要
+・アプリ名: ${formData.get('app_idea_title')}
+・アプリ説明: ${formData.get('app_idea_description')}
+・ターゲットユーザー: ${formData.get('target_users')}
+・アプリカテゴリ: ${formData.get('app_category')}
+
+■ 市場分析・価格設定
+・市場分析: ${formData.get('market_analysis') || 'なし'}
+・予想価格: ${formData.get('expected_price') || 'なし'}
+
+■ 技術要件・参考情報
+・技術要件: ${formData.get('technical_requirements') || 'なし'}
+・参考アプリ: ${formData.get('reference_apps') || 'なし'}
+・追加情報: ${formData.get('additional_info') || 'なし'}
+
+■ 同意事項
+・著作権同意: ${formData.get('copyright_agreement') === 'on' ? '同意済み' : '未同意'}
+・利用規約同意: ${formData.get('terms_agreement') === 'on' ? '同意済み' : '未同意'}
+・収益性理解: ${formData.get('revenue_understanding') === 'on' ? '理解済み' : '未理解'}
+
+---
+送信日時: ${new Date().toLocaleString()}
+システム経由での自動送信（503エラー回避）
+                    `;
+                    const mailtoBody = encodeURIComponent(emailBody.trim());
+                    
+                    errorMessage.innerHTML = `
+                        <div style="background: rgba(255, 149, 0, 0.2); border: 1px solid #FF9500; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                            <h4 style="color: #FF9500; margin-bottom: 15px;">⚠️ システムが一時的に利用できません</h4>
+                            <p style="margin-bottom: 15px;">システムの一時的な不具合により、申請を受け付けることができませんでした。</p>
+                            <p style="margin-bottom: 20px;">以下のボタンをクリックしてメールアプリで送信するか、直接 <strong>bucksboxaiqa@gmail.com</strong> までご連絡ください。</p>
+                            <button onclick="window.location.href='mailto:bucksboxaiqa@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}'" 
+                                    style="background: linear-gradient(45deg, #007AFF, #5856D6); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                                📧 メールアプリでアイデア申請を送信
+                            </button>
+                            <p style="font-size: 14px; color: #666; margin-top: 15px;">※ 入力された内容が自動的にメール本文に記載されます</p>
+                        </div>
+                    `;
+                } else {
+                    // その他のエラー
+                    errorMessage.innerHTML = `
+                        <div style="background: rgba(255, 59, 48, 0.2); border: 1px solid #FF3B30; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                            <h4 style="color: #FF3B30; margin-bottom: 10px;">❌ 送信エラー</h4>
+                            <p>${error.message || '送信に失敗しました。しばらく時間をおいて再度お試しください。'}</p>
+                            <p style="margin-top: 10px;">問題が継続する場合は、直接 <strong>bucksboxaiqa@gmail.com</strong> までお問い合わせください。</p>
+                        </div>
+                    `;
+                }
+                
                 errorMessage.style.display = 'block';
                 errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {

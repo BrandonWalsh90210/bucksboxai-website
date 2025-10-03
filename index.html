@@ -2003,6 +2003,42 @@
             }
             return null;
         }
+
+        // 503エラー対応のリトライ機能付き保存関数
+        async function saveWithRetry(supabaseClient, inquiryData, formData, maxRetries = 2) {
+            let lastError = null;
+            
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    // Supabaseに保存を試行
+                    const { data, error } = await supabaseClient
+                        .from('inquiries')
+                        .insert([inquiryData]);
+                    
+                    if (error) throw error;
+                    
+                    // 成功した場合は即座に返す
+                    return data;
+                    
+                } catch (error) {
+                    lastError = error;
+                    console.log(`保存試行 ${attempt}/${maxRetries} 失敗:`, error.message);
+                    
+                    // 503エラーまたは接続エラーの場合のみリトライ
+                    if ((error.message.includes('503') || error.message.includes('upstream connect error')) && attempt < maxRetries) {
+                        const delay = attempt * 2000; // 2秒、4秒と増加
+                        console.log(`${delay/1000}秒後にリトライします...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    } else {
+                        // リトライ不要なエラーまたは最大試行回数に達した場合
+                        throw error;
+                    }
+                }
+            }
+            
+            // すべてのリトライが失敗した場合
+            throw lastError;
+        }
         
         document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -2037,12 +2073,8 @@
                     status: 'unread'
                 };
                 
-                // Save to Supabase
-                const { data, error } = await supabaseClient
-                    .from('inquiries')
-                    .insert([inquiryData]);
-                
-                if (error) throw error;
+                // リトライ機能付きでSupabaseに保存
+                await saveWithRetry(supabaseClient, inquiryData, formData);
                 
                 // 送信成功
                 formStatus.innerHTML = '<span style="color: #34C759;">✓ お問い合わせを受け付けました。<br>標準72時間以内（最長一週間以内）にご返信させていただきます。</span>';
@@ -2055,8 +2087,32 @@
                 
             } catch (error) {
                 console.error('Submission error:', error);
-                // エラー表示
-                formStatus.innerHTML = `<span style="color: #FF3B30;">✗ ${error.message || '送信エラーが発生しました。直接メール（bucksboxaiqa@gmail.com）でお問い合わせください。'}</span>`;
+                
+                // 503エラーまたはデータベース接続エラーの場合はメール送信にフォールバック
+                if (error.message.includes('503') || error.message.includes('upstream connect error') || error.message.includes('データベース接続エラー')) {
+                    const mailtoSubject = encodeURIComponent(`お問い合わせ: ${formData.get('service-type')}`);
+                    const mailtoBody = encodeURIComponent(
+                        `お名前: ${formData.get('name')}\n` +
+                        `メールアドレス: ${formData.get('email')}\n` +
+                        `お問い合わせ内容: ${formData.get('service-type')}\n\n` +
+                        `詳細内容:\n${formData.get('message')}\n\n` +
+                        `---\n送信日時: ${new Date().toLocaleString()}\n` +
+                        `システム経由での自動送信`
+                    );
+                    
+                    formStatus.innerHTML = `
+                        <span style="color: #FF9500;">⚠️ システムが一時的に利用できません。</span><br>
+                        <span style="color: #FFFFFF;">以下のボタンをクリックしてメールアプリで送信するか、</span><br>
+                        <span style="color: #FFFFFF;">直接 bucksboxaiqa@gmail.com までご連絡ください。</span><br>
+                        <button onclick="window.location.href='mailto:bucksboxaiqa@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}'" 
+                                style="background: linear-gradient(45deg, #007AFF, #5856D6); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+                            📧 メールアプリで送信
+                        </button>
+                    `;
+                } else {
+                    // その他のエラー
+                    formStatus.innerHTML = `<span style="color: #FF3B30;">✗ ${error.message || '送信エラーが発生しました。直接メール（bucksboxaiqa@gmail.com）でお問い合わせください。'}</span>`;
+                }
             } finally {
                 // ボタンを再度有効化
                 submitButton.disabled = false;
