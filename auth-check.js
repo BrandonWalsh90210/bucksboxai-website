@@ -1,9 +1,6 @@
 // Authentication check module for BucksBox.ai
 // This module ensures only authenticated users can access the main application
 
-const SUPABASE_URL = 'https://ypesemlagxsdixjxvrpb.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZXNlbWxhZ3hzZGl4anh2cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYzODgsImV4cCI6MjA3MjU1MjM4OH0.Q6OnAHRJCpIAdWP3fCgtsaVF_YLM0ov9-p6nhluUPm8';
-
 // Pages that don't require authentication
 const PUBLIC_PAGES = [
     '/index.html',
@@ -17,33 +14,18 @@ const PUBLIC_PAGES = [
     '/bucksbox-terms-of-service.html',
     '/test-supabase.html',
     '/debug-signup.html',
-    '/supabase-proxy.html'
+    '/supabase-proxy.html',
+    '/payment-success.html'
 ];
 
-// Initialize Supabase client
-let supabaseClient = null;
-
-async function initializeAuth() {
-    // Wait for Supabase library to load
-    if (typeof supabase === 'undefined') {
-        console.error('Supabase library not loaded');
-        return false;
-    }
-    
-    const { createClient } = supabase;
-    supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    return true;
-}
-
 async function checkAuth() {
+    // Get shared Supabase client from supabase-client.js
+    const supabaseClient = window.getSupabaseClient();
+
     if (!supabaseClient) {
-        const initialized = await initializeAuth();
-        if (!initialized) {
-            console.error('Failed to initialize Supabase');
-            redirectToLogin();
-            return;
-        }
+        console.error('Failed to get Supabase client');
+        redirectToLogin();
+        return;
     }
 
     try {
@@ -91,14 +73,16 @@ function redirectToLogin() {
 }
 
 async function logout() {
+    const supabaseClient = window.getSupabaseClient();
     if (!supabaseClient) {
-        await initializeAuth();
+        console.error('Failed to get Supabase client for logout');
+        return;
     }
-    
+
     try {
         const { error } = await supabaseClient.auth.signOut();
         if (error) throw error;
-        
+
         window.location.href = 'login.html';
     } catch (error) {
         console.error('Logout error:', error);
@@ -117,15 +101,8 @@ window.authModule = {
     checkAuth,
     logout,
     getSession: async () => {
-        if (!supabaseClient) await initializeAuth();
+        const supabaseClient = window.getSupabaseClient();
+        if (!supabaseClient) return null;
         return supabaseClient.auth.getSession();
     }
-};
-
-// Export supabaseClient getter function
-window.getSupabaseClient = async () => {
-    if (!supabaseClient) {
-        await initializeAuth();
-    }
-    return supabaseClient;
 };

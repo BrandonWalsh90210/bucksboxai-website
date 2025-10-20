@@ -17,16 +17,10 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://bucksbox.ai/review-application">
 
-    <!-- Stripe Configuration (Free Mode) -->
-    <script>
-        // 無料モード設定（決済機能は無効）
-        const STRIPE_CONFIG = {
-            REVIEW_FEE: 0,
-            ENABLE_PAYMENT: false,
-            PUBLISHABLE_KEY: '',
-            MODE: 'free'
-        };
-    </script>
+    <!-- Stripe Configuration -->
+    <script src="config.js"></script>
+    <!-- Stripe.js SDK -->
+    <script src="https://js.stripe.com/v3/"></script>
 
     <style>
         * {
@@ -460,6 +454,8 @@
     </style>
     <!-- Supabase SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Supabase Client Module -->
+    <script src="supabase-client.js"></script>
     <!-- Auth Check Script -->
     <script src="auth-check.js"></script>
 </head>
@@ -994,11 +990,22 @@
                     sessionStorage.setItem('review_application_data', JSON.stringify(formDataObject));
                     sessionStorage.setItem('review_application_timestamp', new Date().toISOString());
 
+                    // Get Supabase client for authentication
+                    const supabaseClient = await window.getSupabaseClient();
+                    if (!supabaseClient) {
+                        throw new Error('認証システムの初期化に失敗しました');
+                    }
+
+                    // Get session token
+                    const { data: { session } } = await supabaseClient.auth.getSession();
+                    const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZXNlbWxhZ3hzZGl4anh2cnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5NzYzODgsImV4cCI6MjA3MjU1MjM4OH0.Q6OnAHRJCpIAdWP3fCgtsaVF_YLM0ov9-p6nhluUPm8';
+
                     // Call Edge Function to create Stripe Checkout session
                     const response = await fetch('https://ypesemlagxsdixjxvrpb.supabase.co/functions/v1/create-checkout-session', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${anonKey}`,
                         },
                         body: JSON.stringify({
                             email: formData.get('email'),
