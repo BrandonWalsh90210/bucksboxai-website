@@ -131,10 +131,15 @@ async function logout() {
 }
 
 // Auto-check auth on page load
+// Wait for both DOM and all scripts to be ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', checkAuth);
+    document.addEventListener('DOMContentLoaded', () => {
+        // Additional delay to ensure Supabase SDK is fully loaded
+        setTimeout(checkAuth, 100);
+    });
 } else {
-    checkAuth();
+    // Additional delay to ensure Supabase SDK is fully loaded
+    setTimeout(checkAuth, 100);
 }
 
 // Export for use in other scripts
