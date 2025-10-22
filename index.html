@@ -1361,25 +1361,16 @@
                 <li><a href="faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
                 <li><a href="bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
-                <!-- Auth buttons (will be shown/hidden based on login status) -->
-                <li id="nav-login-btn" style="display: none;">
-                    <a href="login.html" style="background: linear-gradient(45deg, #007AFF, #5856D6); padding: 8px 20px; border-radius: 20px; color: white !important;">ログイン</a>
-                </li>
-                <li id="nav-signup-btn" style="display: none;">
-                    <a href="signup.html" style="background: linear-gradient(45deg, #34C759, #30B0C7); padding: 8px 20px; border-radius: 20px; color: white !important;">新規登録</a>
-                </li>
-                <li id="nav-logout-btn" style="display: none;">
-                    <a href="#" onclick="safeLogout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a>
-                </li>
+                <li><a href="#" onclick="safeLogout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
             </ul>
-
+            
             <!-- Mobile Navigation Toggle -->
             <div class="nav-toggle">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-
+            
             <!-- Mobile Navigation Menu -->
             <ul class="nav-menu mobile-menu" role="navigation">
                 <li><a href="#about" aria-label="企業理念セクションへ移動">企業理念</a></li>
@@ -1390,16 +1381,7 @@
                 <li><a href="faq.html" aria-label="よくある質問ページへ移動">よくある質問</a></li>
                 <li><a href="bucksbox-terms-of-service.html" aria-label="利用規約ページへ移動">利用規約</a></li>
                 <li><a href="#contact" aria-label="お問い合わせセクションへ移動">お問い合わせ</a></li>
-                <!-- Auth buttons for mobile (will be shown/hidden based on login status) -->
-                <li id="nav-login-btn-mobile" style="display: none;">
-                    <a href="login.html" style="background: linear-gradient(45deg, #007AFF, #5856D6); padding: 8px 20px; border-radius: 20px; color: white !important;">ログイン</a>
-                </li>
-                <li id="nav-signup-btn-mobile" style="display: none;">
-                    <a href="signup.html" style="background: linear-gradient(45deg, #34C759, #30B0C7); padding: 8px 20px; border-radius: 20px; color: white !important;">新規登録</a>
-                </li>
-                <li id="nav-logout-btn-mobile" style="display: none;">
-                    <a href="#" onclick="safeLogout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a>
-                </li>
+                <li><a href="#" onclick="safeLogout(); return false;" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); padding: 8px 20px; border-radius: 20px; color: white !important;">ログアウト</a></li>
             </ul>
         </div>
     </nav>
@@ -1905,61 +1887,6 @@
             // フォールバック: 3秒後に必ず削除
             setTimeout(removeLoader, 3000);
         })();
-
-        // Update navigation buttons based on auth status
-        async function updateNavButtons() {
-            try {
-                const supabaseClient = window.getSupabaseClient();
-                if (!supabaseClient) {
-                    // Show login/signup buttons by default
-                    showLoggedOutButtons();
-                    return;
-                }
-
-                const { data: { session } } = await supabaseClient.auth.getSession();
-
-                if (session) {
-                    // User is logged in
-                    showLoggedInButtons();
-                    console.log('[NAV] User is logged in, showing logout button');
-                } else {
-                    // User is not logged in
-                    showLoggedOutButtons();
-                    console.log('[NAV] User is not logged in, showing login/signup buttons');
-                }
-            } catch (error) {
-                console.error('[NAV] Error checking auth status:', error);
-                // Default to showing login/signup buttons
-                showLoggedOutButtons();
-            }
-        }
-
-        function showLoggedInButtons() {
-            // Desktop
-            document.getElementById('nav-login-btn').style.display = 'none';
-            document.getElementById('nav-signup-btn').style.display = 'none';
-            document.getElementById('nav-logout-btn').style.display = 'block';
-            // Mobile
-            document.getElementById('nav-login-btn-mobile').style.display = 'none';
-            document.getElementById('nav-signup-btn-mobile').style.display = 'none';
-            document.getElementById('nav-logout-btn-mobile').style.display = 'block';
-        }
-
-        function showLoggedOutButtons() {
-            // Desktop
-            document.getElementById('nav-login-btn').style.display = 'block';
-            document.getElementById('nav-signup-btn').style.display = 'block';
-            document.getElementById('nav-logout-btn').style.display = 'none';
-            // Mobile
-            document.getElementById('nav-login-btn-mobile').style.display = 'block';
-            document.getElementById('nav-signup-btn-mobile').style.display = 'block';
-            document.getElementById('nav-logout-btn-mobile').style.display = 'none';
-        }
-
-        // Call updateNavButtons when page loads
-        window.addEventListener('load', function() {
-            setTimeout(updateNavButtons, 500); // Wait for Supabase client to initialize
-        });
 
         // 安全なログアウト関数
         async function safeLogout() {
