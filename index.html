@@ -2051,15 +2051,6 @@
         // Form submission handling with Supabase
         // Supabase configuration is handled by auth-check.js
         
-        // Get supabaseClient from auth module
-        window.getSupabaseClient = async function() {
-            if (window.authModule) {
-                const { data: session } = await window.authModule.getSession();
-                return window.supabaseClient;
-            }
-            return null;
-        }
-
         // 503エラー対応のリトライ機能付き保存関数
         async function saveWithRetry(supabaseClient, inquiryData, formData, maxRetries = 2) {
             let lastError = null;

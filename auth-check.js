@@ -177,8 +177,11 @@ window.authModule = {
     checkAuth,
     logout,
     getSession: async () => {
-        const supabaseClient = window.getSupabaseClient();
-        if (!supabaseClient) return null;
+        const supabaseClient = await waitForSupabaseClient();
+        if (!supabaseClient) {
+            console.error('[AUTH-MODULE] Failed to get Supabase client for getSession');
+            return { data: { session: null }, error: null };
+        }
         return supabaseClient.auth.getSession();
     }
 };
