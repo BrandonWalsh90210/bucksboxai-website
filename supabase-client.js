@@ -25,3 +25,12 @@ function getSupabaseClient() {
 // Export for use in other scripts
 window.getSupabaseClient = getSupabaseClient;
 window.SUPABASE_CONFIG = SUPABASE_CONFIG;
+
+// Notify that supabase-client.js is ready
+window.supabaseClientReady = true;
+console.log('[SUPABASE-CLIENT] Module loaded and ready');
+
+// Dispatch custom event for other scripts to listen
+if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('supabaseClientReady'));
+}

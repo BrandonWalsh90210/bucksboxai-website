@@ -16,15 +16,50 @@ const PUBLIC_PAGES = [
     '/payment-success.html'
 ];
 
+// Helper function to wait for Supabase client to be ready
+async function waitForSupabaseClient(maxWaitTime = 10000) {
+    const startTime = Date.now();
+
+    // First, wait for supabase-client.js to be ready
+    if (!window.supabaseClientReady) {
+        console.log('[AUTH-CHECK] Waiting for supabase-client.js to load...');
+        await new Promise((resolve) => {
+            if (window.supabaseClientReady) {
+                resolve();
+            } else {
+                window.addEventListener('supabaseClientReady', () => resolve(), { once: true });
+                // Timeout fallback
+                setTimeout(resolve, maxWaitTime);
+            }
+        });
+    }
+
+    // Then, wait for Supabase SDK to be available
+    while (Date.now() - startTime < maxWaitTime) {
+        const client = window.getSupabaseClient();
+        if (client) {
+            console.log('[AUTH-CHECK] Supabase client ready');
+            return client;
+        }
+        // Check every 50ms
+        await new Promise(resolve => setTimeout(resolve, 50));
+    }
+
+    console.error('[AUTH-CHECK] Timeout waiting for Supabase client');
+    return null;
+}
+
 async function checkAuth() {
-    // Get shared Supabase client from supabase-client.js
-    const supabaseClient = window.getSupabaseClient();
+    // Wait for Supabase client to be fully ready
+    const supabaseClient = await waitForSupabaseClient();
 
     if (!supabaseClient) {
-        console.error('Failed to get Supabase client');
+        console.error('[AUTH-CHECK] Failed to get Supabase client after waiting');
         redirectToLogin();
         return;
     }
+
+    console.log('[AUTH-CHECK] Supabase client initialized successfully');
 
     // Check for logout flag in URL parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -131,15 +166,10 @@ async function logout() {
 }
 
 // Auto-check auth on page load
-// Wait for both DOM and all scripts to be ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        // Additional delay to ensure Supabase SDK is fully loaded
-        setTimeout(checkAuth, 100);
-    });
+    document.addEventListener('DOMContentLoaded', checkAuth);
 } else {
-    // Additional delay to ensure Supabase SDK is fully loaded
-    setTimeout(checkAuth, 100);
+    checkAuth();
 }
 
 // Export for use in other scripts
