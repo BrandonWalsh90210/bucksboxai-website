@@ -3,8 +3,6 @@
 
 // Pages that don't require authentication
 const PUBLIC_PAGES = [
-    '/index.html',
-    '/',
     '/login.html',
     '/signup.html',
     '/signup-simple.html',
