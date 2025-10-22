@@ -28,6 +28,49 @@ async function checkAuth() {
         return;
     }
 
+    // Check for logout flag in URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const isLoggingOut = urlParams.get('logout') === 'true';
+
+    if (isLoggingOut) {
+        console.log('[AUTH-CHECK] Logout flag detected, forcing session cleanup...');
+
+        try {
+            // Force sign out if session still exists
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                console.log('[AUTH-CHECK] Session still exists, forcing signOut()...');
+                await supabaseClient.auth.signOut();
+            }
+
+            // Clear all Supabase-related localStorage
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.includes('supabase')) {
+                    keysToRemove.push(key);
+                }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+            console.log('[AUTH-CHECK] Cleared', keysToRemove.length, 'Supabase keys');
+
+            // Wait for cleanup to complete
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Remove logout parameter and stay on login page
+            console.log('[AUTH-CHECK] Cleanup complete, removing logout flag...');
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            // Do not proceed with normal auth check
+            return null;
+        } catch (error) {
+            console.error('[AUTH-CHECK] Logout cleanup error:', error);
+            // Still remove the parameter
+            window.history.replaceState({}, document.title, window.location.pathname);
+            return null;
+        }
+    }
+
     try {
         const { data: { session } } = await supabaseClient.auth.getSession();
 
