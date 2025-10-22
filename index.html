@@ -1311,6 +1311,8 @@
     </script>
     <!-- Supabase SDK -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Supabase Client Module -->
+    <script src="supabase-client.js"></script>
     <!-- Auth Check Script -->
     <!-- auth-check.js removed for public landing page -->
 </head>
@@ -1887,11 +1889,22 @@
         })();
 
         // 安全なログアウト関数
-        function safeLogout() {
-            if (window.authModule && typeof window.authModule.logout === 'function') {
-                window.authModule.logout();
-            } else {
-                // authModuleが無い場合はログインページへ
+        async function safeLogout() {
+            try {
+                // Get Supabase client
+                const supabaseClient = window.getSupabaseClient();
+                if (supabaseClient) {
+                    // Sign out from Supabase
+                    const { error } = await supabaseClient.auth.signOut();
+                    if (error) {
+                        console.error('Logout error:', error);
+                    }
+                }
+                // Always redirect to login page after logout
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Logout failed:', error);
+                // Still redirect to login even if logout fails
                 window.location.href = 'login.html';
             }
             return false;
