@@ -13,7 +13,11 @@ const PUBLIC_PAGES = [
     '/test-supabase.html',
     '/debug-signup.html',
     '/supabase-proxy.html',
-    '/payment-success.html'
+    '/payment-success.html',
+    '/idea_application.html',
+    '/faq.html',
+    '/bucksbox-our-apps-page.html',
+    '/review_application.html'
 ];
 
 // Helper function to wait for Supabase client to be ready
